@@ -9,7 +9,19 @@
 </head>
 <body>
 
+
+
 	<div class="container">
+		
+		<div class="navbar">
+		  <div class="navbar-inner">
+		    <a class="brand" href="/">Ensemble</a>
+		    <ul class="nav">
+		      <li><%= link_to 'Logout', '/logout' unless current_user.nil? %></li>
+		    </ul>
+		  </div>
+		</div>
+
 		<%= yield %>
 	</div>
 

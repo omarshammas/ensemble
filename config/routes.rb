@@ -1,6 +1,13 @@
 Ensemble::Application.routes.draw do
 
-  root to: 'user#index'
+  get "authenticate" => "sessions#authenticate", as: :authenticate
+  get "logout" => "sessions#destroy", as: :logout
+  post "sessions/login", as: :login
+  post "sessions/signup", as: :signup
+
+  get "user/dashboard", as: :dashboard
+
+  root to: 'user#dashboard', as: :home
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
