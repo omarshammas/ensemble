@@ -10,7 +10,8 @@ Ensemble::Application.routes.draw do
   root to: 'user#dashboard', as: :home
   
   resources :tasks
-
+  
+  match ':controller(/:action(/:id(.:format)))'
 
 
   # The priority is based upon order of creation:

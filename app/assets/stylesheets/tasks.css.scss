@@ -19,6 +19,10 @@
     background: none repeat scroll 0% 0% whitesmoke;
 }
 
+#chat-messages-list{
+    list-style-type: none;
+}
+
 #chat-input{
   margin-left:0px;
   margin-top:20px;
@@ -32,4 +36,13 @@
 }
 #suggestions-list{
  
+}
+
+.nav li a {
+  display:inline;
+}
+
+.message .alert {
+  padding: 4px 4px 4px 4px;
+  margin-bottom: 10px;
 }

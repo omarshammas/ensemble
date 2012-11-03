@@ -1,9 +1,36 @@
+  <script type='text/javascript'>
+  	channel_name = "ensemble-<%= @task.id %>";
+  	channel = "<%= @task.id %>";
+  	//TODO: Enable current_user support
+  	user_id = 1;
+  </script>
+<%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
+
 <div class='row'>
 <div class='span8' id='chat-box'>
 	<div class='row' id='chat-messages'>
+		<ul id='chat-messages-list'>
+				<% @comments.each do |comment| %>
+				<li class='message'>
+					<div class=	'			
+					<%if comment.user_id == @task.id%>
+						alert alert-error
+					<%elsif comment.user_id == user_id%>
+						alert alert-success
+					<%else%>
+						alert alert-info
+					<%end%>
+					'><p><strong>User<%= comment.user_id %>:</strong> <%= comment.body %></p></div>
+				</li>
+				<% end %>
+		</ul>
 	</div>
-	<div class='row' id='chat-input'>
-		<form class='well form-search'>
+	<div class='row well' id='chat-input'>
+		<textarea rows="3" class='span4' id='chat-text-input'></textarea>
+		<button class='btn btn-success' id="comment-btn">Comment</button>
+		<button class='btn btn-danger' id="suggest-btn">Suggest</button>
+
+<!-- 		<form class='well form-search'>
 			<input class='span4 input-medium search-query' placeholder='Type message to chat...' type='text'>
 			<button class='btn' type='submit'>
 				Send
@@ -11,7 +38,7 @@
 			<label class='checkbox'>
 				<input type='checkbox'>Suggestion?
 			</label>
-		</form>
+		</form> -->
 	</div>
 </div>
 <div class='span4'>
@@ -20,9 +47,13 @@
 			<li class='nav-header'>
 				Suggestions
 			</li>
-			<!-- 						<li class='active'>
-			<a href='#users'> <i class='icon-inbox'></i> All Messages </a>
-			</li> -->
+			<% @suggestions.each do |suggestion| %>
+			<li class='suggestion'>
+				<a href='#'><i class='icon-thumbs-up'></i></a>
+				<a href='#'><i class='icon-thumbs-down'></i></a>
+				<%= suggestion.body %>
+			</li>
+			<% end %>
 		</ul>
 	</div>
 </div>

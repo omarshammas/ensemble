@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+
   # GET /tasks
   # GET /tasks.json
   def index
@@ -14,6 +15,8 @@ class TasksController < ApplicationController
   # GET /tasks/1.json
   def show
     @task = Task.find(params[:id])
+    @comments = @task.comments
+    @suggestions = @task.suggestions
 
     respond_to do |format|
       format.html # show.html.erb
