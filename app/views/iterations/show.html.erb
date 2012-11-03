@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Task:</b>
+  <%= @iteration.task_id %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @iteration.state %>
+</p>
+
+
+<%= link_to 'Edit', edit_iteration_path(@iteration) %> |
+<%= link_to 'Back', iterations_path %>

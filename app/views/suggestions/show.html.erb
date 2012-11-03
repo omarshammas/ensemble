@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Task:</b>
+  <%= @suggestion.task_id %>
+</p>
+
+<p>
+  <b>User:</b>
+  <%= @suggestion.user_id %>
+</p>
+
+<p>
+  <b>Interation:</b>
+  <%= @suggestion.interation_id %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%= @suggestion.body %>
+</p>
+
+<p>
+  <b>Vote count:</b>
+  <%= @suggestion.vote_count %>
+</p>
+
+<p>
+  <b>Vote status:</b>
+  <%= @suggestion.vote_status %>
+</p>
+
+<p>
+  <b>Acceptance status:</b>
+  <%= @suggestion.acceptance_status %>
+</p>
+
+
+<%= link_to 'Edit', edit_suggestion_path(@suggestion) %> |
+<%= link_to 'Back', suggestions_path %>

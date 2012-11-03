@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  task_id: 1
+  user_id: 1
+  interation_id: 1
+  body: MyString
+  vote_count: 1
+  vote_status: 1
+  acceptance_status: 1
+
+two:
+  task_id: 1
+  user_id: 1
+  interation_id: 1
+  body: MyString
+  vote_count: 1
+  vote_status: 1
+  acceptance_status: 1

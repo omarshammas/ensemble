@@ -1,0 +1,35 @@
+<h1>Listing suggestions</h1>
+
+<table>
+  <tr>
+    <th>Task</th>
+    <th>User</th>
+    <th>Interation</th>
+    <th>Body</th>
+    <th>Vote count</th>
+    <th>Vote status</th>
+    <th>Acceptance status</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @suggestions.each do |suggestion| %>
+  <tr>
+    <td><%= suggestion.task_id %></td>
+    <td><%= suggestion.user_id %></td>
+    <td><%= suggestion.interation_id %></td>
+    <td><%= suggestion.body %></td>
+    <td><%= suggestion.vote_count %></td>
+    <td><%= suggestion.vote_status %></td>
+    <td><%= suggestion.acceptance_status %></td>
+    <td><%= link_to 'Show', suggestion %></td>
+    <td><%= link_to 'Edit', edit_suggestion_path(suggestion) %></td>
+    <td><%= link_to 'Destroy', suggestion, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Suggestion', new_suggestion_path %>
