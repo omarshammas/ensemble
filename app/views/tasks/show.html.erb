@@ -1,10 +1,29 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>User:</b>
-  <%= @task.user_id %>
-</p>
-
-
-<%= link_to 'Edit', edit_task_path(@task) %> |
-<%= link_to 'Back', tasks_path %>
+<div class='row'>
+<div class='span8' id='chat-box'>
+	<div class='row' id='chat-messages'>
+	</div>
+	<div class='row' id='chat-input'>
+		<form class='well form-search'>
+			<input class='span4 input-medium search-query' placeholder='Type message to chat...' type='text'>
+			<button class='btn' type='submit'>
+				Send
+			</button>
+			<label class='checkbox'>
+				<input type='checkbox'>Suggestion?
+			</label>
+		</form>
+	</div>
+</div>
+<div class='span4'>
+	<div class='well sidebar-nav' id='suggestions'>
+		<ul class='nav nav-list' id='suggestion-list'>
+			<li class='nav-header'>
+				Suggestions
+			</li>
+			<!-- 						<li class='active'>
+			<a href='#users'> <i class='icon-inbox'></i> All Messages </a>
+			</li> -->
+		</ul>
+	</div>
+</div>
+</div>

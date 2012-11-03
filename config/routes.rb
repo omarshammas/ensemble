@@ -8,6 +8,10 @@ Ensemble::Application.routes.draw do
   get "user/dashboard", as: :dashboard
 
   root to: 'user#dashboard', as: :home
+  
+  resources :tasks
+
+
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
