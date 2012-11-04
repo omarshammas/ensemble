@@ -14,6 +14,7 @@ function post_comment() {
 
 function post_suggestion() {
 	// Validate Field
+	//TODO: Only post if is a URL
 	if($('#chat-text-input').val() == '') {
 		alert('Please enter text...');
 		$('#chat-text-input').focus();
@@ -25,12 +26,17 @@ function post_suggestion() {
 	});
 }
 
+function post_up_vote(suggestion_id) {
+	//TODO: Only post if is a URL
+	$.post('/api/post_up_vote', {"suggestion_id": suggestion_id}, function(response) {
+	});
+}
 
 function scrollToTheTop() {
-$("#messages").scrollTop(20000000);
+	$("#chat-messages").scrollTop(20000000);
 }
 
 function replaceURLWithHTMLLinks(text) {
-     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+     var exp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/;
      return text.replace(exp,"<a href='$1' target='_blank'>$1</a>");
 }

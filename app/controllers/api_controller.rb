@@ -5,6 +5,22 @@ class ApiController < ApplicationController
   Pusher.secret = '959771cb4f1e0062256a'
 
   
+  def post_up_vote
+    suggestion = Suggestion.find(params[:suggestion_id])
+    #TODO Don't hardcode user
+    user = User.find(1);
+    vote = Vote.new(:suggestion_id => suggestion.id, :user_id => user.id)
+    suggestion.vote_count = suggestion.vote_count+1
+    if vote.save && suggestion.save
+      task = suggestion.task
+      votes = task.suggestions.order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('post_up_vote', votes)
+      render :text => "sent"
+    else
+      render :text => "failed"
+    end
+  end
+  
   def post_suggestion
     task = Task.find(params[:task_id])
     suggestion = Suggestion.new

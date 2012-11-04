@@ -19,8 +19,14 @@
     background: none repeat scroll 0% 0% whitesmoke;
 }
 
+#chat-messages.row{
+  padding:0px;
+}
+
 #chat-messages-list{
     list-style-type: none;
+    width:95%;
+    margin:10px auto 0px auto;
 }
 
 #chat-input{
@@ -45,4 +51,12 @@
 .message .alert {
   padding: 4px 4px 4px 4px;
   margin-bottom: 10px;
+}
+
+.suggestion {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.badge{
+  float:right;
 }
