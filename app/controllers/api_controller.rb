@@ -6,8 +6,7 @@ class ApiController < ApplicationController
 
   def post_up_vote
     suggestion = Suggestion.find(params[:suggestion_id])
-    #TODO Don't hardcode user
-    user = User.find(1);
+    user = current_user
     vote = Vote.new(:suggestion_id => suggestion.id, :user_id => user.id)
     suggestion.vote_count = suggestion.vote_count+1
     if vote.save && suggestion.save
@@ -24,8 +23,7 @@ class ApiController < ApplicationController
     task = Task.find(params[:task_id])
     suggestion = Suggestion.new
     suggestion.task_id = task.id
-    #TODO Don't hardcode user
-    user = User.find(1);
+    user = current_user;
     suggestion.user_id = user.id
     suggestion.body = params[:body]
     suggestion.acceptance_status = 0
@@ -47,8 +45,7 @@ class ApiController < ApplicationController
     task = Task.find(params[:task_id])
     comment = Comment.new
     comment.task_id = task.id
-    #TODO Don't hardcode user
-    user = User.find(1);
+    user = current_user
     comment.user_id = user.id
     comment.body = params[:body]
     #TODO set iteration for comment
