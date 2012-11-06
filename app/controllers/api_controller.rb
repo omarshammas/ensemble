@@ -4,7 +4,6 @@ class ApiController < ApplicationController
   Pusher.key = '9ceb5ef670c4262bfbca'
   Pusher.secret = '959771cb4f1e0062256a'
 
-  
   def post_up_vote
     suggestion = Suggestion.find(params[:suggestion_id])
     #TODO Don't hardcode user
@@ -56,7 +55,7 @@ class ApiController < ApplicationController
     
     payload = comment.attributes
     payload[:user] = user.attributes
-
+    payload[:task] = task.attributes
     if comment.save
       Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
       render :text => "sent"

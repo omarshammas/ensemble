@@ -13,7 +13,13 @@ var ensembleChannel = pusher.subscribe('ensemble-1');
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
-  $('#chat-messages-list').append('<li class="message"><strong> User' + comment.user_id + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</li>');
+  var comment_class = 'alert alert-info';
+  if(comment.user_id == comment.task.user_id)
+      comment_class = 'alert alert-error';
+  else if(comment.user_id == comment.user.id)
+      comment_class = 'alert alert-success'; 
+  
+  $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p><strong> User' + comment.user_id + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
 });
 ensembleChannel.bind('post_suggestion', function(suggestion) {

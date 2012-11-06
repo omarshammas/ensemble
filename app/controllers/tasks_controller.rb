@@ -1,6 +1,4 @@
 class TasksController < ApplicationController
-
-  @@url_regex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/
   # GET /tasks
   # GET /tasks.json
   def index
@@ -16,7 +14,7 @@ class TasksController < ApplicationController
   # GET /tasks/1.json
   def show
     @task = Task.find(params[:id])
-    @comments = @task.comments
+    @comments = @task.comments('created_at asc')
     @suggestions = @task.suggestions.order('vote_count desc')
     @preferences = [];
     respond_to do |format|
