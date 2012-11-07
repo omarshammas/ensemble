@@ -15,7 +15,8 @@ class TasksController < ApplicationController
   def show
     @task = Task.find(params[:id])
     @comments = @task.comments('created_at asc')
-    @suggestions = @task.suggestions.order('vote_count desc')
+    @suggestions = @task.suggestions.where(:vote_status => 0).order('vote_count desc')
+    @processed_suggestions = @task.suggestions.where('vote_status <> 0 AND acceptance_status <> 0').order('created_at desc')
     @preferences = [];
     respond_to do |format|
       format.html # show.html.erb

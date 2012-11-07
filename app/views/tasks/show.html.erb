@@ -6,6 +6,26 @@
   </script>
 <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
 
+<div class ='row'>
+	<div class='span12 well preferences'>
+		<ul class="thumbnails">
+			<%  @processed_suggestions.each do |suggestion| %>
+			<li class="span1">
+				<div class = "thumbnail  
+				<%if suggestion.acceptance_status == -1%>
+						negative
+				<%elsif suggestion.acceptance_status == 1%>
+						positive
+				<%end%>">
+				<img class= 'preference-img' src=<%=suggestion.image_url%>><input type="hidden" value="<%=suggestion.response%>" href='#'/></img>
+				</div>
+			</li>
+			<%end%>
+
+			
+		</ul>
+	</div>
+</div>
 <div class='row'>
 <div class='span7' id='chat-box'>
 	<div class='row' id='chat-messages'>

@@ -7,7 +7,7 @@ Pusher.log = function() { if (window.console) window.console.log.apply(window.co
 // Global variable "channel" is set in the view
 var pusher = new Pusher('9ceb5ef670c4262bfbca');
 Pusher.channel_auth_endpoint = '/api/authenticate';
-var ensembleChannel = pusher.subscribe('ensemble-1');
+var ensembleChannel = pusher.subscribe(channel_name);
 
 
 
@@ -64,5 +64,14 @@ $('#suggest-btn').click(function(){
     post_suggestion();
 });
 
+$('.thumbnail').tooltip({ 
+    track: true, 
+    delay: 0, 
+    showURL: false, 
+    bodyHandler: function() { 
+    	var response = $(this).children().find('input[type="hidden"]');
+        return response.val();
+    } 
+});
 
 });

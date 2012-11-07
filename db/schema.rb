@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121103214255) do
+ActiveRecord::Schema.define(:version => 20121107024554) do
 
   create_table "comments", :force => true do |t|
     t.integer  "task_id"
@@ -39,6 +39,8 @@ ActiveRecord::Schema.define(:version => 20121103214255) do
     t.integer  "acceptance_status"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.string   "image_url"
+    t.string   "response"
   end
 
   create_table "tasks", :force => true do |t|
