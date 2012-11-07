@@ -32,6 +32,12 @@ function post_up_vote(suggestion_id) {
 	});
 }
 
+function post_down_vote(suggestion_id) {
+	//TODO: Only post if is a URL
+	$.post('/api/post_down_vote', {"suggestion_id": suggestion_id}, function(response) {
+	});
+}
+
 function scrollToTheTop() {
 	$("#chat-messages").scrollTop(20000000);
 }

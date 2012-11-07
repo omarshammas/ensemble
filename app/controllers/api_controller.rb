@@ -5,14 +5,30 @@ class ApiController < ApplicationController
   Pusher.secret = '959771cb4f1e0062256a'
 
   def post_up_vote
-    suggestion = Suggestion.find(params[:suggestion_id])
+    suggestion = Suggestion.find params[:suggestion_id]
     user = current_user
-    vote = Vote.new(:suggestion_id => suggestion.id, :user_id => user.id)
-    suggestion.vote_count = suggestion.vote_count+1
-    if vote.save && suggestion.save
+    vote = Vote.new suggestion_id: suggestion.id, user_id: user.id
+    if vote.save
+      Suggestion.increment_counter :vote_count, suggestion.id 
       task = suggestion.task
       votes = task.suggestions.order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_up_vote', votes)
+      p votes
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', votes)
+      render :text => "sent"
+    else
+      render :text => "failed"
+    end
+  end
+
+  def post_down_vote
+    suggestion = Suggestion.find params[:suggestion_id]
+    user = current_user
+    vote = Vote.new suggestion_id: suggestion.id, user_id: user.id
+    if vote.save
+      Suggestion.decrement_counter :vote_count, suggestion.id
+      task = suggestion.task
+      votes = task.suggestions.order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', votes)
       render :text => "sent"
     else
       render :text => "failed"
