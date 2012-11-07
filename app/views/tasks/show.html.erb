@@ -47,15 +47,34 @@
 		<div class='row well' id='chat-input'>
 			<textarea rows='3' class='span6' id='chat-text-input'></textarea>
 			<button class='btn btn-success' id='comment-btn'>Comment</button>
-			<button class='btn btn-danger' id='suggest-btn'>Suggest</button>
-			<button class='btn btn-info' id='suggest-btn'>Add a preference</button>
 		</div>
 	</div>
 
 	<div class='span5' id='suggestions'>		
 		<ul id='suggestion-list'>
-			<li><h3>Suggestions &nbsp; &nbsp;<button class='btn  btn-mini' id='suggest-btn'><i class='icon-plus'></i></button></li></h3>
-			<li>&nbsp;</li>
+			<li>
+				<h3>Suggestions &nbsp; &nbsp;
+				<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal"><i class='icon-plus'></i></a>
+				</h3>
+			</li>
+
+			<!-- Modal -->
+			<div id="addSuggestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addSuggestionLabel" aria-hidden="true" style="display:none;">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 id="addSuggestionLabel">Make a suggestion</h3>
+			  </div>
+			  <div class="modal-body">
+			  	<input type='text' class='span6' id='suggestion_url' placeholder='Example - http://www.amazon.com/4562312'></textarea>
+			  	<!-- <input type='text' name='suggestion_retailer' id='suggestion_retailer' placeholder='Retailers .. Nike, Amazon, ..' />
+			  	<input type='text' name='suggestion_price' id='suggestion_price' placeholder='Price .. $35, 20, ..' /> -->
+			  </div>
+			  <div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			    <button class="btn btn-primary" id='suggest-btn' data-dismiss="modal" aria-hidden="true">Add</button>
+			  </div>
+			</div>
+
 			<% @suggestions.each do |suggestion| %>
 				<li class='suggestion'>
 					<button class='btn btn-mini upvote'>

@@ -19,7 +19,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     @comments = @task.comments('created_at asc')
     @suggestions = @task.suggestions.order('vote_count desc')
-    @preferences = [];
+    @preferences = []
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @task }

@@ -15,14 +15,14 @@ function post_comment() {
 function post_suggestion() {
 	// Validate Field
 	//TODO: Only post if is a URL
-	if($('#chat-text-input').val() == '') {
+	if($('#suggestion_url').val() == '') {
 		alert('Please enter text...');
-		$('#chat-text-input').focus();
+		$('#suggestion_url').focus();
 		return false;
 	}
-	var body = $('#chat-text-input').val();
+	var body = $('#suggestion_url').val();
 	$.post('/api/post_suggestion', { "task_id": channel, "body":body }, function(response) {
-		$('#chat-text-input').val("");
+		$('#suggestion_url').val("");
 	});
 }
 
