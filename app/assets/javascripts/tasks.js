@@ -75,5 +75,14 @@ $('#suggest-btn').click(function(){
     post_suggestion();
 });
 
+$('.thumbnail').tooltip({ 
+    track: true, 
+    delay: 0, 
+    showURL: false, 
+    bodyHandler: function() { 
+    	var response = $(this).children().find('input[type="hidden"]');
+        return response.val();
+    } 
+});
 
 });
