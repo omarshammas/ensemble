@@ -1,6 +1,6 @@
 class SessionsController < ApplicationController
   def authenticate
-  	return redirect_to :home unless current_user.nil?
+  	return redirect_to "/users/#{current_user.id}/tasks" unless current_user.nil?
   	@user = User.new
   end
 
@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
   		redirect_to :authenticate, notice: 'Email is not recognized.'
     else
   		session[:user_id] = @user.id
-  		redirect_to :home
+  		redirect_to "/users/#{current_user.id}/tasks"
   	end
   end
 
@@ -26,7 +26,7 @@ class SessionsController < ApplicationController
     @user = User.new(params[:user])
     if @user.save
       session[:user_id] = @user.id
-      redirect_to :home
+      redirect_to "/users/#{current_user.id}/tasks"
     else
       redirect_to :authenticate, notice: @user.errors.messages
     end 

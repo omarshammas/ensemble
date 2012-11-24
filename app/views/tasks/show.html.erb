@@ -7,13 +7,9 @@
 <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
 
 
-<div class='row' id='objective'>
-	<div class='span10'>
-		<h1><%= @task.body %></h1>
-	</div>
-	<!-- 	<div class='span2'>
-		<button class='btn' id='redeem_code'>Redeem Code</button>
-	</div> -->
+<div class='hero-unit' id='objective'>
+	<%= image_tag @task.image.url(:small),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+	<h3><%= @task.body %></h3>
 </div>
 
 <div class ='row'>

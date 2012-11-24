@@ -14,6 +14,11 @@ Ensemble::Application.routes.draw do
   resources :tasks
   
   match ':controller(/:action(/:id(.:format)))'
+  
+  resources :users do
+    resources :tasks
+  end
+  
 
 
   # The priority is based upon order of creation:
