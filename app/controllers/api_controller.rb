@@ -6,8 +6,8 @@ class ApiController < ApplicationController
 
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
-    user = current_user
-    vote = Vote.new suggestion_id: suggestion.id, user_id: user.id
+    turk = current_turk
+    vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id 
       task = suggestion.task
@@ -22,8 +22,8 @@ class ApiController < ApplicationController
 
   def post_down_vote
     suggestion = Suggestion.find params[:suggestion_id]
-    user = current_user
-    vote = Vote.new suggestion_id: suggestion.id, user_id: user.id
+    turk = current_turk
+    vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
@@ -39,16 +39,17 @@ class ApiController < ApplicationController
     task = Task.find(params[:task_id])
     suggestion = Suggestion.new
     suggestion.task_id = task.id
-    user = current_user;
-    suggestion.user_id = user.id
+    
+    turk = current_turk
+    suggestion.suggestable = turk
     suggestion.body = params[:body]
     suggestion.acceptance_status = 0
     suggestion.vote_status = 0
     suggestion.vote_count = 0
     #TODO set iteration for comment
-    payload = suggestion.attributes
-    payload[:user] = user.attributes
 
+    payload = suggestion.attributes
+    payload[:turk] = turk.attributes
     if suggestion.save
       Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestion', payload)
       render :text => "sent"
@@ -61,13 +62,14 @@ class ApiController < ApplicationController
     task = Task.find(params[:task_id])
     comment = Comment.new
     comment.task_id = task.id
-    user = current_user
-    comment.user_id = user.id
+    
+    turk = current_turk
+    comment.commentable = turk
     comment.body = params[:body]
     #TODO set iteration for comment
     
     payload = comment.attributes
-    payload[:user] = user.attributes
+    payload[:turk] = turk.attributes
     payload[:task] = task.attributes
     if comment.save
       Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
@@ -77,18 +79,16 @@ class ApiController < ApplicationController
     end
   end
   
-    def authenticate
-      #TODO Don't hardcode user
-      user = User.find(1);
-      if !user.nil?
-        auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
-          :user_id => user.id,
-          :user => user.attributes
-        )
-        render :json => auth
-      else
-        render :text => "Not authorized", :status => '403'
-      end
+  def authenticate
+    turk = current_turk
+    if !turk.nil?
+      auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
+        :turk => turk.attributes
+      )
+      render :json => auth
+    else
+      render :text => "Not authorized", :status => '403'
+    end
   end
 
 end

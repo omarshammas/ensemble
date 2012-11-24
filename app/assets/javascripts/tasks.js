@@ -13,13 +13,24 @@ var ensembleChannel = pusher.subscribe(channel_name);
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
-  var comment_class = 'alert alert-info';
-  if(comment.user_id == comment.task.user_id)
-      comment_class = 'alert alert-error';
-  else if(comment.user_id == comment.user.id)
-      comment_class = 'alert alert-success'; 
+  console.log('Nowwwwwww');
+  console.log(comment);
+
+  console.log(comment.commentable_type)
+  console.log(comment.commentable_type=='Turk')
+  var comment_class;
   
-  $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p><strong> User' + comment.user_id + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
+  //User comment
+  if(comment.commentable_type == 'User')
+    comment_class = 'alert alert-error';
+  //My Comment
+  else if(comment.commentable_type == 'Turk' && turk_id == comment.commentable_id)
+    comment_class = 'alert alert-success'; 
+  //Another Turker's comment
+  else
+    comment_class = 'alert alert-info';
+  
+  $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p><strong> User ' + comment.commentable_id + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
 });
 

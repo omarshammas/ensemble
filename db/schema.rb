@@ -11,15 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121107002712) do
+ActiveRecord::Schema.define(:version => 20121124215929) do
 
   create_table "comments", :force => true do |t|
-    t.integer  "task_id"
-    t.integer  "user_id"
     t.integer  "iteration_id"
     t.string   "body"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.integer  "commentable_id"
+    t.string   "commentable_type"
+    t.integer  "task_id"
   end
 
   create_table "iterations", :force => true do |t|
@@ -30,8 +31,6 @@ ActiveRecord::Schema.define(:version => 20121107002712) do
   end
 
   create_table "suggestions", :force => true do |t|
-    t.integer  "task_id"
-    t.integer  "user_id"
     t.integer  "iteration_id"
     t.string   "body"
     t.integer  "vote_count"
@@ -39,6 +38,9 @@ ActiveRecord::Schema.define(:version => 20121107002712) do
     t.integer  "acceptance_status"
     t.datetime "created_at",        :null => false
     t.datetime "updated_at",        :null => false
+    t.integer  "suggestable_id"
+    t.string   "suggestable_type"
+    t.integer  "task_id"
   end
 
   create_table "tasks", :force => true do |t|
@@ -46,6 +48,12 @@ ActiveRecord::Schema.define(:version => 20121107002712) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
     t.string   "body"
+  end
+
+  create_table "turks", :force => true do |t|
+    t.string   "code"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -59,7 +67,7 @@ ActiveRecord::Schema.define(:version => 20121107002712) do
 
   create_table "votes", :force => true do |t|
     t.integer  "suggestion_id"
-    t.integer  "user_id"
+    t.integer  "turk_id"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
   end

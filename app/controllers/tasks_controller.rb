@@ -1,7 +1,5 @@
 class TasksController < ApplicationController
 
-  layout "turkers"
-
   # GET /tasks
   # GET /tasks.json
   def index

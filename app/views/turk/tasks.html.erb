@@ -1,0 +1,104 @@
+<script type='text/javascript'>
+  	channel_name = 'ensemble-<%= @task.id %>';
+  	channel = '<%= @task.id %>';
+  	turk_id = '<%= current_turk.id%>';
+</script>
+
+<div class='row' id='objective'>
+	<div class='span10'>
+		<h1><%= @task.body %></h1>
+	</div>
+	<!-- 	<div class='span2'>
+		<button class='btn' id='redeem_code'>Redeem Code</button>
+	</div> -->
+</div>
+
+<div class ='row'>
+	<div class='span12 well preferences'>
+		<ul class="thumbnails">
+			<%  @processed_suggestions.each do |suggestion| %>
+			<li class="span1">
+				<div class = "thumbnail  
+				<%if suggestion.acceptance_status == -1%>
+						negative
+				<%elsif suggestion.acceptance_status == 1%>
+						positive
+				<%end%>">
+				<img class= 'preference-img' src=<%=suggestion.image_url%>><input type="hidden" value="<%=suggestion.response%>" href='#'/></img>
+				</div>
+			</li>
+			<% end %>
+		</ul>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='span7' id='chat-box'>
+		<div class='row' id='chat-messages'>
+			<ul id='chat-messages-list'>
+					<% @comments.each do |comment| %>
+					<li class='message'>
+						<div class=	'			
+						<%if comment.commentable == @task.user%>
+							alert alert-error
+						<%elsif comment.commentable == current_turk%>
+							alert alert-success
+						<%else%>
+							alert alert-info
+						<%end%>
+						'><p><strong>User <%= comment.commentable.id %>:</strong> <%= comment.body%></p></div>
+					</li>
+					<% end %>
+			</ul>
+		</div>
+		<div class='row well' id='chat-input'>
+			<textarea rows='3' class='span6' id='chat-text-input'></textarea>
+			<button class='btn btn-success' id='comment-btn'>Comment</button>
+		</div>
+	</div>
+
+	<div class='span5' id='suggestions'>		
+		<ul id='suggestion-list'>
+			<li>
+				<h3>Suggestions &nbsp; &nbsp;
+				<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal"><i class='icon-plus'></i></a>
+				</h3>
+			</li>
+
+			<!-- Modal -->
+			<div id="addSuggestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addSuggestionLabel" aria-hidden="true" style="display:none;">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 id="addSuggestionLabel">Make a suggestion</h3>
+			  </div>
+			  <div class="modal-body">
+			  	<input type='text' class='span6' id='suggestion_url' placeholder='Example - http://www.amazon.com/4562312'></textarea>
+			  	<!-- <input type='text' name='suggestion_retailer' id='suggestion_retailer' placeholder='Retailers .. Nike, Amazon, ..' />
+			  	<input type='text' name='suggestion_price' id='suggestion_price' placeholder='Price .. $35, 20, ..' /> -->
+			  </div>
+			  <div class="modal-footer">
+			    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			    <button class="btn btn-primary" id='suggest-btn' data-dismiss="modal" aria-hidden="true">Add</button>
+			  </div>
+			</div>
+
+			<% @suggestions.each do |suggestion| %>
+				<li class='suggestion'>
+					<button class='btn btn-mini upvote'>
+						<i class='icon-thumbs-up'>
+							<input type='hidden' value='<%=suggestion.id%>'/>
+						</i>
+					</button>
+					<button class='btn btn-mini downvote'>
+						<i class='icon-thumbs-down'>
+							<input type='hidden' value='<%=suggestion.id%>'/>
+						</i>
+					</button>
+					<%= suggestion.body %>
+					<span class='badge badge-success'><%=suggestion.vote_count%></span>
+				</li>
+			<% end %>
+		</ul>
+	</div>
+
+</div>

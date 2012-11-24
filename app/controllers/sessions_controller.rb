@@ -6,10 +6,6 @@ class SessionsController < ApplicationController
 
   def login
   	@user = User.find_by_email(params[:user][:email])
-    p "-0------"
-    p @user
-    p "==-----="
-    p params
 
   	if @user.nil?
   		redirect_to :authenticate, notice: 'Email is not recognized.'

@@ -10,4 +10,6 @@ class User < ActiveRecord::Base
   validates :password_confirmation, presence: true
   
   has_many :tasks
+  has_many :comments, as: :commentable
+  has_many :suggestions, as: :suggestable
 end

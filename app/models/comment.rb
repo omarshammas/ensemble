@@ -1,8 +1,7 @@
 class Comment < ActiveRecord::Base
-  attr_accessible :body, :iteration_id, :task_id, :user_id
+  attr_accessible :body, :task_id, :iteration_id, :commentable_id, :commentable_type
   
   belongs_to :task
-  belongs_to :user
   belongs_to :iteration
-  
+  belongs_to :commentable, polymorphic: true
 end
