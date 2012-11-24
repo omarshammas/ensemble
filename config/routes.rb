@@ -1,6 +1,9 @@
 Ensemble::Application.routes.draw do
   resources :votes
   resources :tasks
+  resources :users do
+    resources :tasks
+  end
 
   get "authenticate" => "sessions#authenticate", as: :authenticate
   get "logout" => "sessions#destroy", as: :logout

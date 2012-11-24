@@ -1,9 +1,14 @@
 class TasksController < ApplicationController
+  before_filter :get_parent
 
+  def get_parent
+    @user = User.find_by_id(params[:user_id]) unless params[:user_id].blank?
+  end
+ 
   # GET /tasks
   # GET /tasks.json
   def index
-    @tasks = Task.all
+    @tasks = @user.nil? ? Task.all : @user.tasks
     
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +19,7 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+    
     @task = Task.find(params[:id])
     @comments = @task.comments('created_at asc')
     @suggestions = @task.suggestions.where(:vote_status => 0).order('vote_count desc')
@@ -29,7 +35,7 @@ class TasksController < ApplicationController
   # GET /tasks/new.json
   def new
     @task = Task.new
-
+    #TODO: Create 5 Turker hits
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @task }

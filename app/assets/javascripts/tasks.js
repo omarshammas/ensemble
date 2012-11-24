@@ -13,11 +13,6 @@ var ensembleChannel = pusher.subscribe(channel_name);
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
-  console.log('Nowwwwwww');
-  console.log(comment);
-
-  console.log(comment.commentable_type)
-  console.log(comment.commentable_type=='Turk')
   var comment_class;
   
   //User comment

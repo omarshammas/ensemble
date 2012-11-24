@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.8'
 gem 'pusher'
 gem 'rinku'
+gem 'paperclip', '~> 3.0'
 
 group :development do
   gem 'sqlite3'
