@@ -37,14 +37,14 @@
 					<% @comments.each do |comment| %>
 					<li class='message'>
 						<div class=	'			
-						<%if comment.user_id == @task.user_id%>
+						<%if comment.commentable == @task.user%>
 							alert alert-error
-						<%elsif comment.user_id == current_user%>
+						<%elsif comment.commentable == current_turk%>
 							alert alert-success
 						<%else%>
 							alert alert-info
 						<%end%>
-						'><p><strong>User<%= comment.user_id %>:</strong> <%= comment.body%></p></div>
+						'><p><strong>Fashionista<%= comment.commentable.id %>:</strong> <%= comment.body%></p></div>
 					</li>
 					<% end %>
 			</ul>
@@ -108,18 +108,23 @@
 
 			<% @suggestions.each do |suggestion| %>
 				<li class='suggestion'>
-					<button class='btn btn-mini upvote'>
-						<i class='icon-thumbs-up'>
-							<input type='hidden' value='<%=suggestion.id%>'/>
-						</i>
-					</button>
-					<button class='btn btn-mini downvote'>
-						<i class='icon-thumbs-down'>
-							<input type='hidden' value='<%=suggestion.id%>'/>
-						</i>
-					</button>
-					<%= suggestion.body %>
-					<span class='badge badge-success'><%=suggestion.vote_count%></span>
+					<div class="row">
+						<div class="span1">
+							<p><%= image_tag suggestion.image_url, :id => 'suggestion-img'%></p>
+						</div>
+						<div class="span3">
+							<a src=<%= suggestion.product_link%>><p><b><%=suggestion.product_name%></b></p></a>
+							<p><%=suggestion.retailer%></p>
+							<p>$<%=suggestion.price%></p>
+							<button class='btn btn-mini upvote'>
+								<i class='icon-thumbs-up'><input type='hidden' value='<%=suggestion.id%>'/></i>
+							</button>
+							<button class='btn btn-mini downvote'>
+								<i class='icon-thumbs-down'><input type='hidden' value='<%=suggestion.id%>'/></i>
+							</button>
+							<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
+						</div>
+					</div>
 				</li>
 			<% end %>
 		</ul>

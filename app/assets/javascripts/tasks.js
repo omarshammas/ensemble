@@ -18,7 +18,6 @@ var currentImageIndex = -1;
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
   var comment_class;
-  
   //User comment
   if(comment.commentable_type == 'User')
     comment_class = 'alert alert-error';
@@ -28,7 +27,6 @@ ensembleChannel.bind('post_comment', function(comment) {
   //Another Turker's comment
   else
     comment_class = 'alert alert-info';
-  
   $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p><strong> User ' + comment.commentable_id + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
 });
@@ -51,19 +49,16 @@ ensembleChannel.bind('update_suggestion_votes', function(suggestions) {
 });
 
 function getSuggestionBullet(suggestion){
-  list_item = "<li class='suggestion'>  \
-      <button class='btn btn-mini upvote'>  \
-        <i class='icon-thumbs-up'>  \
-          <input type='hidden' value='" + suggestion.id + "'/> \
-        </i> \
-      </button> \
-      <button class='btn btn-mini downvote'>  \
-        <i class='icon-thumbs-down'>  \
-          <input type='hidden' value='" + suggestion.id + "'/>  \
-        </i>  \
-      </button>&nbsp;" + replaceURLWithHTMLLinks(suggestion.body) + " \
-      <span class='badge badge-success'>" + suggestion.vote_count + "</span></li>";
-  return list_item;
+	list_item = '<li class="suggestion"><div class="row"><div class="span1">';
+  	list_item += '<p><img alt="" id="suggestion-img" src="'+suggestion.image_url+'"/></p>';
+  	list_item += '</div> <div class="span3"><a src='+suggestion.product_url;
+  	list_item += '><p><b>'+suggestion.product_name+'</b></p></a>';
+	list_item += '<p>'+suggestion.retailer+'</p><p>$'+suggestion.price+'</p>';
+	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="3"/></i>';
+	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="3"/></i>';
+	list_item += '</button><span class="badge badge-success">'+suggestion.vote_count+'</span></div></div></li>';
+  	console.log(list_item);
+  	return list_item;
 }
 
 $('.upvote').live("click",function(){
@@ -90,9 +85,10 @@ function trim(str) {
 }
 
 
-$('#create-suggestion-product-link').keyup(function(e)
+$('#create-suggestion-product-link').blur(function()
 {
-	if((e.which == 13 || e.which == 32 || e.which == 17 || e.which == 9) && trim($(this).val()) != ""){
+	if( trim($(this).val() ) != ""){
+		alert(trim($(this).val()));
 		url = $(this).val();
 		if(urlRegex.test(url)){	
 			$.get('/preview?url='+url, function(response){
@@ -105,6 +101,8 @@ $('#create-suggestion-product-link').keyup(function(e)
 	}
 	return false;
 });
+
+
 
 $('#suggestion-img-left').click(function(){
 	if(currentImageIndex > 0){
