@@ -23,6 +23,7 @@ class ApiController < ApplicationController
   def post_down_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
+    #if(suggestion.votes.where(:turk_id => turk.id))   
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
@@ -42,10 +43,15 @@ class ApiController < ApplicationController
     
     turk = current_turk
     suggestion.suggestable = turk
-    suggestion.body = params[:body]
     suggestion.acceptance_status = 0
     suggestion.vote_status = 0
     suggestion.vote_count = 0
+    suggestion.image_url = params[:image_url]
+    suggestion.retailer = params[:retailer]
+    suggestion.product_link = params[:product_link]
+    suggestion.product_name = params[:product_name]
+    suggestion.price = params[:price]
+
     #TODO set iteration for comment
 
     payload = suggestion.attributes

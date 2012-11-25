@@ -12,7 +12,7 @@ Ensemble::Application.routes.draw do
 
   get "user/dashboard", as: :dashboard
   root to: 'user#dashboard', as: :home
-  
+  match '/preview', :to => 'preview#load'
   match 'turk/tasks/:id' => "turk#tasks"
   match ':controller(/:action(/:id(.:format)))'
 end

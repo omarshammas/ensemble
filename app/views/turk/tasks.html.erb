@@ -1,16 +1,14 @@
 <script type='text/javascript'>
-  	channel_name = 'ensemble-<%= @task.id %>';
-  	channel = '<%= @task.id %>';
-  	turk_id = '<%= current_turk.id%>';
+   channel_name = 'ensemble-<%= @task.id %>';
+   channel = '<%= @task.id %>';
+   turk_id = '<%= current_turk.id%>';
 </script>
+<%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
+<%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
 
-<div class='row' id='objective'>
-	<div class='span10'>
-		<h1><%= @task.body %></h1>
-	</div>
-	<!-- 	<div class='span2'>
-		<button class='btn' id='redeem_code'>Redeem Code</button>
-	</div> -->
+<div class='hero-unit' id='objective'>
+	<%= image_tag @task.image.url(:small),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+	<h3><%= @task.body %></h3>
 </div>
 
 <div class ='row'>
@@ -39,14 +37,14 @@
 					<% @comments.each do |comment| %>
 					<li class='message'>
 						<div class=	'			
-						<%if comment.commentable == @task.user%>
+						<%if comment.user_id == @task.user_id%>
 							alert alert-error
-						<%elsif comment.commentable == current_turk%>
+						<%elsif comment.user_id == current_user%>
 							alert alert-success
 						<%else%>
 							alert alert-info
 						<%end%>
-						'><p><strong>User <%= comment.commentable.id %>:</strong> <%= comment.body%></p></div>
+						'><p><strong>User<%= comment.user_id %>:</strong> <%= comment.body%></p></div>
 					</li>
 					<% end %>
 			</ul>
@@ -72,9 +70,35 @@
 			    <h3 id="addSuggestionLabel">Make a suggestion</h3>
 			  </div>
 			  <div class="modal-body">
-			  	<input type='text' class='span6' id='suggestion_url' placeholder='Example - http://www.amazon.com/4562312'></textarea>
-			  	<!-- <input type='text' name='suggestion_retailer' id='suggestion_retailer' placeholder='Retailers .. Nike, Amazon, ..' />
-			  	<input type='text' name='suggestion_price' id='suggestion_price' placeholder='Price .. $35, 20, ..' /> -->
+		  		<form>
+					<fieldset>
+						<div class='row well'>
+							<div class = 'span3' id='suggestion img'>
+									<img alt="" class="img-polaroid pull-left" id="create-suggestion-img" src="" />
+							</div>
+							<div class = 'span3'>
+						    	<div class="btn-toolbar">
+						    		<div class="btn-group">
+						    			<a class="btn" id='suggestion-img-left' href="#"><i class="icon-chevron-left"></i></a>
+						    			<a class="btn" id='suggestion-img-right' href="#"><i class="icon-chevron-right"></i></a>
+						    		</div>
+						    	</div>
+						    	<p> Select product image </p>
+							</div>
+						</div>
+						<br>
+						<input type='hidden' id='create-suggestion-img-url' >
+						<label>Product link</label>
+						<input type='text' class='span6' id='create-suggestion-product-link' placeholder='Example - http://www.amazon.com/4562312'>
+						<span class='help-block'><i>Paste link to article of clothing. Images will be extracted from the link</i></span>
+						<label>Product name</label>
+						<input type="text" class="span6" id="create-suggestion-product-name" placeholder="Include brand name e.g. The North Face 'Redpoint' Jacket">
+						<label>Retailer</label>
+						<input type="text" class="span6" id="create-suggestion-retailer" placeholder="Enter retailer e.g. Macy's, Target, Amazon, Nordstrom">
+						<label>Price</label>
+						<input type="text" class="span6" id="create-suggestion-product-price" placeholder="Enter price...">
+					</fieldset>
+				</form>
 			  </div>
 			  <div class="modal-footer">
 			    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>

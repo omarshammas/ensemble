@@ -1,3 +1,5 @@
+
+
 $(document).ready(function()
 {
 // Logging - Disable in production
@@ -8,8 +10,10 @@ Pusher.log = function() { if (window.console) window.console.log.apply(window.co
 var pusher = new Pusher('9ceb5ef670c4262bfbca');
 Pusher.channel_auth_endpoint = '/api/authenticate';
 var ensembleChannel = pusher.subscribe(channel_name);
-
-
+var url;
+var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i;
+var images;
+var currentImageIndex = -1;
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
@@ -81,14 +85,45 @@ $('#suggest-btn').click(function(){
     post_suggestion();
 });
 
-// $('.thumbnail').tooltip({ 
-//     track: true, 
-//     delay: 0, 
-//     showURL: false, 
-//     bodyHandler: function() { 
-//     	var response = $(this).children().find('input[type="hidden"]');
-//         return response.val();
-//     } 
-// });
+function trim(str) {
+	return str.replace(/^\s+|\s+$/g,"");
+}
+
+
+$('#create-suggestion-product-link').keyup(function(e)
+{
+	if((e.which == 13 || e.which == 32 || e.which == 17 || e.which == 9) && trim($(this).val()) != ""){
+		url = $(this).val();
+		if(urlRegex.test(url)){	
+			$.get('/preview?url='+url, function(response){
+				images = response.images;
+				currentImageIndex = 0;
+				var imgSrc = images[currentImageIndex];
+				$('#create-suggestion-img').attr("src",imgSrc);
+			});	
+		}
+	}
+	return false;
+});
+
+$('#suggestion-img-left').click(function(){
+	if(currentImageIndex > 0){
+		currentImageIndex--;
+		var imgSrc = images[currentImageIndex];
+		$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+		$('#create-suggestion-img-url').attr("src",imgSrc);
+	}
+});
+
+$('#suggestion-img-right').click(function(){
+	if(currentImageIndex < (images.length - 1) ){
+		currentImageIndex++;
+		var imgSrc = images[currentImageIndex];
+		$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+		$('#create-suggestion-img-url').attr("src",imgSrc);
+	}
+});
+
+
 
 });
