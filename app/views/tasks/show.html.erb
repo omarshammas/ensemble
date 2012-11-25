@@ -5,7 +5,7 @@
   	user_id = '<%= current_user.id%>'
 </script>
 <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
-
+<%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
 
 <div class='hero-unit' id='objective'>
 	<%= image_tag @task.image.url(:small),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
@@ -71,9 +71,25 @@
 			    <h3 id="addSuggestionLabel">Make a suggestion</h3>
 			  </div>
 			  <div class="modal-body">
-			  	<input type='text' class='span6' id='suggestion_url' placeholder='Example - http://www.amazon.com/4562312'></textarea>
-			  	<!-- <input type='text' name='suggestion_retailer' id='suggestion_retailer' placeholder='Retailers .. Nike, Amazon, ..' />
-			  	<input type='text' name='suggestion_price' id='suggestion_price' placeholder='Price .. $35, 20, ..' /> -->
+		  		<form>
+					<fieldset>
+						<legend>Suggestion details</legend>
+						<label>URL</label>
+						<input type='text' class='span6' id='suggestion_url' placeholder='Example - http://www.amazon.com/4562312'></textarea>
+						<span class='help-block'>Paste URL to article of clothing</span>
+						<label>Retailer</label>
+						<input type="text" placeholder="Enter retailer...">
+						<label>Price</label>
+						<input type="text" placeholder="Enter price...">
+						
+						<label class="checkbox">
+							<input type="checkbox"> Check me out
+						</label>
+						<button type="submit" class="btn">
+							Submit
+						</button>
+					</fieldset>
+				</form>
 			  </div>
 			  <div class="modal-footer">
 			    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>

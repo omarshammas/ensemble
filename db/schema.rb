@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121125035631) do
+ActiveRecord::Schema.define(:version => 20121125042417) do
 
   create_table "comments", :force => true do |t|
     t.integer  "iteration_id"
@@ -51,6 +51,11 @@ ActiveRecord::Schema.define(:version => 20121125035631) do
     t.integer  "suggestable_id"
     t.string   "suggestable_type"
     t.integer  "task_id"
+    t.integer  "price"
+    t.string   "product_name"
+    t.string   "product_link"
+    t.string   "image_url"
+    t.string   "retailer"
   end
 
   create_table "tasks", :force => true do |t|
