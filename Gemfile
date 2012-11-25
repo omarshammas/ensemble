@@ -5,6 +5,7 @@ gem 'pusher'
 gem 'rinku'
 gem 'paperclip', '~> 3.0'
 gem 'ruby-aws'
+gem 'twilio-ruby'
 
 group :development do
   gem 'sqlite3'
