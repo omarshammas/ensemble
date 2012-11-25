@@ -7,6 +7,7 @@ gem 'paperclip', '~> 3.0'
 gem 'httpclient'
 gem 'nokogiri'
 gem 'rmagick'
+gem 'ruby-aws'
 
 group :development do
   gem 'sqlite3'
@@ -32,6 +33,7 @@ end
 gem 'jquery-rails'
 gem 'bootstrap-sass'
 gem 'bcrypt-ruby' #for securely storing passwords
+
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

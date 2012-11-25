@@ -48,6 +48,7 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    highline (1.6.15)
     hike (1.2.1)
     httpclient (2.3.0.1)
     i18n (0.6.1)
@@ -106,6 +107,9 @@ GEM
       json (~> 1.4)
     rinku (1.7.2)
     rmagick (2.13.1)
+    ruby-aws (1.6.0)
+      highline (>= 1.2.7)
+      nokogiri (>= 1.4)
     ruby-graphviz (1.0.8)
     sass (3.2.3)
     sass-rails (3.2.5)
@@ -145,6 +149,7 @@ DEPENDENCIES
   rails (= 3.2.8)
   rinku
   rmagick
+  ruby-aws
   sass-rails (~> 3.2.3)
   sqlite3
   uglifier (>= 1.0.3)

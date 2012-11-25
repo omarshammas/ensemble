@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(:version => 20121125042417) do
     t.integer  "task_id"
   end
 
+  create_table "hits", :force => true do |t|
+    t.string   "code"
+    t.string   "h_id"
+    t.string   "type_id"
+    t.string   "url"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.integer  "task_id"
+  end
+
   create_table "iterations", :force => true do |t|
     t.integer  "task_id"
     t.integer  "state"
