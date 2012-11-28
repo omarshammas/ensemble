@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121125042417) do
+ActiveRecord::Schema.define(:version => 20121125092912) do
 
   create_table "comments", :force => true do |t|
     t.integer  "iteration_id"
@@ -36,6 +36,14 @@ ActiveRecord::Schema.define(:version => 20121125042417) do
   create_table "iterations", :force => true do |t|
     t.integer  "task_id"
     t.integer  "state"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "preferences", :force => true do |t|
+    t.integer  "task_id"
+    t.integer  "turk_id"
+    t.text     "body"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

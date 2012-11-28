@@ -7,6 +7,7 @@ class Task < ActiveRecord::Base
   has_many :comments
   has_many :suggestions
   has_many :hits
+  has_many :preferences
   
   has_attached_file :image, :styles => {:medium => "300x300", :small => "200x200>", :thumb => "100x100>" }
 

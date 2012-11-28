@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Task:</b>
+  <%= @preference.task_id %>
+</p>
+
+<p>
+  <b>Turk:</b>
+  <%= @preference.turk_id %>
+</p>
+
+<p>
+  <b>Body:</b>
+  <%= @preference.body %>
+</p>
+
+
+<%= link_to 'Edit', edit_preference_path(@preference) %> |
+<%= link_to 'Back', preferences_path %>
