@@ -53,7 +53,7 @@ class ApiController < ApplicationController
     payload = suggestion.attributes
     payload[:turk] = turk.attributes
     if suggestion.save
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', payload)
+      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestions', payload)
       render :text => "sent"
     else
       render :text => "failed"
