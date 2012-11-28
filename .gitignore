@@ -16,3 +16,5 @@
 
 .rvmrc
 *.log
+
+config/twilio.yml

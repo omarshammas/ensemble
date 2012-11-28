@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  attr_accessible :email, :access_key_id, :secret_access_key, :password, :password_confirmation
+  attr_accessible :email, :phone_number, :access_key_id, :secret_access_key, :password, :password_confirmation
   has_secure_password
 
   before_save { |user| user.email = email.downcase }
@@ -12,4 +12,15 @@ class User < ActiveRecord::Base
   has_many :tasks
   has_many :comments, as: :commentable
   has_many :suggestions, as: :suggestable
+
+  def send_message msg
+    account_sid = TWILIO['ACCOUNT_SSID']
+    auth_token = TWILIO['AUTH_TOKEN']
+    @client = Twilio::REST::Client.new account_sid, auth_token
+    @client.account.sms.messages.create(
+      from: '+14155992671',
+      to: self.phone_number,
+      body: msg
+    )
+  end
 end

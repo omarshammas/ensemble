@@ -14,6 +14,11 @@ class ApiController < ApplicationController
       suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render :text => "sent"
+
+      #Get User and Send SMS
+      user = task.user
+      user.send_message suggestion.product_link
+      user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
     else
       render :text => "failed"
     end
