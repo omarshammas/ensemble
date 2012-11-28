@@ -8,6 +8,6 @@ class TurkController < ApplicationController
     @comments = @task.comments('created_at asc')
     @suggestions = @task.suggestions.where(vote_status: 0).order('vote_count desc')
     @processed_suggestions = @task.suggestions.where('vote_status <> 0 AND acceptance_status <> 0').order('created_at desc')
-    @preferences = []
+    @preferences = @task.preferences('created_at desc')
   end
 end

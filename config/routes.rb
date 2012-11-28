@@ -1,4 +1,6 @@
 Ensemble::Application.routes.draw do
+  resources :preferences
+
   resources :votes
   resources :tasks
   resources :users do
