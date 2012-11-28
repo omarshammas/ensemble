@@ -9,6 +9,7 @@ gem 'nokogiri'
 gem 'rmagick'
 gem 'ruby-aws'
 gem 'twilio-ruby'
+gem 'forward'
 
 group :development do
   gem 'sqlite3'

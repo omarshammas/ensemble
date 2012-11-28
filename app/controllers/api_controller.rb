@@ -4,6 +4,8 @@ class ApiController < ApplicationController
   Pusher.key = '9ceb5ef670c4262bfbca'
   Pusher.secret = '959771cb4f1e0062256a'
 
+  THRESHOLD = 5
+
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
@@ -16,9 +18,11 @@ class ApiController < ApplicationController
       render :text => "sent"
 
       #Get User and Send SMS
-      user = task.user
-      user.send_message suggestion.product_link
-      user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
+      if suggestion.vote_count >= THRESHOLD
+        user = task.user
+        user.send_message suggestion.product_link
+        user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
+      end
     else
       render :text => "failed"
     end
@@ -110,6 +114,37 @@ class ApiController < ApplicationController
     else
       render :text => "Not authorized", :status => '403'
     end
+  end
+
+  def sms
+
+=begin
+  {"AccountSid"=>"ACebf8674db0f1e95deec913097e855dee", "Body"=>"Sent from your Twilio trial account - shoo bro", "ToZip"=>"01801", "FromState"=>"MA", "ToCity"=>"WOBURN", "SmsSid"=>"SM58e0207cc3294ccca7905bc28bb6e5f8", "ToState"=>"MA", "To"=>"+13392984356", "ToCountry"=>"US", "FromCountry"=>"US", "SmsMessageSid"=>"SM58e0207cc3294ccca7905bc28bb6e5f8", "ApiVersion"=>"2010-04-01", "FromCity"=>"BOSTON", "SmsStatus"=>"received", "From"=>"+16177211618", "FromZip"=>"02110", "controller"=>"turk", "action"=>"sms"}
+=end
+    phone_number = params[:From]
+    body = params[:Body]
+
+    user = User.find_by_phone_number(phone_number)
+    return render text: '<Response>' if user.nil?
+  
+    #TODO    
+    #task = user.tasks.where()    
+    task = user.tasks.last
+    return render text: '<Response>' if user.nil?
+
+    comment = Comment.new
+    comment.task_id = task.id
+    comment.commentable = user
+    comment.body = body
+    
+    payload = comment.attributes
+    payload[:user] = user.attributes
+    payload[:task] = task.attributes
+    if comment.save
+      Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
+    end
+
+    return render text: '<Response>'
   end
 
 end
