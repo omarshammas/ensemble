@@ -31,6 +31,10 @@ ensembleChannel.bind('post_comment', function(comment) {
   scrollToTheTop();
 });
 
+ensembleChannel.bind('vote_already_cast', function(suggestion) {
+	alert("You have already voted on this suggestion");
+});
+
 ensembleChannel.bind('post_suggestion', function(suggestion) {
   var list_item = getSuggestionBullet(suggestion);
   $('#suggestion-list').append(list_item);
@@ -54,7 +58,10 @@ ensembleChannel.bind('update_preferences', function(preferences) {
   var list_item;
   for (ii = 0; ii < preferences.length; ++ii) {
       pref = preferences[ii];
-      list_item = '<li class="span5 preference"><p>' + pref.body + '</p></li>';
+      list_item = "<li class='span5 preference'><p>" + pref.body;
+      list_item += "<a  href='#'><i class='icon-remove remove-pref-icon' value='";
+      list_item += pref.id+"'></i></a></p></li>";
+      console.log(list_item);
       $('#preference-list').append(list_item);    
   }
 });
@@ -62,8 +69,8 @@ ensembleChannel.bind('update_preferences', function(preferences) {
 function getSuggestionBullet(suggestion){
 	list_item = '<li class="suggestion"><div class="row"><div class="span1">';
   	list_item += '<p><img alt="" id="suggestion-img" src="'+suggestion.image_url+'"/></p>';
-  	list_item += '</div> <div class="span3"><a src="'+suggestion.product_url;
-  	list_item += '"><p><b>'+suggestion.product_name+'</b></p></a>';
+  	list_item += '</div> <div class="span3"><a href="'+suggestion.product_url;
+  	list_item += '" target="_blank"><p><b>'+suggestion.product_name+'</b></p></a>';
 	list_item += '<p>'+suggestion.retailer+'</p><p>$'+suggestion.price+'</p>';
 	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="'+suggestion.id+'"/></i>';
 	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="3"/></i>';
@@ -80,6 +87,10 @@ $('.upvote').live("click",function(){
 $('.downvote').live("click",function(){
     var suggestion_id = $(this).children().find('input[type="hidden"]');
     post_down_vote(suggestion_id.val());
+});
+
+$('.remove-pref-icon').live("click",function(){
+    remove_pref($(this).attr("value"));
 });
 
 
