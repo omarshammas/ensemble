@@ -44,12 +44,17 @@
   display:inline;
 }
 
-.preferences{
+.memory{
   height:115px;
-  padding:5px;
 }
 
-.preference-img{
+#objective{
+  height:110px;
+  padding:5px;
+  margin-bottom:15px;
+}
+
+.prev-suggestion-img{
   max-height:100px;
 }
 
@@ -89,4 +94,9 @@
 #suggestion-img{
   width:60px;
   max-height:100px;
+}
+
+#preference-list{
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

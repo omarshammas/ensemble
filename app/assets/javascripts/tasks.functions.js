@@ -13,28 +13,25 @@ function post_comment() {
 }
 
 function post_suggestion() {
-
 	var image_url = $('#create-suggestion-img-url').attr('src');
 	var retailer = $('#create-suggestion-retailer').val();
 	var product_name = $('#create-suggestion-product-name').val();
 	var product_link = $('#create-suggestion-product-link').val();
 	var price = $('#create-suggestion-product-price').val(); 
-	
-	alert(image_url)
-	alert(retailer)
-	alert(product_name)
-	alert(product_link)
-	alert(price)
-	
+	//Return if all fields aren't filled out
 	if(!image_url || !retailer || !product_name || !product_link || !price) {
 		alert('Please fill out all fields');
 		return false;
 	}
-	
-
-
+	//Post suggestion
 	$.post('/api/post_suggestion', { "task_id": channel, "image_url": image_url, "retailer": retailer, 
 		"product_name": product_name, "product_link": product_link, "price": price}, function(response) {
+	});
+}
+
+function post_preference(){
+	var body = $('#create-preference-modal-textarea').val();
+	$.post('/api/post_preference', {"preference_body": body, "task_id": channel}, function(response) {
 	});
 }
 

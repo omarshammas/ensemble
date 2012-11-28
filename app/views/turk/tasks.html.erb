@@ -5,14 +5,18 @@
 </script>
 <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
 <%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
-
-<div class='hero-unit' id='objective'>
-	<%= image_tag @task.image.url(:small),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
-	<h3><%= @task.body %></h3>
+<div class="row">
+	<div class="span12">
+		<div class='hero-unit' id='objective'>
+			<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+			<h4><%= @task.body %></h4>
+		</div>
+	</div>
 </div>
 
 <div class ='row'>
-	<div class='span12 well preferences'>
+<!-- 	<div class='span6 well well-small memory'>
+		<h5>User History </h5>
 		<ul class="thumbnails">
 			<%  @processed_suggestions.each do |suggestion| %>
 			<li class="span1">
@@ -22,8 +26,18 @@
 				<%elsif suggestion.acceptance_status == 1%>
 						positive
 				<%end%>">
-				<img class= 'preference-img' src=<%=suggestion.image_url%>><input type="hidden" value="<%=suggestion.response%>" href='#'/></img>
+				<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
 				</div>
+			</li>
+			<% end %>
+		</ul>
+	</div> -->
+	<div id="preference-list" class='span12 well well-small memory'>
+		<h5>User Preferences</h5>
+		<ul>
+			<%  @preferences.each do |preference| %>
+			<li class="span5 preference">
+					<p><%=preference.body%></p>
 			</li>
 			<% end %>
 		</ul>
@@ -38,13 +52,19 @@
 					<li class='message'>
 						<div class=	'			
 						<%if comment.commentable == @task.user%>
-							alert alert-error
+							alert alert-error'>
+							<p><a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>
+								<strong>Requestor:</strong> 
+								<%= comment.body%></p>
+								</div>
 						<%elsif comment.commentable == current_turk%>
-							alert alert-success
+							alert alert-success'>
+							<p><strong>Fashionista<%= comment.commentable.id %>:</strong> 
+								<%= comment.body%></p></div>
 						<%else%>
-							alert alert-info
+							alert alert-info'><p><strong>Fashionista<%= comment.commentable.id %>:</strong>
+								 <%= comment.body%></p></div>
 						<%end%>
-						'><p><strong>Fashionista<%= comment.commentable.id %>:</strong> <%= comment.body%></p></div>
 					</li>
 					<% end %>
 			</ul>
@@ -53,17 +73,34 @@
 			<textarea rows='3' class='span6' id='chat-text-input'></textarea>
 			<button class='btn btn-success' id='comment-btn'>Comment</button>
 		</div>
+		
+		<!-- Add User Preference Modal -->
+		<div id="add-preference-modal" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h3>Create preference</h3>
+			</div>
+			<div class="modal-body">
+				<textarea class="span6" id="create-preference-modal-textarea" rows="3" placeholder="Enter in user preference based on response e.g. User likes to purchase clothes from Nordstrom"></textarea>
+			</div>
+			<div class="modal-footer">
+				 <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+			    <button class="btn btn-primary" id='create-preference-modal-btn' data-dismiss="modal" aria-hidden="true">Create</button>
+			</div>
+		</div>
 	</div>
 
 	<div class='span5' id='suggestions'>		
 		<ul id='suggestion-list'>
 			<li>
 				<h3>Suggestions &nbsp; &nbsp;
-				<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal"><i class='icon-plus'></i></a>
+				<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal" data-target="#addSuggestion"><i class='icon-plus'></i></a>
 				</h3>
 			</li>
 
-			<!-- Modal -->
+			<!-- Create Suggestion Modal -->
 			<div id="addSuggestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addSuggestionLabel" aria-hidden="true" style="display:none;">
 			  <div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -72,7 +109,7 @@
 			  <div class="modal-body">
 		  		<form>
 					<fieldset>
-						<div class='row well'>
+						<div class='row well well-small'>
 							<div class = 'span3' id='suggestion img'>
 									<img alt="" class="img-polaroid pull-left" id="create-suggestion-img" src="" />
 							</div>
@@ -88,9 +125,9 @@
 						</div>
 						<br>
 						<input type='hidden' id='create-suggestion-img-url' >
-						<label>Product link</label>
+						<label>Product link (images will be extracted from link)</label>
 						<input type='text' class='span6' id='create-suggestion-product-link' placeholder='Example - http://www.amazon.com/4562312'>
-						<span class='help-block'><i>Paste link to article of clothing. Images will be extracted from the link</i></span>
+<!-- 						<span class='help-block'><i>Paste link to article of clothing. Images will be extracted from the link</i></span> -->						
 						<label>Product name</label>
 						<input type="text" class="span6" id="create-suggestion-product-name" placeholder="Include brand name e.g. The North Face 'Redpoint' Jacket">
 						<label>Retailer</label>
@@ -105,7 +142,7 @@
 			    <button class="btn btn-primary" id='suggest-btn' data-dismiss="modal" aria-hidden="true">Add</button>
 			  </div>
 			</div>
-
+			
 			<% @suggestions.each do |suggestion| %>
 				<li class='suggestion'>
 					<div class="row">
@@ -113,7 +150,7 @@
 							<p><%= image_tag suggestion.image_url, :id => 'suggestion-img'%></p>
 						</div>
 						<div class="span3">
-							<a src=<%= suggestion.product_link%>><p><b><%=suggestion.product_name%></b></p></a>
+							<a src="<%= suggestion.product_link%>"><p><b><%=suggestion.product_name%></b></p></a>
 							<p><%=suggestion.retailer%></p>
 							<p>$<%=suggestion.price%></p>
 							<button class='btn btn-mini upvote'>

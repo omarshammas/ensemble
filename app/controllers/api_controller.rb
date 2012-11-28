@@ -11,9 +11,8 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id 
       task = suggestion.task
-      votes = task.suggestions.order('vote_count desc')
-      p votes
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', votes)
+      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render :text => "sent"
     else
       render :text => "failed"
@@ -28,8 +27,8 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
-      votes = task.suggestions.order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', votes)
+      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render :text => "sent"
     else
       render :text => "failed"
@@ -40,7 +39,6 @@ class ApiController < ApplicationController
     task = Task.find(params[:task_id])
     suggestion = Suggestion.new
     suggestion.task_id = task.id
-    
     turk = current_turk
     suggestion.suggestable = turk
     suggestion.acceptance_status = 0
@@ -51,14 +49,26 @@ class ApiController < ApplicationController
     suggestion.product_link = params[:product_link]
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
-
     #TODO set iteration for comment
-
     payload = suggestion.attributes
     payload[:turk] = turk.attributes
     if suggestion.save
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestion', payload)
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', payload)
       render :text => "sent"
+    else
+      render :text => "failed"
+    end
+  end
+  
+  def post_preference
+    task = Task.find(params[:task_id])
+    turk = current_turk;
+    preference_body = params[:preference_body]
+    pref = Preference.new(:turk_id => turk.id, :body => preference_body, :task_id => task.id)
+    if pref.save 
+      prefs = task.preferences.order('created_at desc')
+      Pusher["ensemble-"+"#{task.id}"].trigger('update_preferences', prefs)
+      render :text => 'sent'
     else
       render :text => "failed"
     end

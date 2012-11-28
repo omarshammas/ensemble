@@ -48,13 +48,24 @@ ensembleChannel.bind('update_suggestion_votes', function(suggestions) {
   }
 });
 
+ensembleChannel.bind('update_preferences', function(preferences) {
+  $('.preference').remove();
+  var ii;
+  var list_item;
+  for (ii = 0; ii < preferences.length; ++ii) {
+      pref = preferences[ii];
+      list_item = '<li class="span5 preference"><p>' + pref.body + '</p></li>';
+      $('#preference-list').append(list_item);    
+  }
+});
+
 function getSuggestionBullet(suggestion){
 	list_item = '<li class="suggestion"><div class="row"><div class="span1">';
   	list_item += '<p><img alt="" id="suggestion-img" src="'+suggestion.image_url+'"/></p>';
-  	list_item += '</div> <div class="span3"><a src='+suggestion.product_url;
-  	list_item += '><p><b>'+suggestion.product_name+'</b></p></a>';
+  	list_item += '</div> <div class="span3"><a src="'+suggestion.product_url;
+  	list_item += '"><p><b>'+suggestion.product_name+'</b></p></a>';
 	list_item += '<p>'+suggestion.retailer+'</p><p>$'+suggestion.price+'</p>';
-	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="3"/></i>';
+	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="'+suggestion.id+'"/></i>';
 	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="3"/></i>';
 	list_item += '</button><span class="badge badge-success">'+suggestion.vote_count+'</span></div></div></li>';
   	console.log(list_item);
@@ -79,6 +90,9 @@ $('#comment-btn').click(function(){
 $('#suggest-btn').click(function(){
     post_suggestion();
 });
+$('#create-preference-modal-btn').click(function(){
+	post_preference();
+});
 
 function trim(str) {
 	return str.replace(/^\s+|\s+$/g,"");
@@ -88,9 +102,9 @@ function trim(str) {
 $('#create-suggestion-product-link').blur(function()
 {
 	if( trim($(this).val() ) != ""){
-		alert(trim($(this).val()));
 		url = $(this).val();
-		if(urlRegex.test(url)){	
+		if(urlRegex.test(url)){
+			$('#create-suggestion-img').attr('src','/loader.gif');	
 			$.get('/preview?url='+url, function(response){
 				images = response.images;
 				currentImageIndex = 0;
