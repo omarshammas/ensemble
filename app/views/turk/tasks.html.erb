@@ -37,7 +37,9 @@
 		<ul>
 			<%  @preferences.each do |preference| %>
 			<li class="span5 preference">
-					<p><%=preference.body%></p>
+					<p><%=preference.body%><a  href="#">
+						<i class="icon-remove remove-pref-icon" value="<%=preference.id%>">
+						</i></a></p>
 			</li>
 			<% end %>
 		</ul>
@@ -150,7 +152,7 @@
 							<p><%= image_tag suggestion.image_url, :id => 'suggestion-img'%></p>
 						</div>
 						<div class="span3">
-							<a src="<%= suggestion.product_link%>"><p><b><%=suggestion.product_name%></b></p></a>
+							<a href="<%= suggestion.product_link%>" target="_blank"><p><b><%=suggestion.product_name%></b></p></a>
 							<p><%=suggestion.retailer%></p>
 							<p>$<%=suggestion.price%></p>
 							<button class='btn btn-mini upvote'>

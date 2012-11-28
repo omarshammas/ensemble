@@ -36,14 +36,17 @@ function post_preference(){
 }
 
 function post_up_vote(suggestion_id) {
-	//TODO: Only post if is a URL
 	$.post('/api/post_up_vote', {"suggestion_id": suggestion_id}, function(response) {
 	});
 }
 
 function post_down_vote(suggestion_id) {
-	//TODO: Only post if is a URL
 	$.post('/api/post_down_vote', {"suggestion_id": suggestion_id}, function(response) {
+	});
+}
+
+function remove_pref(pref_id){
+	$.post('/api/remove_preference', {"preference_id": pref_id, "task_id": channel}, function(response) {
 	});
 }
 

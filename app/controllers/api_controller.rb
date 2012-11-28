@@ -9,6 +9,12 @@ class ApiController < ApplicationController
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
+    if(suggestion.votes.where(:turk_id => turk.id).count >= 1)
+      task = suggestion.task
+      Pusher["ensemble-" + "#{task.id}"].trigger('vote_already_cast', task)
+      render :text => "failed"
+      return
+    end 
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id 
@@ -31,7 +37,12 @@ class ApiController < ApplicationController
   def post_down_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
-    #if(suggestion.votes.where(:turk_id => turk.id))   
+    if(suggestion.votes.where(:turk_id => turk.id).count >= 1)
+      task = suggestion.task
+      Pusher["ensemble-" + "#{task.id}"].trigger('vote_already_cast', task)
+      render :text => "failed"
+      return
+    end 
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
@@ -81,6 +92,15 @@ class ApiController < ApplicationController
     else
       render :text => "failed"
     end
+  end
+  
+  def remove_preference
+    task = Task.find(params[:task_id])
+    pref = Preference.find(params[:preference_id])
+    pref.destroy()
+    prefs = task.preferences.order('created_at desc')
+    Pusher["ensemble-"+"#{task.id}"].trigger('update_preferences', prefs)
+    render :text => 'sent'
   end
   
   def post_comment
