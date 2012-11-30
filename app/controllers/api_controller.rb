@@ -15,18 +15,23 @@ class ApiController < ApplicationController
 
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
-      Suggestion.increment_counter :vote_count, suggestion.id 
+      Suggestion.increment_counter :vote_count, suggestion.id
+      suggestion.reload
       task = suggestion.task
       suggestions = task.suggestions.where(sent: false).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
-
       #Send User an SMS with the suggestion
-      if suggestion.reload.vote_count >= THRESHOLD
-        logger.info "Voting threshold reached"
+      if suggestion.vote_count >= THRESHOLD
         user = task.user
         user.send_message suggestion.product_link
         user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
+        #Update suggestion list and show sent suggestion
+        suggestion.sent = true
+        suggestion.save
+        suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+        Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
+        Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
     else
       render json: { status: "failed"}
@@ -45,7 +50,7 @@ class ApiController < ApplicationController
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
       suggestions = task.suggestions.where(sent: false).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else
       render json: { status: "failed"}
@@ -58,16 +63,12 @@ class ApiController < ApplicationController
     suggestion.task_id = task.id
     turk = current_turk
     suggestion.suggestable = turk
-    # suggestion.accepted = 0
-    # suggestion.sent = false
     suggestion.vote_count = 0
     suggestion.image_url = params[:image_url]
     suggestion.retailer = params[:retailer]
     suggestion.product_link = params[:product_link]
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
-    #TODO set iteration for comment
-    suggestion.iteration_id = task.current_iteration.id unless task.current_iteration.nil?
     if suggestion.save
       payload = suggestion.attributes
       payload[:turk] = turk.attributes
@@ -109,7 +110,6 @@ class ApiController < ApplicationController
     turk = current_turk
     comment.commentable = turk
     comment.body = params[:body]
-    #TODO set iteration for comment
     
     payload = comment.attributes
     payload[:turk] = turk.attributes

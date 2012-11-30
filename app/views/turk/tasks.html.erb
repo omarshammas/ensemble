@@ -13,7 +13,14 @@
 		</div>
 	</div>
 </div>
-
+<div class ='row suggestion-alert'>
+	<% if @task.suggestion_sent? %>
+	<div class="span11 alert alert-error">
+		<h4>Waiting on response...</h4>
+		Please wait for the requestor to respond before peforming any actions
+	</div>
+	<%end%>
+</div>
 <div class ='row'>
 <!-- 	<div class='span6 well well-small memory'>
 		<h5>User History </h5>
