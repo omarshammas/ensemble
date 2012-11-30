@@ -69,6 +69,7 @@ class ApiController < ApplicationController
     suggestion.product_link = params[:product_link]
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
+    suggestion.iteration_id = task.current_iteration.id unless task.current_iteration.nil?
     #TODO set iteration for comment
     payload = suggestion.attributes
     payload[:turk] = turk.attributes
