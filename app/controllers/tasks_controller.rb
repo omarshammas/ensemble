@@ -16,11 +16,14 @@ class TasksController < ApplicationController
   end
 
   def show
+    @user = current_user
     @task = Task.find(params[:id])
-    @comments = @task.comments('created_at asc')
-    @suggestions = @task.suggestions.where(sent: false).order('vote_count desc')
-    @processed_suggestions = @task.suggestions.where(sent: true, accepted: [-1,1]).order('created_at desc')
-    @preferences = @task.preferences('created_at desc')
+
+    return redirect_to :home unless @task.user == @user
+
+    @suggestions = @task.suggestions.where(sent: true).order('updated_at desc')
+    @hits = @task.hits
+
     respond_to do |format|
       format.html
       format.json { render json: @task }
@@ -57,10 +60,11 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find(params[:id])
+    return redirect_to :home unless @task.user == @user
 
     respond_to do |format|
       if @task.update_attributes(params[:task])
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        format.html { redirect_to user_task_path(@user,@task), notice: 'Task was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -71,6 +75,8 @@ class TasksController < ApplicationController
 
   def destroy
     @task = Task.find(params[:id])
+    return redirect_to :home unless @task.user == @user
+
     @task.destroy
 
     respond_to do |format|

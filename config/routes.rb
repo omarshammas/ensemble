@@ -2,7 +2,9 @@ Ensemble::Application.routes.draw do
   resources :preferences
   resources :votes
   resources :users do
-    resources :tasks
+    resources :tasks do
+      resources :suggestions
+    end
   end
 
   get "authenticate" => "sessions#authenticate", as: :authenticate

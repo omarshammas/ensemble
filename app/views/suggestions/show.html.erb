@@ -1,18 +1,22 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Task:</b>
-  <%= @suggestion.task_id %>
+  <%= image_tag @suggestion.image_url, :class => 'img-polaroid', width: '100px' %>
 </p>
 
 <p>
-  <b>User:</b>
-  <%= @suggestion.user_id %>
+  <b>Price:</b>
+  <%= @suggestion.iteration_id %>
 </p>
 
 <p>
-  <b>Interation:</b>
-  <%= @suggestion.interation_id %>
+  <b>Product Name:</b>
+  <%= @suggestion.product_name %>
+</p>
+
+<p>
+  <b>Retailer:</b>
+  <%= @suggestion.retailer %>
 </p>
 
 <p>
@@ -21,8 +25,8 @@
 </p>
 
 <p>
-  <b>Vote count:</b>
-  <%= @suggestion.vote_count %>
+  <b>Iteration:</b>
+  <%= @suggestion.iteration_id %>
 </p>
 
 <p>
@@ -35,6 +39,10 @@
   <%= @suggestion.accepted %>
 </p>
 
+<p>
+  <b>Vote count:</b>
+  <%= @suggestion.vote_count %>
+</p>
 
-<%= link_to 'Edit', edit_suggestion_path(@suggestion) %> |
-<%= link_to 'Back', suggestions_path %>
+
+<%= link_to 'Back', user_task_path(@user, @task) %>
