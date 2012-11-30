@@ -22,7 +22,7 @@ class ApiController < ApplicationController
       render json: { status: "success"}
 
       #Send User an SMS with the suggestion
-      if suggestion.reload.vote_count >= THRESHOLD #and not suggestion.sent 
+      if suggestion.reload.vote_count >= THRESHOLD and not suggestion.sent 
         logger.info "Voting threshold reached"
 
         user = task.user
