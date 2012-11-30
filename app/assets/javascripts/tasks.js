@@ -31,7 +31,7 @@ ensembleChannel.bind('post_comment', function(comment) {
   } else {
     //Another Turker's comment
     comment_class = 'alert alert-info';
-    display_name = 'Fashionista'+turk_id;
+    display_name = 'Fashionista'+comment.commentable_id;
   }
   $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
