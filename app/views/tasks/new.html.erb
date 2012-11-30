@@ -13,6 +13,7 @@
 		<input class = "span5" id="task_image" name="task[image]" type="file" />
 		<label>Additional information</label>
   		<textarea class="span4" rows="3"  name="task[body]" placeholder="Enter any other details e.g. I want the following in red"></textarea>
+		<input type="hidden" name="task[user_id]" value= "<%=current_user.id%>" />
 		<br>
 		<button type="submit" class="btn">
 			Submit

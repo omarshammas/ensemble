@@ -22,7 +22,8 @@ class ApiController < ApplicationController
       render json: { status: "success"}
 
       #Send User an SMS with the suggestion
-      if suggestion.vote_count >= THRESHOLD
+      if suggestion.reload.vote_count >= THRESHOLD
+        logger.info "Voting threshold reached"
         user = task.user
         user.send_message suggestion.product_link
         user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
