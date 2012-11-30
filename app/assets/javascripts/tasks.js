@@ -3,7 +3,7 @@
 $(document).ready(function()
 {
 // Logging - Disable in production
-Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
+//Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
 
 // Global variable "channel" is set in the view
@@ -17,17 +17,23 @@ var currentImageIndex = -1;
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
-  var comment_class;
-  //User comment
-  if(comment.commentable_type == 'User')
+  var comment_class, display_name, suggestion_button = '';
+
+  if(comment.commentable_type == 'User'){
+    //User comment
     comment_class = 'alert alert-error';
-  //My Comment
-  else if(comment.commentable_type == 'Turk' && turk_id == comment.commentable_id)
+    suggestion_button = '<a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>';
+    display_name = 'Requester'
+  } else if(comment.commentable_type == 'Turk' && turk_id == comment.commentable_id) {
+    //My Comment
     comment_class = 'alert alert-success'; 
-  //Another Turker's comment
-  else
+    display_name = 'Me'
+  } else {
+    //Another Turker's comment
     comment_class = 'alert alert-info';
-  $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p><strong> User ' + comment.commentable_id + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
+    display_name = 'Fashionista'+turk_id;
+  }
+  $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
 });
 
