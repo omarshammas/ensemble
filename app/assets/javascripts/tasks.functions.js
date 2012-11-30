@@ -37,11 +37,15 @@ function post_preference(){
 
 function post_up_vote(suggestion_id) {
 	$.post('/api/post_up_vote', {"suggestion_id": suggestion_id}, function(response) {
+		if (response['status'] == 'already_voted')
+			vote_already_cast();
 	});
 }
 
 function post_down_vote(suggestion_id) {
 	$.post('/api/post_down_vote', {"suggestion_id": suggestion_id}, function(response) {
+		if (response['status'] == 'already_voted')
+			vote_already_cast();
 	});
 }
 
@@ -57,4 +61,8 @@ function scrollToTheTop() {
 function replaceURLWithHTMLLinks(text) {
      var exp = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[.\!\/\\w]*))?)/;
      return text.replace(exp,"<a href='$1' target='_blank'>$1</a>");
+}
+
+function vote_already_cast(){
+	alert("You have already voted on this suggestion");
 }

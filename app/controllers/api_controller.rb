@@ -9,49 +9,45 @@ class ApiController < ApplicationController
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
-    if(suggestion.votes.where(:turk_id => turk.id).count >= 1)
-      task = suggestion.task
-      Pusher["ensemble-" + "#{task.id}"].trigger('vote_already_cast', task)
-      render :text => "failed"
-      return
-    end 
+
+    #if already voted
+    return render json: { status: "already_voted"} if suggestion.votes.where(:turk_id => turk.id).count >= 1
+
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id 
       task = suggestion.task
       suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
-      render :text => "sent"
+      render json: { status: "success"}
 
-      #Get User and Send SMS
+      #Send User an SMS with the suggestion
       if suggestion.vote_count >= THRESHOLD
         user = task.user
         user.send_message suggestion.product_link
         user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
       end
     else
-      render :text => "failed"
+      render json: { status: "failed"}
     end
   end
 
   def post_down_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
-    if(suggestion.votes.where(:turk_id => turk.id).count >= 1)
-      task = suggestion.task
-      Pusher["ensemble-" + "#{task.id}"].trigger('vote_already_cast', task)
-      render :text => "failed"
-      return
-    end 
+
+    #if already voted
+    return render json: { status: "already_voted"} if suggestion.votes.where(:turk_id => turk.id).count >= 1
+
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
       suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
-      render :text => "sent"
+      render json: { status: "success"}
     else
-      render :text => "failed"
+      render json: { status: "failed"}
     end
   end
   

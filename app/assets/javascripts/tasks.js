@@ -37,10 +37,6 @@ ensembleChannel.bind('post_comment', function(comment) {
   scrollToTheTop();
 });
 
-ensembleChannel.bind('vote_already_cast', function(suggestion) {
-	alert("You have already voted on this suggestion");
-});
-
 ensembleChannel.bind('post_suggestion', function(suggestion) {
   var list_item = getSuggestionBullet(suggestion);
   $('#suggestion-list').append(list_item);
