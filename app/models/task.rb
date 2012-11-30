@@ -8,9 +8,16 @@ class Task < ActiveRecord::Base
   has_many :suggestions
   has_many :hits
   has_many :preferences
+  has_many :iterations
   
   has_attached_file :image, :styles => {:medium => "300x300", :small => "200x200>", :thumb => "100x100>" }
 
+
+  def current_iteration
+    return self.iterations.where(finished: false).first  
+  end
+  
+  
   def createHIT
     @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => :Sandbox
     

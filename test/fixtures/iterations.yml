@@ -2,8 +2,8 @@
 
 one:
   task_id: 1
-  state: 1
+  finished: true
 
 two:
   task_id: 1
-  state: 1
+  finished: true

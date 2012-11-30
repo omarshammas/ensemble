@@ -1,5 +1,6 @@
 class Iteration < ActiveRecord::Base
-  attr_accessible :state, :task_id
+  attr_accessible :finished, :task_id
   
   belongs_to :task
+  has_many :iterations
 end

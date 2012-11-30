@@ -17,12 +17,13 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id 
       task = suggestion.task
-      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render json: { status: "success"}
 
       #Send User an SMS with the suggestion
-      if suggestion.vote_count >= THRESHOLD
+      if suggestion.reload.vote_count >= THRESHOLD
+        logger.info "Voting threshold reached"
         user = task.user
         user.send_message suggestion.product_link
         user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
@@ -43,7 +44,7 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
-      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render json: { status: "success"}
     else
@@ -57,8 +58,8 @@ class ApiController < ApplicationController
     suggestion.task_id = task.id
     turk = current_turk
     suggestion.suggestable = turk
-    suggestion.acceptance_status = 0
-    suggestion.vote_status = 0
+    # suggestion.accepted = 0
+    # suggestion.sent = false
     suggestion.vote_count = 0
     suggestion.image_url = params[:image_url]
     suggestion.retailer = params[:retailer]
@@ -66,10 +67,11 @@ class ApiController < ApplicationController
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
     #TODO set iteration for comment
-    payload = suggestion.attributes
-    payload[:turk] = turk.attributes
+    suggestion.iteration_id = task.current_iteration.id unless task.current_iteration.nil?
     if suggestion.save
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestions', payload)
+      payload = suggestion.attributes
+      payload[:turk] = turk.attributes
+      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestion', payload)
       render :text => "sent"
     else
       render :text => "failed"
@@ -157,11 +159,11 @@ class ApiController < ApplicationController
       comment.task_id = task.id
       comment.commentable = user
       comment.body = body
-      
-      payload = comment.attributes
-      payload[:user] = user.attributes
-      payload[:task] = task.attributes
+    
       if comment.save
+        payload = comment.attributes
+        payload[:user] = user.attributes
+        payload[:task] = task.attributes
         Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
       end
     end

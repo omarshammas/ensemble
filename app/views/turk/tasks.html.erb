@@ -21,9 +21,9 @@
 			<%  @processed_suggestions.each do |suggestion| %>
 			<li class="span1">
 				<div class = "thumbnail  
-				<%if suggestion.acceptance_status == -1%>
+				<%if suggestion.accepted == -1%>
 						negative
-				<%elsif suggestion.acceptance_status == 1%>
+				<%elsif suggestion.accepted == 1%>
 						positive
 				<%end%>">
 				<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>

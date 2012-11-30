@@ -18,7 +18,7 @@ class SuggestionsControllerTest < ActionController::TestCase
 
   test "should create suggestion" do
     assert_difference('Suggestion.count') do
-      post :create, suggestion: { acceptance_status: @suggestion.acceptance_status, body: @suggestion.body, interation_id: @suggestion.interation_id, task_id: @suggestion.task_id, user_id: @suggestion.user_id, vote_count: @suggestion.vote_count, vote_status: @suggestion.vote_status }
+      post :create, suggestion: { accepted: @suggestion.accepted, body: @suggestion.body, interation_id: @suggestion.interation_id, task_id: @suggestion.task_id, user_id: @suggestion.user_id, vote_count: @suggestion.vote_count, sent: @suggestion.sent }
     end
 
     assert_redirected_to suggestion_path(assigns(:suggestion))
@@ -35,7 +35,7 @@ class SuggestionsControllerTest < ActionController::TestCase
   end
 
   test "should update suggestion" do
-    put :update, id: @suggestion, suggestion: { acceptance_status: @suggestion.acceptance_status, body: @suggestion.body, interation_id: @suggestion.interation_id, task_id: @suggestion.task_id, user_id: @suggestion.user_id, vote_count: @suggestion.vote_count, vote_status: @suggestion.vote_status }
+    put :update, id: @suggestion, suggestion: { accepted: @suggestion.accepted, body: @suggestion.body, interation_id: @suggestion.interation_id, task_id: @suggestion.task_id, user_id: @suggestion.user_id, vote_count: @suggestion.vote_count, sent: @suggestion.sent }
     assert_redirected_to suggestion_path(assigns(:suggestion))
   end
 
