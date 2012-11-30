@@ -4,7 +4,7 @@ class ApiController < ApplicationController
   Pusher.key = '9ceb5ef670c4262bfbca'
   Pusher.secret = '959771cb4f1e0062256a'
 
-  THRESHOLD = 5
+  THRESHOLD = 2
 
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
@@ -145,23 +145,29 @@ class ApiController < ApplicationController
     body = params[:Body]
 
     user = User.find_by_phone_number(phone_number)
+    p "User #{user}"
     return render text: '<Response>' if user.nil?
   
-    #TODO    
-    #task = user.tasks.where()    
-    task = user.tasks.last
-    return render text: '<Response>' if user.nil?
+    task = user.tasks.where(finished: false).first
+    p "Task #{task}"
+    return render text: '<Response>' if task.nil?
 
-    comment = Comment.new
-    comment.task_id = task.id
-    comment.commentable = user
-    comment.body = body
-    
-    payload = comment.attributes
-    payload[:user] = user.attributes
-    payload[:task] = task.attributes
-    if comment.save
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
+    p "Body #{body}"
+    if body == "end;"
+      task.close()
+      Pusher["ensemble-" + "#{task.id}"].trigger('task_finished', payload)
+    else
+      comment = Comment.new
+      comment.task_id = task.id
+      comment.commentable = user
+      comment.body = body
+      
+      payload = comment.attributes
+      payload[:user] = user.attributes
+      payload[:task] = task.attributes
+      if comment.save
+        Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
+      end
     end
 
     return render text: '<Response>'

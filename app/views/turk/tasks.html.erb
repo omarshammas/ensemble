@@ -8,7 +8,8 @@
 <div class="row">
 	<div class="span12">
 		<div class='hero-unit' id='objective'>
-			<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+			<!--<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%> -->
+			<%= image_tag "http://www3.pictures.gi.stylebistro.com/Gisele+Bundchen+Baseball+Caps+Plain+Baseball+JaeK_hGRij-l.jpg",  :width => "125", :class => 'img-polaroid pull-left', :id => 'task-img'%>
 			<h4><%= @task.body %></h4>
 		</div>
 	</div>
@@ -56,12 +57,12 @@
 						<%if comment.commentable == @task.user%>
 							alert alert-error'>
 							<p><a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>
-								<strong>Requestor:</strong> 
+								<strong>Requester:</strong> 
 								<%= comment.body%></p>
 								</div>
 						<%elsif comment.commentable == current_turk%>
 							alert alert-success'>
-							<p><strong>Fashionista<%= comment.commentable.id %>:</strong> 
+							<p><strong>Me:</strong> 
 								<%= comment.body%></p></div>
 						<%else%>
 							alert alert-info'><p><strong>Fashionista<%= comment.commentable.id %>:</strong>

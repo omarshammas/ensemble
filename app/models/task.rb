@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
-  attr_accessible :user_id, :body, :image
+  attr_accessible :user_id, :body, :image, :finished
   
   belongs_to :user
   has_many :comments
@@ -29,6 +29,10 @@ class Task < ActiveRecord::Base
 
     h = Hit.create task_id: self.id, h_id: result[:HITId], type_id:result[:HITTypeId], url: getHITUrl( result[:HITTypeId] )
     return h
+  end
+
+  def close
+    self.update_attribute :finished, true
   end
 
 private

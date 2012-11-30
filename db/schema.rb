@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121128040902) do
+ActiveRecord::Schema.define(:version => 20121128053913) do
 
   create_table "comments", :force => true do |t|
     t.integer  "iteration_id"
@@ -78,13 +78,14 @@ ActiveRecord::Schema.define(:version => 20121128040902) do
 
   create_table "tasks", :force => true do |t|
     t.integer  "user_id"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.string   "body"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
+    t.boolean  "finished",           :default => false
   end
 
   create_table "turks", :force => true do |t|
