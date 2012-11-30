@@ -14,7 +14,7 @@ class Task < ActiveRecord::Base
 
 
   def current_iteration
-    return self.iterations.where('finished = 0').first  
+    return self.iterations.where(finished: false).first  
   end
   
   

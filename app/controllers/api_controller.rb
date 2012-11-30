@@ -65,11 +65,11 @@ class ApiController < ApplicationController
     suggestion.product_link = params[:product_link]
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
-    suggestion.iteration_id = task.current_iteration.id unless task.current_iteration.nil?
     #TODO set iteration for comment
-    payload = suggestion.attributes
-    payload[:turk] = turk.attributes
+    suggestion.iteration_id = task.current_iteration.id unless task.current_iteration.nil?
     if suggestion.save
+      payload = suggestion.attributes
+      payload[:turk] = turk.attributes
       Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestion', payload)
       render :text => "sent"
     else
@@ -158,11 +158,11 @@ class ApiController < ApplicationController
       comment.task_id = task.id
       comment.commentable = user
       comment.body = body
-      
-      payload = comment.attributes
-      payload[:user] = user.attributes
-      payload[:task] = task.attributes
+    
       if comment.save
+        payload = comment.attributes
+        payload[:user] = user.attributes
+        payload[:task] = task.attributes
         Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
       end
     end

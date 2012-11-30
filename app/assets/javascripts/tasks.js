@@ -75,7 +75,7 @@ function getSuggestionBullet(suggestion){
   	list_item += '" target="_blank"><p><b>'+suggestion.product_name+'</b></p></a>';
 	list_item += '<p>'+suggestion.retailer+'</p><p>$'+suggestion.price+'</p>';
 	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="'+suggestion.id+'"/></i>';
-	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="3"/></i>';
+	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="'+suggestion.id+'"/></i>';
 	list_item += '</button><span class="badge badge-success">'+suggestion.vote_count+'</span></div></div></li>';
   	console.log(list_item);
   	return list_item;
