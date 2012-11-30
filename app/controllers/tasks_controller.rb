@@ -19,12 +19,11 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
-    
     @task = Task.find(params[:id])
     @comments = @task.comments('created_at asc')
-    @suggestions = @task.suggestions.where(:vote_status => 0).order('vote_count desc')
-    @processed_suggestions = @task.suggestions.where('vote_status <> 0 AND acceptance_status <> 0').order('created_at desc')
-    @preferences = @task.preferences
+    @suggestions = @task.suggestions.where(sent: false).order('vote_count desc')
+    @processed_suggestions = @task.suggestions.where(sent: true, accepted: [-1,1]).order('created_at desc')
+    @preferences = @task.preferences('created_at desc')
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @task }
@@ -54,7 +53,7 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        task.iteration.create!(:state => 0)
+        @task.iterations.create!()
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
         format.json { render json: @task, status: :created, location: @task }
       else

@@ -35,9 +35,9 @@ ActiveRecord::Schema.define(:version => 20121128053913) do
 
   create_table "iterations", :force => true do |t|
     t.integer  "task_id"
-    t.integer  "state"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.boolean  "finished",   :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   create_table "preferences", :force => true do |t|
@@ -52,10 +52,10 @@ ActiveRecord::Schema.define(:version => 20121128053913) do
     t.integer  "iteration_id"
     t.string   "body"
     t.integer  "vote_count"
-    t.integer  "vote_status"
-    t.integer  "acceptance_status"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.boolean  "sent",             :default => false
+    t.integer  "accepted",         :default => 0
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.integer  "suggestable_id"
     t.string   "suggestable_type"
     t.integer  "task_id"

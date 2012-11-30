@@ -6,8 +6,8 @@ one:
   interation_id: 1
   body: MyString
   vote_count: 1
-  vote_status: 1
-  acceptance_status: 1
+  sent: 1
+  accepted: 1
 
 two:
   task_id: 1
@@ -15,5 +15,5 @@ two:
   interation_id: 1
   body: MyString
   vote_count: 1
-  vote_status: 1
-  acceptance_status: 1
+  sent: 1
+  accepted: 1

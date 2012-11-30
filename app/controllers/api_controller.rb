@@ -19,7 +19,7 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id 
       task = suggestion.task
-      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render :text => "sent"
 
@@ -47,7 +47,7 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
-      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
       render :text => "sent"
     else
@@ -61,8 +61,8 @@ class ApiController < ApplicationController
     suggestion.task_id = task.id
     turk = current_turk
     suggestion.suggestable = turk
-    suggestion.acceptance_status = 0
-    suggestion.vote_status = 0
+    # suggestion.accepted = 0
+    # suggestion.sent = false
     suggestion.vote_count = 0
     suggestion.image_url = params[:image_url]
     suggestion.retailer = params[:retailer]

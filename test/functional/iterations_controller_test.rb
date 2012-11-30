@@ -18,7 +18,7 @@ class IterationsControllerTest < ActionController::TestCase
 
   test "should create iteration" do
     assert_difference('Iteration.count') do
-      post :create, iteration: { state: @iteration.state, task_id: @iteration.task_id }
+      post :create, iteration: { finished: @iteration.finished, task_id: @iteration.task_id }
     end
 
     assert_redirected_to iteration_path(assigns(:iteration))
@@ -35,7 +35,7 @@ class IterationsControllerTest < ActionController::TestCase
   end
 
   test "should update iteration" do
-    put :update, id: @iteration, iteration: { state: @iteration.state, task_id: @iteration.task_id }
+    put :update, id: @iteration, iteration: { finished: @iteration.finished, task_id: @iteration.task_id }
     assert_redirected_to iteration_path(assigns(:iteration))
   end
 
