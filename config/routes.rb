@@ -1,10 +1,10 @@
 Ensemble::Application.routes.draw do
   resources :preferences
-
   resources :votes
-  resources :tasks
   resources :users do
-    resources :tasks
+    resources :tasks do
+      resources :suggestions
+    end
   end
 
   get "authenticate" => "sessions#authenticate", as: :authenticate
@@ -12,8 +12,8 @@ Ensemble::Application.routes.draw do
   post "sessions/login", as: :login
   post "sessions/signup", as: :signup
 
-  get "user/dashboard", as: :dashboard
   root to: 'user#dashboard', as: :home
+  
   match '/preview', :to => 'preview#load'
   match 'turk/tasks/:id' => "turk#tasks"
   match ':controller(/:action(/:id(.:format)))'

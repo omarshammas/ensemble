@@ -1,124 +1,56 @@
-<script type='text/javascript'>
-  	channel_name = 'ensemble-<%= @task.id %>';
-  	channel = '<%= @task.id %>';
-  	//TODO: Enable current_user support
-  	user_id = '<%= current_user.id%>'
-</script>
-<%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
-<%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
+<p id="notice"><%= notice %></p>
 
-<div class="row">
-	<div class="span12">
-		<div class='hero-unit' id='objective'>
-			<!--<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%> -->
-			<%= image_tag "http://www3.pictures.gi.stylebistro.com/Gisele+Bundchen+Baseball+Caps+Plain+Baseball+JaeK_hGRij-l.jpg",  :width => "125", :class => 'img-polaroid pull-left', :id => 'task-img'%>
-			<h4><%= @task.body %></h4>
-		</div>
-	</div>
-</div>
+<p>
+	<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+</p>
 
-<div class ='row'>
-	<div class='span12 well preferences'>
-		<ul class="thumbnails">
-			<%  @processed_suggestions.each do |suggestion| %>
-			<li class="span1">
-				<div class = "thumbnail  
-				<%if suggestion.accepted == -1%>
-						negative
-				<%elsif suggestion.accepted == 1%>
-						positive
-				<%end%>">
-				<img class= 'preference-img' src=<%=suggestion.image_url%>><input type="hidden" value="<%=suggestion.response%>" href='#'/></img>
-				</div>
-			</li>
-			<% end %>
-		</ul>
-	</div>
-</div>
+<p>
+	<%= @task.body %>
+</p>
 
-<div class='row'>
-	<div class='span7' id='chat-box'>
-		<div class='row' id='chat-messages'>
-			<ul id='chat-messages-list'>
-					<% @comments.each do |comment| %>
-					<li class='message'>
-						<div class=	'			
-						<%if comment.user_id == @task.user_id%>
-							alert alert-error
-						<%elsif comment.user_id == current_user%>
-							alert alert-success
-						<%else%>
-							alert alert-info
-						<%end%>
-						'><p><strong>User<%= comment.user_id %>:</strong> <%= comment.body%></p></div>
-					</li>
-					<% end %>
-			</ul>
-		</div>
-		<div class='row well' id='chat-input'>
-			<textarea rows='3' class='span6' id='chat-text-input'></textarea>
-			<button class='btn btn-success' id='comment-btn'>Comment</button>
-		</div>
-	</div>
+<hr />
 
-	<div class='span5' id='suggestions'>		
-		<ul id='suggestion-list'>
-			<li>
-				<h3>Suggestions &nbsp; &nbsp;
-				<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal"><i class='icon-plus'></i></a>
-				</h3>
-			</li>
+<p>
+<% if @hits.empty? %>
+	No HITs have been created. Contact Omar or Tunde something may be wrong.
+<% else %>
+	<%= @hits.count %> HITs have been created.
+<% end %>
+</p>
 
-			<!-- Modal -->
-			<div id="addSuggestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addSuggestionLabel" aria-hidden="true" style="display:none;">
-			  <div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 id="addSuggestionLabel">Make a suggestion</h3>
-			  </div>
-			  <div class="modal-body">
-		  		<form>
-					<fieldset>
-						<legend>Suggestion details</legend>
-						<label>URL</label>
-						<input type='text' class='span6' id='suggestion_url' placeholder='Example - http://www.amazon.com/4562312'></textarea>
-						<span class='help-block'>Paste URL to article of clothing</span>
-						<label>Retailer</label>
-						<input type="text" placeholder="Enter retailer...">
-						<label>Price</label>
-						<input type="text" placeholder="Enter price...">
-						
-						<label class="checkbox">
-							<input type="checkbox"> Check me out
-						</label>
-						<button type="submit" class="btn">
-							Submit
-						</button>
-					</fieldset>
-				</form>
-			  </div>
-			  <div class="modal-footer">
-			    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-			    <button class="btn btn-primary" id='suggest-btn' data-dismiss="modal" aria-hidden="true">Add</button>
-			  </div>
-			</div>
+<br />
 
-			<% @suggestions.each do |suggestion| %>
-				<li class='suggestion'>
-					<button class='btn btn-mini upvote'>
-						<i class='icon-thumbs-up'>
-							<input type='hidden' value='<%=suggestion.id%>'/>
-						</i>
-					</button>
-					<button class='btn btn-mini downvote'>
-						<i class='icon-thumbs-down'>
-							<input type='hidden' value='<%=suggestion.id%>'/>
-						</i>
-					</button>
-					<%= suggestion.body %>
-					<span class='badge badge-success'><%=suggestion.vote_count%></span>
-				</li>
-			<% end %>
-		</ul>
-	</div>
+<% if @suggestions.empty? %>
+	No suggestions have been submitted. Don't worry turkers are on it.
+<% else %>
+	<table class='table'>
+		<tr>
+			<th>ID</th>
+			<th>Price</th>
+			<th>Product Name</th>
+			<th>Retailer</th>
+			<th></th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+		<% @suggestions.each do |suggestion| %>
+		  <tr>
+		  	<td><%= suggestion.id %></td>
+		    <td><%= suggestion.price %></td>
+		    <td><%= suggestion.product_name %></td>
+		    <td><%= suggestion.retailer %></td>
+		    <td><%= image_tag suggestion.image_url, :class => 'img-polaroid', width: '100px' %></td>
+		    
+		    <td><%= link_to 'Show', user_task_suggestion_path(@user, @task, suggestion) %></td>
+		    <td><%= link_to 'Edit', edit_user_task_suggestion_path(@user, @task, suggestion) %></td>
+		    <td><%= link_to 'Destroy', user_task_suggestion_path(@user, @task, suggestion), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+		  </tr>
+		<% end %>
+	</table>
+<% end %>
 
-</div>
+<hr />
+
+<%= link_to 'Edit', edit_user_task_path(@user, @task) %> |
+<%= link_to 'Back', user_tasks_path(@user) %>

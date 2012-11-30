@@ -22,13 +22,11 @@ class ApiController < ApplicationController
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
       #Send User an SMS with the suggestion
-      if suggestion.vote_count >= THRESHOLD
+      if suggestion.vote_count >= THRESHOLD and not suggestion.sent 
         user = task.user
-        user.send_message suggestion.product_link
-        user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
+        user.send_message user_task_suggestion_path(user, task, suggestion)
         #Update suggestion list and show sent suggestion
-        suggestion.sent = true
-        suggestion.save
+        suggestion.update_attribute :sent, true
         suggestions = task.suggestions.where(sent: false).order('vote_count desc')
         Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
         Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
