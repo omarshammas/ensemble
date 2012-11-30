@@ -5,21 +5,23 @@
 </script>
 <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
 <%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
-<div class="row">
-	<div class="span12">
-		<div class='hero-unit' id='objective'>
-			<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
-			<h4><%= @task.body %></h4>
-		</div>
+<div class='row-fluid'>
+	<div class='span8' id='objective'>
+		<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+		<h4><%= @task.body %></h4>
+	</div>
+	<div class='span4'>
+		<h3> 3 tasks remaining </h3>
 	</div>
 </div>
 
-<div class ='row'>
-<!-- 	<div class='span6 well well-small memory'>
-		<h5>User History </h5>
+
+<div class='row-fluid'>
+	<div id='history-list' class='span2 well well-small memory'>
+		<h5>History </h5>
 		<ul class="thumbnails">
 			<%  @processed_suggestions.each do |suggestion| %>
-			<li class="span1">
+			<li>
 				<div class = "thumbnail  
 				<%if suggestion.acceptance_status == -1%>
 						negative
@@ -31,23 +33,22 @@
 			</li>
 			<% end %>
 		</ul>
-	</div> -->
-	<div id="preference-list" class='span12 well well-small memory'>
-		<h5>User Preferences</h5>
+	</div>
+
+	<div id='preference-list' class='span2 well well-small memory' >			
+		<h5>Preferences</h5>
 		<ul>
 			<%  @preferences.each do |preference| %>
-			<li class="span5 preference">
-					<p><%=preference.body%><a  href="#">
+			<li class="preference">
+					<p><%=preference.body%><a href="#">
 						<i class="icon-remove remove-pref-icon" value="<%=preference.id%>">
 						</i></a></p>
 			</li>
 			<% end %>
 		</ul>
 	</div>
-</div>
 
-<div class='row'>
-	<div class='span7' id='chat-box'>
+	<div  id='chat-box' class='span5'>
 		<div class='row' id='chat-messages'>
 			<ul id='chat-messages-list'>
 					<% @comments.each do |comment| %>
@@ -93,8 +94,8 @@
 			</div>
 		</div>
 	</div>
-
-	<div class='span5' id='suggestions'>		
+	
+	<div id='suggestions' class='span3'>		
 		<ul id='suggestion-list'>
 			<li>
 				<h3>Suggestions &nbsp; &nbsp;
@@ -148,10 +149,10 @@
 			<% @suggestions.each do |suggestion| %>
 				<li class='suggestion'>
 					<div class="row">
-						<div class="span1">
+						<div class="span2">
 							<p><%= image_tag suggestion.image_url, :id => 'suggestion-img'%></p>
 						</div>
-						<div class="span3">
+						<div class="span10">
 							<a href="<%= suggestion.product_link%>" target="_blank"><p><b><%=suggestion.product_name%></b></p></a>
 							<p><%=suggestion.retailer%></p>
 							<p>$<%=suggestion.price%></p>
