@@ -46,6 +46,7 @@ ensembleChannel.bind('post_suggestion', function(suggestion) {
 });
 
 ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
+  $('.suggestion-alert').empty();
 	alert_div = "<div class='span11 alert alert-error'><h4>Waiting on response...</h4>";
 	alert_div += "Please wait for the requestor to respond before peforming any actions</div>";
 	$('.suggestion-alert').append(alert_div);
@@ -63,13 +64,13 @@ ensembleChannel.bind('suggestion_accepted', function(suggestion) {
 
 
 ensembleChannel.bind('update_suggestions', function(suggestions) {
-  $('.suggestion').remove();
+  $('.suggestion-item').remove();
   var ii;
   var list_item;
   for (ii = 0; ii < suggestions.length; ++ii) {
       suggestion = suggestions[ii];
       list_item = getSuggestionBullet(suggestion);
-      $('#suggestion-list').append(list_item);    
+      $('#suggestions-box').append(list_item);    
   }
 });
 

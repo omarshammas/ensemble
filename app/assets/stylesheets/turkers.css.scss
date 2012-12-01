@@ -11,7 +11,7 @@ hr {
 #history-box {
   //border-right: thin solid lightGrey;
   .history-item {
-    margin-top: 20px;
+    margin-bottom: 15px;
     .negative{ border: medium solid red; }  
     .positive{ border: medium solid green; }     
     .desc { margin-left: 10px;}
@@ -42,15 +42,7 @@ hr {
   overflow-y:auto;
   overflow-x:auto;
 
-  ul {
-    margin: 0px;
-    list-style-type: none;
-
-    .suggestion {
-      margin-top:10px;
-      margin-bottom:10px;
-    }
-  }
+  .suggestion-item { margin-bottom:15px; }
 }
 
 
