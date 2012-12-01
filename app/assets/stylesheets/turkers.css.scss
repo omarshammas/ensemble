@@ -37,17 +37,22 @@ hr {
   #comment-btn { margin-top: 45px;}
 }
 
-
-
-
-#suggestions{
+#suggestions-box{
   height:480px;
   overflow-y:auto;
   overflow-x:auto;
+
+  ul {
+    margin: 0px;
+    list-style-type: none;
+
+    .suggestion {
+      margin-top:10px;
+      margin-bottom:10px;
+    }
+  }
 }
-#suggestions-list{
- 
-}
+
 
 .nav li a {
   display:inline;
@@ -68,10 +73,7 @@ hr {
   margin-bottom: 10px;
 }
 
-.suggestion {
-  margin-top:10px;
-  margin-bottom:10px;
-}
+
 .badge{
   float:right;
 }

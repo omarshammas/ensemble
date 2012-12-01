@@ -33,7 +33,9 @@ ensembleChannel.bind('post_comment', function(comment) {
     comment_class = 'alert alert-info';
     display_name = 'Fashionista'+comment.commentable_id;
   }
-  $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
+  console.log(comment.body)
+  console.log($('#chat-messages ul'))
+  $('#chat-messages ul').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
 });
 

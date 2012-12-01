@@ -1,0 +1,42 @@
+<!-- Create Suggestion Modal -->
+<div id="addSuggestion" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addSuggestionLabel" aria-hidden="true" style="display:none;">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="addSuggestionLabel">Make a suggestion</h3>
+  </div>
+  <div class="modal-body">
+		<form>
+		<fieldset>
+			<div class='row well well-small'>
+				<div class = 'span3' id='suggestion img'>
+						<img alt="" class="img-polaroid pull-left" id="create-suggestion-img" src="" />
+				</div>
+				<div class = 'span3'>
+			    	<div class="btn-toolbar">
+			    		<div class="btn-group">
+			    			<a class="btn" id='suggestion-img-left' href="#"><i class="icon-chevron-left"></i></a>
+			    			<a class="btn" id='suggestion-img-right' href="#"><i class="icon-chevron-right"></i></a>
+			    		</div>
+			    	</div>
+			    	<p> Select product image </p>
+				</div>
+			</div>
+			<br>
+			<input type='hidden' id='create-suggestion-img-url' >
+			<label>Product link (images will be extracted from link)</label>
+			<input type='text' class='span6' id='create-suggestion-product-link' placeholder='Example - http://www.amazon.com/4562312'>
+<!-- 						<span class='help-block'><i>Paste link to article of clothing. Images will be extracted from the link</i></span> -->						
+			<label>Product name</label>
+			<input type="text" class="span6" id="create-suggestion-product-name" placeholder="Include brand name e.g. The North Face 'Redpoint' Jacket">
+			<label>Retailer</label>
+			<input type="text" class="span6" id="create-suggestion-retailer" placeholder="Enter retailer e.g. Macy's, Target, Amazon, Nordstrom">
+			<label>Price</label>
+			<input type="text" class="span6" id="create-suggestion-product-price" placeholder="Enter price...">
+		</fieldset>
+	</form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary" id='suggest-btn' data-dismiss="modal" aria-hidden="true">Add</button>
+  </div>
+</div>
