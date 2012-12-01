@@ -32,7 +32,6 @@ class TasksController < ApplicationController
 
   def new
     @task = Task.new
-    #TODO: Create 5 Turker hits
     respond_to do |format|
       format.html
       format.json { render json: @task }
@@ -48,6 +47,11 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
+        #TODO: Create 5 Turker hits
+        for i in 1..5
+          task.createHIT
+        end
+
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
         format.json { render json: @task, status: :created, location: @task }
       else
