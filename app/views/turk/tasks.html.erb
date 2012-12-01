@@ -54,7 +54,6 @@ turk_id = '<%= current_turk.id%>';
 					<%= suggestion.body %>
 				</div>
 			</div>
-			<br />
 		<% end %>
 	</div>
 
@@ -110,9 +109,7 @@ turk_id = '<%= current_turk.id%>';
 					</button>
 					<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
 				</div>
-
 			</div>
-			<br />
 		<% end %>
 
 		<%= render 'suggestion_form' %>
