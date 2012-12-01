@@ -1,7 +1,7 @@
 <script type='text/javascript'>
-   channel_name = 'ensemble-<%= @task.id %>';
-   channel = '<%= @task.id %>';
-   turk_id = '<%= current_turk.id%>';
+channel_name = 'ensemble-<%= @task.id %>';
+channel = '<%= @task.id %>';
+turk_id = '<%= current_turk.id%>';
 </script>
 <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
 <%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
@@ -26,6 +26,7 @@
 	</div>
 	<%end%>
 </div>
+
 <div class='row-fluid'>
 	<div id='history-box' class='span3'> <!--well well-small memory-->
 		<h4>Requester Feedback</h4>	
@@ -33,9 +34,9 @@
 			<div class='history-item row-fluid'>
 				<div class = 'span6 thumbnail  
 					<%if suggestion.accepted == false%>
-							negative
+					negative
 					<%elsif suggestion.accepted == true%>
-							positive
+					positive
 					<%end%>'>
 					<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
 				</div>
@@ -55,18 +56,18 @@
 				<li class='message'>
 					<div class=	'			
 					<%if comment.commentable == @task.user%>
-						alert alert-error'>
-						<p><a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>
-							<strong>Requester:</strong> 
-							<%= comment.body%></p>
-							</div>
+					alert alert-error'>
+					<p><a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>
+						<strong>Requester:</strong> 
+						<%= comment.body%></p>
+					</div>
 					<%elsif comment.commentable == current_turk%>
 						alert alert-success'>
 						<p><strong>Me:</strong> 
 							<%= comment.body%></p></div>
-					<%else%>
-						alert alert-info'><p><strong>Fashionista<%= comment.commentable.id %>:</strong>
-							 <%= comment.body%></p></div>
+							<%else%>
+							alert alert-info'><p><strong>Fashionista<%= comment.commentable.id %>:</strong>
+							<%= comment.body%></p></div>
 					<%end%>
 				</li>
 				<% end %>	
@@ -77,7 +78,7 @@
 			<button class='btn btn-mini btn-success' id='comment-btn'>Comment</button>
 		</div>
 	</div>
-	
+
 	<div id='suggestions-box' class='span3'> <!--well well-small memory-->
 		<h4>Suggestions &nbsp; &nbsp;
 			<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal" data-target="#addSuggestion"><i class='icon-plus'></i></a>
@@ -103,7 +104,7 @@
 			</div>
 			<br />
 		<% end %>
-	</div>
 
-	<%= render 'suggestion_form' %>
+		<%= render 'suggestion_form' %>
+	</div>
 </div>

@@ -41,7 +41,7 @@ ensembleChannel.bind('post_comment', function(comment) {
 
 ensembleChannel.bind('post_suggestion', function(suggestion) {
   var list_item = getSuggestionBullet(suggestion);
-  $('#suggestion-list').append(list_item);
+  $('#suggestions-box').append(list_item);
   scrollToTheTop();
 });
 
@@ -87,15 +87,18 @@ ensembleChannel.bind('update_preferences', function(preferences) {
 });
 
 function getSuggestionBullet(suggestion){
-	list_item = '<li class="suggestion"><div class="row"><div class="span1">';
-  	list_item += '<p><img alt="" id="suggestion-img" src="'+suggestion.image_url+'"/></p>';
-  	list_item += '</div> <div class="span3"><a href="'+suggestion.product_url;
-  	list_item += '" target="_blank"><p><b>'+suggestion.product_name+'</b></p></a>';
-	list_item += '<p>'+suggestion.retailer+'</p><p>$'+suggestion.price+'</p>';
-	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="'+suggestion.id+'"/></i>';
-	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="'+suggestion.id+'"/></i>';
-	list_item += '</button><span class="badge badge-success">'+suggestion.vote_count+'</span></div></div></li>';
-  	return list_item;
+
+  list_item = "<div class='suggestion-item row-fluid'><div class = 'span6 thumbnail'>"
+  list_item += "<img alt='' class='prev-suggestion-img' src='"+ suggestion.image_url +"'/></div>";
+  list_item += "<div class='desc span5'><a href='" + suggestion.product_link + "' target='_blank'>";
+  list_item += "<b>" + suggestion.product_name + "</b></a><br />";
+  list_item += "$" + suggestion.price + "<br />";
+  list_item += "$" + suggestion.retailer + "<br />";
+  list_item += "<button class='btn btn-mini upvote'><i class='icon-thumbs-up'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
+  list_item += "<button class='btn btn-mini downvote'><i class='icon-thumbs-down'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
+  list_item += "<span class='badge badge-success' id='vote_count_"+ suggestion.id +"'>"+ suggestion.vote_count +"</span>"; 
+  list_item += "</div></div><br />"
+ 	return list_item;
 }
 
 $('.upvote').live("click",function(){
