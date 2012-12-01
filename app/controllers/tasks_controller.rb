@@ -49,7 +49,7 @@ class TasksController < ApplicationController
       if @task.save
         #TODO: Create 5 Turker hits
         for i in 1..5
-          task.createHIT
+          @task.createHIT
         end
 
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
