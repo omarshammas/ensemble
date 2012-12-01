@@ -20,22 +20,21 @@
 
 <div class ='row-fluid suggestion-alert'>
 	<% if @task.suggestion_sent? %>
-	<div class="span11 alert alert-error">
+	<div class="span12 alert-block alert alert-error">
 		<h4>Waiting on response...</h4>
 		Please wait for the requestor to respond before peforming any actions
 	</div>
 	<%end%>
 </div>
-
 <div class='row-fluid'>
 	<div id='history-box' class='span3'> <!--well well-small memory-->
 		<h4>Suggestions With User Feedback</h4>	
 		<%  @processed_suggestions.each do |suggestion| %>
 			<div class='history-item row-fluid'>
 				<div class = 'span6 thumbnail  
-					<%if suggestion.accepted == -1%>
+					<%if suggestion.accepted == false%>
 							negative
-					<%elsif suggestion.accepted == 1%>
+					<%elsif suggestion.accepted == true%>
 							positive
 					<%end%>'>
 					<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
@@ -100,6 +99,7 @@
 					</button>
 					<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
 				</div>
+
 			</div>
 			<br />
 		<% end %>
