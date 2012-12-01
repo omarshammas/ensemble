@@ -15,7 +15,7 @@
 </div>
 <div class ='row suggestion-alert'>
 	<% if @task.suggestion_sent? %>
-	<div class="span11 alert alert-error">
+	<div class="span12 alert-block alert alert-error">
 		<h4>Waiting on response...</h4>
 		Please wait for the requestor to respond before peforming any actions
 	</div>
@@ -28,9 +28,9 @@
 			<%  @processed_suggestions.each do |suggestion| %>
 			<li class="span1">
 				<div class = "thumbnail  
-				<%if suggestion.accepted == -1%>
+				<%if suggestion.accepted == false%>
 						negative
-				<%elsif suggestion.accepted == 1%>
+				<%elsif suggestion.accepted == true%>
 						positive
 				<%end%>">
 				<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
@@ -136,7 +136,6 @@
 						<input type='hidden' id='create-suggestion-img-url' >
 						<label>Product link (images will be extracted from link)</label>
 						<input type='text' class='span6' id='create-suggestion-product-link' placeholder='Example - http://www.amazon.com/4562312'>
-<!-- 						<span class='help-block'><i>Paste link to article of clothing. Images will be extracted from the link</i></span> -->						
 						<label>Product name</label>
 						<input type="text" class="span6" id="create-suggestion-product-name" placeholder="Include brand name e.g. The North Face 'Redpoint' Jacket">
 						<label>Retailer</label>

@@ -1,43 +1,72 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <%= image_tag @suggestion.image_url, :class => 'img-polaroid', width: '100px' %>
+<p id="notice">
+	<%= notice %>
 </p>
 
-<p>
-  <b>Price:</b>
-  <%= @suggestion.price %>
-</p>
-
-<p>
-  <b>Product Name:</b>
-  <%= @suggestion.product_name %>
-</p>
-
-<p>
-  <b>Retailer:</b>
-  <%= @suggestion.retailer %>
-</p>
-
-<p>
-  <b>Body:</b>
-  <%= @suggestion.body %>
-</p>
-
-<p>
-  <b>Sent:</b>
-  <%= @suggestion.sent %>
-</p>
-
-<p>
-  <b>Accepted:</b>
-  <%= @suggestion.accepted %>
-</p>
-
-<p>
-  <b>Vote count:</b>
-  <%= @suggestion.vote_count %>
-</p>
-
+<div class ="row">
+	<div class="span6">
+		<a href="<%= @suggestion.product_link%>" target="_blank"> <%= image_tag @suggestion.image_url, :class => 'img-polaroid', width: '200px'%> </a>
+	</div>
+	<div class="span6">
+		<dl>
+			<dt>
+				<h4><%= link_to @suggestion.product_name, @suggestion.product_link %></h4>
+			</dt>
+			<dd></dd>
+			<dt>
+				<h4>Retailer:</h4>
+			</dt>
+			<dd>
+				<%= @suggestion.retailer %>
+			</dd>
+			<dt>
+				<h4>Price:</h4>
+			</dt>
+			<dd>
+				$<%= @suggestion.price %>
+			</dd>
+		</dl>
+	</div>
+</div>
+<div class="row well">
+	<form class="form-vertical" method="post" action="/api/suggestion_response">
+	<input type="hidden" name="id" value="<%=@suggestion.id%>">
+	<input type="hidden" name="task_id" value="<%=@task.id%>">
+	<h5>Rate It!</h5>
+	<label class="inline radio">
+		<input type="radio" name="suggestion[rating]" id="rating-1" value="1">
+		1 </label>
+	<label class="inline radio">
+		<input type="radio" name="suggestion[rating]" id="rating-2" value="2">
+		2 </label>
+	<label class="inline radio">
+		<input type="radio" name="suggestion[rating]" id="rating-3" value="3">
+		3 </label>
+	<label class="inline radio">
+		<input type="radio" name="suggestion[rating]" id="rating-4" value="4">
+		4 </label>
+	<label class="inline radio">
+		<input type="radio" name="suggestion[rating]" id="rating-5" value="5">
+		5 </label>
+	<br/>
+	<br/>
+	<span class='help-block'>
+		<p class="pull-left">
+			Hate It!
+		</p>
+		<p class="pull-right">
+			Love It!
+		</p></span>
+	</br>
+	<textarea class="span12" rows="4" placeholder="What don't you like about it?" name="suggestion[body]"></textarea>
+	</br>
+	<button class="submit btn btn-large btn-block btn-success" type="submit" name="suggestion[accepted]" value="1">
+		Accept Suggestion!
+	</button>
+	<button class="submit btn btn-large btn-block btn-danger" type="submit" name="suggestion[accepted]" value="0">
+		Try Again
+	</button>
+	<br/>
+	</form>
+</div>
 
 <%= link_to 'Back', user_task_path(@user, @task) %>

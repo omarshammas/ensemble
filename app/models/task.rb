@@ -13,7 +13,7 @@ class Task < ActiveRecord::Base
 
 
   def suggestion_sent?
-    return !self.suggestions.where(sent: true, accepted:0).first.nil?
+    return !self.suggestions.where('sent = :sent AND accepted IS NULL',{:sent => true}).first.nil?
   end
   
   

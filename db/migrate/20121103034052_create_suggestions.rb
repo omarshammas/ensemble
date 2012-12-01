@@ -7,7 +7,8 @@ class CreateSuggestions < ActiveRecord::Migration
       t.string :body
       t.integer :vote_count
       t.boolean :sent, :default => false
-      t.integer :accepted, :default => 0
+      t.boolean :accepted
+      t.integer :rating
 
       t.timestamps
     end

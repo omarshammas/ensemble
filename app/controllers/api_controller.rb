@@ -24,7 +24,7 @@ class ApiController < ApplicationController
       #Send User an SMS with the suggestion
       if suggestion.vote_count >= THRESHOLD and not suggestion.sent 
         user = task.user
-        user.send_message user_task_suggestion_path(user, task, suggestion)
+        user.send_message "#{request.protocol}#{request.host_with_port}#{user_task_suggestion_path(user, task, suggestion)}"
         #Update suggestion list and show sent suggestion
         suggestion.update_attribute :sent, true
         suggestions = task.suggestions.where(sent: false).order('vote_count desc')
@@ -75,6 +75,22 @@ class ApiController < ApplicationController
     else
       render :text => "failed"
     end
+  end
+  
+  def suggestion_response
+    task = Task.find(params[:task_id])
+    suggestion = Suggestion.find(params[:id])
+    if suggestion.update_attributes(params[:suggestion])
+      if !suggestion.accepted
+        Pusher["ensemble-" + "#{task.id}"].trigger('suggestion_rejected', suggestion)
+        
+      else
+        Pusher["ensemble-" + "#{task.id}"].trigger('suggestion_accepted', suggestion)
+      end
+    else
+      render :text => "failed"
+    end
+      redirect_to :home
   end
   
   def post_preference
@@ -133,7 +149,6 @@ class ApiController < ApplicationController
   end
 
   def sms
-
 =begin
   {"AccountSid"=>"ACebf8674db0f1e95deec913097e855dee", "Body"=>"Sent from your Twilio trial account - shoo bro", "ToZip"=>"01801", "FromState"=>"MA", "ToCity"=>"WOBURN", "SmsSid"=>"SM58e0207cc3294ccca7905bc28bb6e5f8", "ToState"=>"MA", "To"=>"+13392984356", "ToCountry"=>"US", "FromCountry"=>"US", "SmsMessageSid"=>"SM58e0207cc3294ccca7905bc28bb6e5f8", "ApiVersion"=>"2010-04-01", "FromCity"=>"BOSTON", "SmsStatus"=>"received", "From"=>"+16177211618", "FromZip"=>"02110", "controller"=>"turk", "action"=>"sms"}
 =end

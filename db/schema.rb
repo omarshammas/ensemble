@@ -45,7 +45,8 @@ ActiveRecord::Schema.define(:version => 20121128053913) do
     t.string   "body"
     t.integer  "vote_count"
     t.boolean  "sent",             :default => false
-    t.integer  "accepted",         :default => 0
+    t.boolean  "accepted"
+    t.integer  "rating"
     t.datetime "created_at",                          :null => false
     t.datetime "updated_at",                          :null => false
     t.integer  "suggestable_id"

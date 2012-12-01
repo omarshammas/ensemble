@@ -2,27 +2,30 @@ $baseFontFamily: 'Nunito', Helvetica, Arial, sans-serif;
 $baseFontSize: 18px;
 
 @import "bootstrap";
+@import "bootstrap-responsive";
 
-
-
-h1 {
-  color: $red;
+p {
+  text-align:"center"
 }
 
-#header {
-  margin-top: 20px;
-  margin-bottom: 40px;
-  h1 {font-size: 50px;}
-}
+// h1 {
+  // color: $red;
+// }
 
-.navbar {
-  font-style: $baseFontFamily;
-  .navbar-inner {
-    padding: 15px;
-    .brand {
-      color: $red;
-      font-size: 50px;
-      font-weight: bold;
-    }
-  }
-}
+// #header {
+  // margin-top: 20px;
+  // margin-bottom: 40px;
+  // h1 {font-size: 50px;}
+// }
+// 
+// .navbar {
+  // font-style: $baseFontFamily;
+  // .navbar-inner {
+    // padding: 15px;
+    // .brand {
+      // color: $red;
+      // font-size: 50px;
+      // font-weight: bold;
+    // }
+  // }
+// }

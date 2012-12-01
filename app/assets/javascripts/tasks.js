@@ -49,6 +49,16 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
 	$('.suggestion-alert').append(alert_div);
 });
 
+ensembleChannel.bind('suggestion_rejected', function(suggestion) {
+	$('.suggestion-alert').empty();
+	//Add rejection to preference list
+});
+
+ensembleChannel.bind('suggestion_accepted', function(suggestion) {
+	$('.suggestion-alert').empty();
+	alert('Task Complete!!');
+});
+
 
 ensembleChannel.bind('update_suggestions', function(suggestions) {
   $('.suggestion').remove();
