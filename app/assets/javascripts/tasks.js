@@ -31,7 +31,7 @@ ensembleChannel.bind('post_comment', function(comment) {
   } else {
     //Another Turker's comment
     comment_class = 'alert alert-info';
-    display_name = 'Fashionista'+turk_id;
+    display_name = 'Fashionista'+comment.commentable_id;
   }
   $('#chat-messages-list').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
@@ -43,7 +43,14 @@ ensembleChannel.bind('post_suggestion', function(suggestion) {
   scrollToTheTop();
 });
 
-ensembleChannel.bind('update_suggestion_votes', function(suggestions) {
+ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
+	alert_div = "<div class='span11 alert alert-error'><h4>Waiting on response...</h4>";
+	alert_div += "Please wait for the requestor to respond before peforming any actions</div>";
+	$('.suggestion-alert').append(alert_div);
+});
+
+
+ensembleChannel.bind('update_suggestions', function(suggestions) {
   $('.suggestion').remove();
   var ii;
   var list_item;
@@ -63,7 +70,6 @@ ensembleChannel.bind('update_preferences', function(preferences) {
       list_item = "<li class='span5 preference'><p>" + pref.body;
       list_item += "<a  href='#'><i class='icon-remove remove-pref-icon' value='";
       list_item += pref.id+"'></i></a></p></li>";
-      console.log(list_item);
       $('#preference-list').append(list_item);    
   }
 });
@@ -75,9 +81,8 @@ function getSuggestionBullet(suggestion){
   	list_item += '" target="_blank"><p><b>'+suggestion.product_name+'</b></p></a>';
 	list_item += '<p>'+suggestion.retailer+'</p><p>$'+suggestion.price+'</p>';
 	list_item +='<button class="btn btn-mini upvote"><i class="icon-thumbs-up"><input type="hidden" value="'+suggestion.id+'"/></i>';
-	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="3"/></i>';
+	list_item += '</button><button class="btn btn-mini downvote"><i class="icon-thumbs-down"><input type="hidden" value="'+suggestion.id+'"/></i>';
 	list_item += '</button><span class="badge badge-success">'+suggestion.vote_count+'</span></div></div></li>';
-  	console.log(list_item);
   	return list_item;
 }
 

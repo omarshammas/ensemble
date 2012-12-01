@@ -11,6 +11,12 @@ class Task < ActiveRecord::Base
   
   has_attached_file :image, :styles => {:medium => "300x300", :small => "200x200>", :thumb => "100x100>" }
 
+
+  def suggestion_sent?
+    return !self.suggestions.where(sent: true, accepted:0).first.nil?
+  end
+  
+  
   def createHIT
     @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => :Sandbox
     

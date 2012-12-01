@@ -1,10 +1,5 @@
-<!-- <h1>Create a new task</h1>
 
-<%= form_for @task, :url => tasks_path, :html => { :multipart => true } do |form| %>
-  <input id="task_image" name="task[image]" type="file" />
-  <textarea rows="3" name="task[body]" placeholder="Enter description"/>
-<% end %> -->
-<%= form_for @task, :url => tasks_path, :html => { :multipart => true } do |form| %>
+<%= form_for @task, :url => user_tasks_path, :html => { :multipart => true } do |form| %>
 	<fieldset>
 		<legend>
 			Create a new task
@@ -13,6 +8,7 @@
 		<input class = "span5" id="task_image" name="task[image]" type="file" />
 		<label>Additional information</label>
   		<textarea class="span4" rows="3"  name="task[body]" placeholder="Enter any other details e.g. I want the following in red"></textarea>
+		<input type="hidden" name="task[user_id]" value= "<%=current_user.id%>" />
 		<br>
 		<button type="submit" class="btn">
 			Submit
@@ -20,4 +16,4 @@
 	</fieldset>
 <% end %>
 
-<%= link_to 'Back', tasks_path %>
+<%= link_to 'Back', user_tasks_path %>

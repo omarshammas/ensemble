@@ -15,17 +15,21 @@ class ApiController < ApplicationController
 
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
-      Suggestion.increment_counter :vote_count, suggestion.id 
+      Suggestion.increment_counter :vote_count, suggestion.id
+      suggestion.reload
       task = suggestion.task
-      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
-
       #Send User an SMS with the suggestion
-      if suggestion.vote_count >= THRESHOLD
+      if suggestion.vote_count >= THRESHOLD and not suggestion.sent 
         user = task.user
-        user.send_message suggestion.product_link
-        user.send_message "$#{suggestion.price} - #{suggestion.product_name} from #{suggestion.retailer}"
+        user.send_message user_task_suggestion_path(user, task, suggestion)
+        #Update suggestion list and show sent suggestion
+        suggestion.update_attribute :sent, true
+        suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+        Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
+        Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
     else
       render json: { status: "failed"}
@@ -43,8 +47,8 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
-      suggestions = task.suggestions.where(vote_status: 0).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestion_votes', suggestions)
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else
       render json: { status: "failed"}
@@ -57,19 +61,16 @@ class ApiController < ApplicationController
     suggestion.task_id = task.id
     turk = current_turk
     suggestion.suggestable = turk
-    suggestion.acceptance_status = 0
-    suggestion.vote_status = 0
     suggestion.vote_count = 0
     suggestion.image_url = params[:image_url]
     suggestion.retailer = params[:retailer]
     suggestion.product_link = params[:product_link]
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
-    #TODO set iteration for comment
-    payload = suggestion.attributes
-    payload[:turk] = turk.attributes
     if suggestion.save
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestions', payload)
+      payload = suggestion.attributes
+      payload[:turk] = turk.attributes
+      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestion', payload)
       render :text => "sent"
     else
       render :text => "failed"
@@ -107,7 +108,6 @@ class ApiController < ApplicationController
     turk = current_turk
     comment.commentable = turk
     comment.body = params[:body]
-    #TODO set iteration for comment
     
     payload = comment.attributes
     payload[:turk] = turk.attributes
@@ -157,11 +157,11 @@ class ApiController < ApplicationController
       comment.task_id = task.id
       comment.commentable = user
       comment.body = body
-      
-      payload = comment.attributes
-      payload[:user] = user.attributes
-      payload[:task] = task.attributes
+    
       if comment.save
+        payload = comment.attributes
+        payload[:user] = user.attributes
+        payload[:task] = task.attributes
         Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
       end
     end

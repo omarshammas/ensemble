@@ -1,13 +1,95 @@
-#turkers{
+hr {
+  margin-top:0px;
+}
 
-	#redeem_code {
-		margin-top:20px;
-		font-size: 15px;
-	}
+#header {
+  margin: 0;
+  #objective{ padding:5px;}
+  #reedem-code { }
+}
 
-	#suggestions {
+#history-box {
+  //border-right: thin solid lightGrey;
+  .history-item {
+    margin-top: 20px;
+    .negative{ border: medium solid red; }  
+    .positive{ border: medium solid green; }     
+    .desc { margin-left: 10px;}
+  }
+}
 
-		ul { list-style-type: none; }
-	}
+#chat-box{
+  padding:0 10px 0 10px;
+  border-left: 1px solid #EEE;
+  border-right: 1px solid #EEE; 
 
+  #chat-messages {
+    height: 400px;
+    overflow-y: scroll;
+    ul {
+      list-style-type: none;
+      width:95%;
+      margin:0;
+    }
+  }
+
+  #chat-text-input { width: 75%;}
+  #comment-btn { margin-top: 45px;}
+}
+
+
+
+
+#suggestions{
+  height:480px;
+  overflow-y:auto;
+  overflow-x:auto;
+}
+#suggestions-list{
+ 
+}
+
+.nav li a {
+  display:inline;
+}
+
+.memory{
+  height:115px;
+}
+
+
+
+.prev-suggestion-img{
+  max-height:100px;
+}
+
+.message .alert {
+  padding: 4px 4px 4px 4px;
+  margin-bottom: 10px;
+}
+
+.suggestion {
+  margin-top:10px;
+  margin-bottom:10px;
+}
+.badge{
+  float:right;
+}
+
+#task-img{
+  margin-right:1em;
+}
+
+#create-suggestion-img{
+  width:100px;
+  max-height:150px;
+}
+#suggestion-img{
+  width:60px;
+  max-height:100px;
+}
+
+#preference-list{
+  overflow-y: scroll;
+  overflow-x: hidden;
 }

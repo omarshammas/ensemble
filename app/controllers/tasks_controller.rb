@@ -1,59 +1,57 @@
 class TasksController < ApplicationController
-  before_filter :get_parent
+  before_filter :verify_parent
 
-  def get_parent
+  def verify_parent
     @user = User.find_by_id(params[:user_id]) unless params[:user_id].blank?
+    return redirect_to :home if @user != current_user || @user.nil?
   end
  
-  # GET /tasks
-  # GET /tasks.json
   def index
     @tasks = @user.nil? ? Task.all : @user.tasks
     
     respond_to do |format|
-      format.html # index.html.erb
+      format.html
       format.json { render json: @tasks }
     end
   end
 
-  # GET /tasks/1
-  # GET /tasks/1.json
   def show
-    
+    @user = current_user
     @task = Task.find(params[:id])
-    @comments = @task.comments('created_at asc')
-    @suggestions = @task.suggestions.where(:vote_status => 0).order('vote_count desc')
-    @processed_suggestions = @task.suggestions.where('vote_status <> 0 AND acceptance_status <> 0').order('created_at desc')
-    @preferences = @task.preferences
+
+    return redirect_to :home unless @task.user == @user
+
+    @suggestions = @task.suggestions.where(sent: true).order('updated_at desc')
+    @hits = @task.hits
+
     respond_to do |format|
-      format.html # show.html.erb
+      format.html
       format.json { render json: @task }
     end
   end
 
-  # GET /tasks/new
-  # GET /tasks/new.json
   def new
     @task = Task.new
-    #TODO: Create 5 Turker hits
     respond_to do |format|
-      format.html # new.html.erb
+      format.html
       format.json { render json: @task }
     end
   end
 
-  # GET /tasks/1/edit
   def edit
     @task = Task.find(params[:id])
   end
 
-  # POST /tasks
-  # POST /tasks.json
   def create
     @task = Task.new(params[:task])
 
     respond_to do |format|
       if @task.save
+        #TODO: Create 5 Turker hits
+        for i in 1..5
+          task.createHIT
+        end
+
         format.html { redirect_to @task, notice: 'Task was successfully created.' }
         format.json { render json: @task, status: :created, location: @task }
       else
@@ -63,14 +61,13 @@ class TasksController < ApplicationController
     end
   end
 
-  # PUT /tasks/1
-  # PUT /tasks/1.json
   def update
     @task = Task.find(params[:id])
+    return redirect_to :home unless @task.user == @user
 
     respond_to do |format|
       if @task.update_attributes(params[:task])
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        format.html { redirect_to user_task_path(@user,@task), notice: 'Task was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -79,10 +76,10 @@ class TasksController < ApplicationController
     end
   end
 
-  # DELETE /tasks/1
-  # DELETE /tasks/1.json
   def destroy
     @task = Task.find(params[:id])
+    return redirect_to :home unless @task.user == @user
+
     @task.destroy
 
     respond_to do |format|
