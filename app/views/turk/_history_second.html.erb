@@ -1,0 +1,13 @@
+<div class='row-fluid history-item-second'>
+	<div class='span5 thumbnail rating<%= history.rating %>'>
+		<%= image_tag history.image_url,  :class => 'history-img-second'%>
+		<p>
+		<a href="<%= history.product_link%>" target="_blank"><b><%=history.product_name%></b></a><br />
+			$<%= history.price %><br />
+			<%= history.retailer %><br />
+		</p>
+	</div>
+	<div class='span7 desc'>
+		<%= history.body %>
+	</div>
+</div>

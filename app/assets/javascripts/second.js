@@ -1,9 +1,5 @@
-
-
 $(document).ready(function()
 {
-// Logging - Disable in production
-//Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
 
 // Global variable "channel" is set in the view
@@ -15,55 +11,36 @@ var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z
 var images;
 var currentImageIndex = -1;
 
-// Deal with incoming messages!
-ensembleChannel.bind('post_comment', function(comment) {
-  var comment_class, display_name, suggestion_button = '';
-
-  if(comment.commentable_type == 'User'){
-    //User comment
-    comment_class = 'alert alert-error';
-    suggestion_button = '<a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>';
-    display_name = 'Requester'
-  } else if(comment.commentable_type == 'Turk' && turk_id == comment.commentable_id) {
-    //My Comment
-    comment_class = 'alert alert-success'; 
-    display_name = 'Me'
-  } else {
-    //Another Turker's comment
-    comment_class = 'alert alert-info';
-    display_name = 'Fashionista'+comment.commentable_id;
-  }
-  $('#chat-messages ul').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
-  scrollToTheTop();
-});
-
-ensembleChannel.bind('post_suggestion', function(suggestion) {
-  var list_item = getSuggestionBullet(suggestion);
-  $('#suggestions-box').append(list_item);
-  scrollToTheTop();
-});
 
 ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
   $('.suggestion-alert').empty();
-	alert_div = "<div class='span11 alert alert-error'><h4>Waiting on response...</h4>";
-	alert_div += "Please wait for the requestor to respond before peforming any actions</div>";
-	$('.suggestion-alert').append(alert_div);
+  alert_div = "<div class='span11 alert alert-error'><h4>Waiting on response...</h4>";
+  alert_div += "Please wait for the requestor to respond before peforming any actions</div>";
+  $('.suggestion-alert').append(alert_div);
 });
 
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
-	$('.suggestion-alert').empty();
+  $('.suggestion-alert').empty();
   var list_item = getHistoryBullet(suggestion);
-  $('#history-box').prepend(list_item);
+  $('#history-box-second').prepend(list_item);
 });
 
 ensembleChannel.bind('suggestion_accepted', function(suggestion) {
-	$('.suggestion-alert').empty();
-	task_alert = "<div class='span12 alert-block alert alert-success'>";
-	task_alert += "<h4>Task complete</h4>";
-	task_alert += "This task is complete and requires no more work</div>";
-	$('.task-alert').append(task_alert);
-	$('.task-components').empty();
+  $('.suggestion-alert').empty();
+  task_alert = "<div class='span12 alert-block alert alert-success'>";
+  task_alert += "<h4>Task complete</h4>";
+  task_alert += "This task is complete and requires no more work</div>";
+  $('.task-alert').append(task_alert);
+  $('.task-components').empty();
 });
+
+
+ensembleChannel.bind('post-suggestion-second'), function(suggestion) {
+  var list_item = getSuggestionBullet(suggestion);
+  $('#suggestions-box-second').append(list_item);
+  scrollToTheTop();
+});
+
 
 
 ensembleChannel.bind('update_suggestions', function(suggestions) {
@@ -160,25 +137,6 @@ $('#create-suggestion-product-link').blur(function()
 	return false;
 });
 
-
-
-$('#suggestion-img-left').click(function(){
-	if(currentImageIndex > 0){
-		currentImageIndex--;
-		var imgSrc = images[currentImageIndex];
-		$('#create-suggestion-img').attr("src",images[currentImageIndex]);
-		$('#create-suggestion-img-url').attr("src",imgSrc);
-	}
-});
-
-$('#suggestion-img-right').click(function(){
-	if(currentImageIndex < (images.length - 1) ){
-		currentImageIndex++;
-		var imgSrc = images[currentImageIndex];
-		$('#create-suggestion-img').attr("src",images[currentImageIndex]);
-		$('#create-suggestion-img-url').attr("src",imgSrc);
-	}
-});
 
 
 

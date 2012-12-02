@@ -90,3 +90,38 @@ hr {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+
+
+//Second-------
+.rating1{ border: medium solid red; }  
+.rating2{ border: medium solid pink; }
+.rating3{ border: medium solid lightGrey; }
+.rating4{ border: medium solid lightGreen; }
+.rating5{ border: medium solid green; }     
+
+#history-box-second{
+  height: 550px;
+  overflow-y: auto;
+  .history-item-second {
+    margin-bottom: 15px;
+    .history-img-second {height:100px;}
+    .desc { margin-top: 10px; }
+  }
+}
+
+#suggestions-box-second{
+  height: 550px;
+  overflow-y: auto;
+
+  .suggestion-row {
+    margin-bottom: 15px;
+    .suggestion-item-second {
+      border: 2px solid lightGrey;
+      .suggestion-img-second {height:100px;}
+
+    }
+    .suggestion-item-second:hover { border: 2px solid grey; }
+
+
+  }
+}
