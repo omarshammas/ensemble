@@ -45,7 +45,7 @@ private
 
   def get_url
     #TODO change to heroku, should set this in a config file
-    'http://localhost:3000/turk' + task_path(self)
+    'https://tunde.fwd.wf/turk/tasks/' + self.id.to_s #user_task_path(self.user,self)
   end
 
   def get_question (task_url)
