@@ -108,12 +108,8 @@ function getSuggestionBullet(suggestion){
 
 function getHistoryBullet(history){
 
-  var type = "negative";
-  if (suggestion.accepted)
-    type = "positive";
-
-  var list_item = "<div class='history-item row-fluid'><div class = 'span6 thumbnail ";
-  list_item += type + "'><img class='prev-suggestion-img' src='"+ history.image_url +"'/></div>";
+  var list_item = "<div class='history-item row-fluid'><div class = 'span6 thumbnail rating"+suggestion.rating;
+  list_item += "'><img class='prev-suggestion-img' src='"+ history.image_url +"'/></div>";
   list_item += "<div class='desc span5'>" + history.body + "</div></div>";
   return list_item;
 }

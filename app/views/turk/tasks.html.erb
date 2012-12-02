@@ -33,12 +33,7 @@ turk_id = '<%= current_turk.id%>';
 		<div id='history-box'>
 			<%  @processed_suggestions.each do |suggestion| %>
 				<div class='history-item row-fluid'>
-					<div class = 'span6 thumbnail  
-						<%if suggestion.accepted == false%>
-						negative
-						<%elsif suggestion.accepted == true%>
-						positive
-						<%end%>'>
+					<div class = 'span6 thumbnail rating<%= suggestion.rating %>'>
 						<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
 					</div>
 					<div class='desc span5'>

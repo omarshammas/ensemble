@@ -13,9 +13,12 @@ hr {
   overflow-y: auto;
   .history-item {
     margin-bottom: 15px;
-    .negative{ border: medium solid red; }  
-    .positive{ border: medium solid green; }     
-    .desc { margin-left: 10px;}
+    .rating1{ border: medium solid red; }  
+    .rating2{ border: medium solid pink; }
+    .rating3{ border: medium solid lightGrey; }
+    .rating4{ border: medium solid lightGreen; }
+    .rating5{ border: medium solid green; }     
+    .desc { margin-left: 10px; }
   }
 }
 
