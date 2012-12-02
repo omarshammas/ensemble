@@ -28,23 +28,25 @@ turk_id = '<%= current_turk.id%>';
 </div>
 
 <div class='row-fluid'>
-	<div id='history-box' class='span3'> <!--well well-small memory-->
+	<div class='span3'>
 		<h4>Requester Feedback</h4>	
-		<%  @processed_suggestions.each do |suggestion| %>
-			<div class='history-item row-fluid'>
-				<div class = 'span6 thumbnail  
-					<%if suggestion.accepted == false%>
-					negative
-					<%elsif suggestion.accepted == true%>
-					positive
-					<%end%>'>
-					<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
+		<div id='history-box'>
+			<%  @processed_suggestions.each do |suggestion| %>
+				<div class='history-item row-fluid'>
+					<div class = 'span6 thumbnail  
+						<%if suggestion.accepted == false%>
+						negative
+						<%elsif suggestion.accepted == true%>
+						positive
+						<%end%>'>
+						<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
+					</div>
+					<div class='desc span5'>
+						<%= suggestion.body %>
+					</div>
 				</div>
-				<div class='desc span5'>
-					<%= suggestion.body %>
-				</div>
-			</div>
-		<% end %>
+			<% end %>
+		</div>
 	</div>
 
 	<div id='chat-box' class='span6'>
@@ -78,29 +80,31 @@ turk_id = '<%= current_turk.id%>';
 		</div>
 	</div>
 
-	<div id='suggestions-box' class='span3'> <!--well well-small memory-->
+	<div class='span3'> <!--well well-small memory-->
 		<h4>Suggestions &nbsp; &nbsp;
 			<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal" data-target="#addSuggestion"><i class='icon-plus'></i></a>
 		</h4>
-		<%  @suggestions.each do |suggestion| %>
-			<div class='suggestion-item row-fluid'>
-				<div class = 'span6 thumbnail'>
-					<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
+		<div id='suggestions-box'>
+			<%  @suggestions.each do |suggestion| %>
+				<div class='suggestion-item row-fluid'>
+					<div class = 'span6 thumbnail'>
+						<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
+					</div>
+					<div class='desc span5'>
+						<a href="<%= suggestion.product_link%>" target="_blank"><b><%=suggestion.product_name%></b></a><br />
+						$<%= suggestion.price %><br />
+						<%= suggestion.retailer %><br />
+						<button class='btn btn-mini upvote'>
+							<i class='icon-thumbs-up'><input type='hidden' value='<%=suggestion.id%>'/></i>
+						</button>
+						<button class='btn btn-mini downvote'>
+							<i class='icon-thumbs-down'><input type='hidden' value='<%=suggestion.id%>'/></i>
+						</button>
+						<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
+					</div>
 				</div>
-				<div class='desc span5'>
-					<a href="<%= suggestion.product_link%>" target="_blank"><b><%=suggestion.product_name%></b></a><br />
-					$<%= suggestion.price %><br />
-					<%= suggestion.retailer %><br />
-					<button class='btn btn-mini upvote'>
-						<i class='icon-thumbs-up'><input type='hidden' value='<%=suggestion.id%>'/></i>
-					</button>
-					<button class='btn btn-mini downvote'>
-						<i class='icon-thumbs-down'><input type='hidden' value='<%=suggestion.id%>'/></i>
-					</button>
-					<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
-				</div>
-			</div>
-		<% end %>
+			<% end %>
+		</div>
 
 		<%= render 'suggestion_form' %>
 	</div>
