@@ -51,7 +51,7 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
 });
 
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
-	$('.suggestion-alert').empty();
+  $('.suggestion-alert').empty();
   var list_item;
 
   list_item = getHistoryBullet(suggestion);
@@ -110,7 +110,14 @@ function getHistoryBullet(history){
 
   var list_item = "<div class='history-item row-fluid'><div class = 'span6 thumbnail rating"+suggestion.rating;
   list_item += "'><img class='prev-suggestion-img' src='"+ history.image_url +"'/></div>";
-  list_item += "<div class='desc span5'>" + history.body + "</div></div>";
+  list_item += "<div class='desc span5'>" + history.body + "</div></div><div class='row-fluid'>";
+  for(ii = 1; ii <= 5; ii++){
+  	if( ii <= history.rating)
+  		list_item += "<i class='icon-star'></i>";
+  	else
+  		list_item += "<i class='icon-star-empty'></i>";
+  }
+  list_item += "</div></hr>"
   return list_item;
 }
 

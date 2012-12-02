@@ -8,7 +8,7 @@ turk_id = '<%= current_turk.id%>';
 
 <div id='header' class='row-fluid'>
 	<div id='objective' class='span9'>
-		<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+		<a href="<%=@task.image.url(:medium)%>"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%></a>
 		<h4><%= @task.body %></h4>
 	</div>
 	<div id='redeem-code' class='span3'>
@@ -44,12 +44,22 @@ turk_id = '<%= current_turk.id%>';
 			<%  @processed_suggestions.each do |suggestion| %>
 				<div class='history-item row-fluid'>
 					<div class = 'span6 thumbnail rating<%= suggestion.rating %>'>
-						<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
+						<a href="<%= suggestion.product_link%>" target="_blank"><%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%></a>
 					</div>
 					<div class='desc span5'>
-						<%= suggestion.body %>
+						<p><%= suggestion.body %></p>
 					</div>
 				</div>
+				<div class='row-fluid'>
+				<% for ii in 1..5%>
+					<%if ii <= suggestion.rating%>
+					<i class='icon-star'></i>
+					<%else%>
+					<i class='icon-star-empty'></i>
+					<%end%>
+				<%end%>
+				</div>
+				</hr>
 			<% end %>
 		</div>
 	</div>
