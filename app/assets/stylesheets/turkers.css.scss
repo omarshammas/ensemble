@@ -41,11 +41,11 @@ hr {
   #comment-btn { margin-top: 45px;}
 }
 
-#suggestions-box{
+#suggestions-box, #history-box{
   height: 500px;
   overflow-y: auto;
 
-  .suggestion-item { margin-bottom:15px; }
+.suggestion-item { margin-bottom:15px; }
 }
 
 
