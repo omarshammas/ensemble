@@ -5,7 +5,7 @@ class ApiController < ApplicationController
   Pusher.secret = '959771cb4f1e0062256a'
 
   UP_THRESHOLD = 2
-  DOWN_THRESHOLD = -2
+  MIN_THRESHOLD = -2
 
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
@@ -19,7 +19,7 @@ class ApiController < ApplicationController
       Suggestion.increment_counter :vote_count, suggestion.id
       suggestion.reload
       task = suggestion.task
-      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => DOWN_THRESHOLD}).order('vote_count desc')
+      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
       #Send User an SMS with the suggestion
@@ -27,10 +27,11 @@ class ApiController < ApplicationController
         user = task.user
         user.send_message "#{request.protocol}#{request.host_with_port}#{user_task_suggestion_path(user, task, suggestion)}"
         suggestion.update_attribute :sent, true
-        suggestions = task.suggestions.wherewhere('sent = :sent AND min_count > :min_count',{:sent => false, :min_count => DOWN_THRESHOLD}).order('vote_count desc')
+        suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
         Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
         Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
+      render json: { status: "succes"}
     else
       render json: { status: "failed"}
     end
@@ -47,7 +48,7 @@ class ApiController < ApplicationController
     if vote.save
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
-      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => DOWN_THRESHOLD}).order('vote_count desc')
+      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else

@@ -27,8 +27,18 @@ turk_id = '<%= current_turk.id%>';
 	<%end%>
 </div>
 
-<div class='row-fluid'>
-	<div class='span3'>
+<div class ='row-fluid task-alert'>
+	<% if @task.finished %>
+	<div class="span12 alert-block alert alert-success">
+		<h4>Task complete</h4>
+		This task is complete and requires no more work
+	</div>
+	<%end%>
+</div>
+
+<div class='row-fluid task-components'>
+		<% if !@task.finished %>
+		<div class='span3'>
 		<h4>Requester Feedback</h4>	
 		<div id='history-box'>
 			<%  @processed_suggestions.each do |suggestion| %>
@@ -103,4 +113,5 @@ turk_id = '<%= current_turk.id%>';
 
 		<%= render 'suggestion_form' %>
 	</div>
+	<%end%>
 </div>
