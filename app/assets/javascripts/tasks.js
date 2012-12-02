@@ -63,6 +63,7 @@ ensembleChannel.bind('suggestion_accepted', function(suggestion) {
 	task_alert += "<h4>Task complete</h4>";
 	task_alert += "This task is complete and requires no more work</div>";
 	$('.task-alert').append(task_alert);
+	$('.task-components').empty();
 });
 
 
@@ -97,7 +98,7 @@ function getSuggestionBullet(suggestion){
   list_item += "<div class='desc span5'><a href='" + suggestion.product_link + "' target='_blank'>";
   list_item += "<b>" + suggestion.product_name + "</b></a><br />";
   list_item += "$" + suggestion.price + "<br />";
-  list_item += "$" + suggestion.retailer + "<br />";
+  list_item +=  suggestion.retailer + "<br />";
   list_item += "<button class='btn btn-mini upvote'><i class='icon-thumbs-up'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
   list_item += "<button class='btn btn-mini downvote'><i class='icon-thumbs-down'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
   list_item += "<span class='badge badge-success' id='vote_count_"+ suggestion.id +"'>"+ suggestion.vote_count +"</span>"; 

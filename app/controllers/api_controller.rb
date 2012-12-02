@@ -83,8 +83,8 @@ class ApiController < ApplicationController
     if suggestion.update_attributes(params[:suggestion])
       if !suggestion.accepted
         Pusher["ensemble-" + "#{task.id}"].trigger('suggestion_rejected', suggestion)
-        
       else
+        task.update_attributes(:finished => true)
         Pusher["ensemble-" + "#{task.id}"].trigger('suggestion_accepted', suggestion)
       end
     else
