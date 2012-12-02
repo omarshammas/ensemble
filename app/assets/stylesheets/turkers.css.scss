@@ -9,12 +9,16 @@ hr {
 }
 
 #history-box {
-  //border-right: thin solid lightGrey;
+  height: 500px;
+  overflow-y: auto;
   .history-item {
     margin-bottom: 15px;
-    .negative{ border: medium solid red; }  
-    .positive{ border: medium solid green; }     
-    .desc { margin-left: 10px;}
+    .rating1{ border: medium solid red; }  
+    .rating2{ border: medium solid pink; }
+    .rating3{ border: medium solid lightGrey; }
+    .rating4{ border: medium solid lightGreen; }
+    .rating5{ border: medium solid green; }     
+    .desc { margin-left: 10px; }
   }
 }
 
@@ -25,7 +29,7 @@ hr {
 
   #chat-messages {
     height: 400px;
-    overflow-y: scroll;
+    overflow-y: auto;
     ul {
       list-style-type: none;
       width:95%;
@@ -38,9 +42,8 @@ hr {
 }
 
 #suggestions-box{
-  height:480px;
-  overflow-y:auto;
-  overflow-x:auto;
+  height: 500px;
+  overflow-y: auto;
 
   .suggestion-item { margin-bottom:15px; }
 }

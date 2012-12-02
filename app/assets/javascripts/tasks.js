@@ -33,8 +33,6 @@ ensembleChannel.bind('post_comment', function(comment) {
     comment_class = 'alert alert-info';
     display_name = 'Fashionista'+comment.commentable_id;
   }
-  console.log(comment.body)
-  console.log($('#chat-messages ul'))
   $('#chat-messages ul').append('<li class="message"><div class ="'+ comment_class +'"><p>' + suggestion_button +'<strong>' + display_name + '</strong>: ' + replaceURLWithHTMLLinks(comment.body) + '</p></div></li>');
   scrollToTheTop();
 });
@@ -54,7 +52,10 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
 
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
 	$('.suggestion-alert').empty();
-	//Add rejection to preference list
+  var list_item;
+
+  list_item = getHistoryBullet(suggestion);
+  $('#history-box').prepend(list_item);
 });
 
 ensembleChannel.bind('suggestion_accepted', function(suggestion) {
@@ -92,8 +93,7 @@ ensembleChannel.bind('update_preferences', function(preferences) {
 });
 
 function getSuggestionBullet(suggestion){
-
-  list_item = "<div class='suggestion-item row-fluid'><div class = 'span6 thumbnail'>"
+  var list_item = "<div class='suggestion-item row-fluid'><div class = 'span6 thumbnail'>"
   list_item += "<img alt='' class='prev-suggestion-img' src='"+ suggestion.image_url +"'/></div>";
   list_item += "<div class='desc span5'><a href='" + suggestion.product_link + "' target='_blank'>";
   list_item += "<b>" + suggestion.product_name + "</b></a><br />";
@@ -102,8 +102,16 @@ function getSuggestionBullet(suggestion){
   list_item += "<button class='btn btn-mini upvote'><i class='icon-thumbs-up'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
   list_item += "<button class='btn btn-mini downvote'><i class='icon-thumbs-down'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
   list_item += "<span class='badge badge-success' id='vote_count_"+ suggestion.id +"'>"+ suggestion.vote_count +"</span>"; 
-  list_item += "</div></div><br />"
+  list_item += "</div></div>"
  	return list_item;
+}
+
+function getHistoryBullet(history){
+
+  var list_item = "<div class='history-item row-fluid'><div class = 'span6 thumbnail rating"+suggestion.rating;
+  list_item += "'><img class='prev-suggestion-img' src='"+ history.image_url +"'/></div>";
+  list_item += "<div class='desc span5'>" + history.body + "</div></div>";
+  return list_item;
 }
 
 $('.upvote').live("click",function(){
