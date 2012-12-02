@@ -47,12 +47,12 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        #TODO: Create 5 Turker hits
+        base_url = "#{request.protocol}#{request.host_with_port}/"
         for i in 1..5
-          @task.createHIT
+          @task.createHIT(base_url)
         end
 
-        format.html { redirect_to @task, notice: 'Task was successfully created.' }
+        format.html { redirect_to :home, notice: 'Task was successfully created.' }
         format.json { render json: @task, status: :created, location: @task }
       else
         format.html { render action: "new" }
