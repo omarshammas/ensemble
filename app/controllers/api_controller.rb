@@ -27,7 +27,7 @@ class ApiController < ApplicationController
         suggestion.update_attribute :sent, true
         Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
-      
+
       suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)      
       render json: { status: "succes"}
@@ -52,6 +52,20 @@ class ApiController < ApplicationController
       render json: { status: "success"}
     else
       render json: { status: "failed"}
+    end
+  end
+
+  def post_point
+    suggestion = Suggestion.find params[:suggestion_id]
+    turk = current_turk
+
+    return render json: {status: 'failed'} if suggestion.nil? or turk.nil? or params[:isPro].nil? or params[:body].nil?
+
+    point = Point.new isPro: params[:isPro], body: params[:body], suggestion_id: suggestion.id, turk_id: turk.id
+    if point.save
+      render json: { status: 'success', point:point.to_json }
+    else
+      render json: { status: 'failed'}
     end
   end
   

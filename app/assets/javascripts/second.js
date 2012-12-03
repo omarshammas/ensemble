@@ -73,14 +73,22 @@ function getHistoryBullet(history){
   return list_item;
 }
 
-$('.upvote').live("click",function(){
+$('.upvote').live('click',function(){
     var suggestion_id = $(this).children().find('input[type="hidden"]');
     post_up_vote(suggestion_id.val());
 });
 
-$('.downvote').live("click",function(){
+$('.downvote').live('click',function(){
     var suggestion_id = $(this).children().find('input[type="hidden"]');
     post_down_vote(suggestion_id.val());
+});
+
+$('#pro-btn').live('click', function(){
+  makePoint(true);
+});
+
+$('#con-btn').live('click', function(){
+  makePoint(false);
 });
 
 $('#comment-btn').click(function(){

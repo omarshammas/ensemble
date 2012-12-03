@@ -49,6 +49,31 @@ function post_down_vote(suggestion_id) {
 	});
 }
 
+
+function makePoint(isPro){
+  var point = $('#procon-text-input').val();
+  if (point.trim() == ''){
+    alert("If you want to add a con or pro it can't be blank");
+  } else {
+    var suggestion_id = $('#procon-text-input').attr('data-suggestion-id');
+    $('#procon-text-input').val('');
+    post_point(suggestion_id, isPro, point);
+  }
+}
+
+function post_point(suggestion_id, isPro, point){
+	$.post('/api/post_point', {"suggestion_id": suggestion_id, 'isPro':isPro, 'body':point}, function(response) {
+		if (response['status'] == 'success'){
+			var point = $.parseJSON(response['point']);
+			if (point['isPro']){
+				$('#pros ul').append("<li>"+point['body']+"</li>");
+			} else {
+				$('#cons ul').append("<li>"+point['body']+"</li>");
+			}
+		}
+	});
+}
+
 function get_suggestion(suggestion_id){
 	$.post('/api/get_suggestion', {"suggestion_id": suggestion_id}, function(response) {
 		var suggestion = $.parseJSON(response['suggestion']);
@@ -72,7 +97,7 @@ function get_suggestion(suggestion_id){
 		$('#procon-input').empty();
 		if (!suggestion['sent']){
 			$('#procon-input').append("<button class='btn btn-success' id='pro-btn'>Pro</button>");
-			$('#procon-input').append("<textarea rows='2' span='12' id='procon-text-input'></textarea>");
+			$('#procon-input').append("<textarea rows='2' span='12' id='procon-text-input' data-suggestion-id='"+suggestion['id']+"'></textarea>");
 			$('#procon-input').append("<button class='btn btn-danger' id='con-btn'>Con</button>");
 		}
 
