@@ -32,42 +32,46 @@ ensembleChannel.bind('suggestion_accepted', function(suggestion) {
   $('.task-components').empty();
 });
 
-ensembleChannel.bind('post-suggestion-second'), function(suggestion) {
-  var list_item = getSuggestionBullet(suggestion);
-  $('#suggestions-box-second').append(list_item);
-  scrollToTheTop();
-});
-
 ensembleChannel.bind('update_suggestions', function(suggestions) {
-  $('.suggestion-item').remove();
-  var ii;
+  $('#suggestions-box-second').empty();
   var list_item;
-  for (ii = 0; ii < suggestions.length; ++ii) {
+  var items_per_row = 3;
+  for (var ii = 0; ii < suggestions.length; ++ii) {
       suggestion = suggestions[ii];
       list_item = getSuggestionBullet(suggestion);
-      $('#suggestions-box').append(list_item);    
+
+      if (ii%items_per_row == 0){
+        $('#suggestions-box-second').append("<div class='row-fluid suggestion-row'>");        
+      }
+
+      $('#suggestions-box-second .suggestion-row').last().append(list_item);    
+
+      if ((ii%items_per_row == items_per_row-1) || (ii >= suggestions.length-1)){
+        $('#suggestions-box-second').append("</div>");
+      }
   }
 });
 
 function getSuggestionBullet(suggestion){
-  var list_item = "<div class='suggestion-item row-fluid'><div class = 'span6 thumbnail'>"
-  list_item += "<img alt='' class='prev-suggestion-img' src='"+ suggestion.image_url +"'/></div>";
-  list_item += "<div class='desc span5'><a href='" + suggestion.product_link + "' target='_blank'>";
-  list_item += "<b>" + suggestion.product_name + "</b></a><br />";
-  list_item += "$" + suggestion.price + "<br />";
-  list_item +=  suggestion.retailer + "<br />";
+  var list_item = "<div class='suggestion-item-second span4 thumbnail'>";
+  list_item += "<img class='suggestion-img-second' src='"+ suggestion.image_url +"' />";
+  list_item += "<p><a href='" + suggestion.product_link + "' target='blank'><b>"+ suggestion.product_name +"</b></a><br />";
+  list_item += suggestion.price + "<br />" + suggestion.retailer + "<br />";
   list_item += "<button class='btn btn-mini upvote'><i class='icon-thumbs-up'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
   list_item += "<button class='btn btn-mini downvote'><i class='icon-thumbs-down'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
-  list_item += "<span class='badge badge-success' id='vote_count_"+ suggestion.id +"'>"+ suggestion.vote_count +"</span>"; 
-  list_item += "</div></div>"
+  list_item += "<span class='badge badge-success' id='vote_count_" + suggestion.id;
+  list_item += "'>" + suggestion.vote_count + "</span></p></div>";
  	return list_item;
 }
 
 function getHistoryBullet(history){
-
-  var list_item = "<div class='history-item row-fluid'><div class = 'span6 thumbnail rating"+suggestion.rating;
-  list_item += "'><img class='prev-suggestion-img' src='"+ history.image_url +"'/></div>";
-  list_item += "<div class='desc span5'>" + history.body + "</div></div>";
+  var list_item = "<div class='row-fluid history-item-second'>"
+  list_item += "<div class = 'span5 thumbnail rating"+ history.rating + "'>";
+  list_item += "<img class='history-img-second' src='"+ history.image_url +"'/>";
+  list_item += "<p><a href='" + history.product_link + "' target='_blank'>";
+  list_item += "<b>" + history.product_name + "</b></a><br />";
+  list_item += history.price + "<br />" + history.retailer + "<br />";
+  list_item += "</p></div><div class='span7 desc'>" + history.body + "</div></div>";
   return list_item;
 }
 
@@ -80,11 +84,6 @@ $('.downvote').live("click",function(){
     var suggestion_id = $(this).children().find('input[type="hidden"]');
     post_down_vote(suggestion_id.val());
 });
-
-$('.remove-pref-icon').live("click",function(){
-    remove_pref($(this).attr("value"));
-});
-
 
 $('#comment-btn').click(function(){
     post_comment();
@@ -99,8 +98,7 @@ function trim(str) {
 }
 
 
-$('#create-suggestion-product-link').blur(function()
-{
+$('#create-suggestion-product-link').blur(function(){
 	if( trim($(this).val() ) != ""){
 		url = $(this).val();
 		if(urlRegex.test(url)){
@@ -114,6 +112,25 @@ $('#create-suggestion-product-link').blur(function()
 		}
 	}
 	return false;
+});
+
+
+$('#suggestion-img-left').click(function(){
+  if(currentImageIndex > 0){
+    currentImageIndex--;
+    var imgSrc = images[currentImageIndex];
+    $('#create-suggestion-img').attr("src",images[currentImageIndex]);
+    $('#create-suggestion-img-url').attr("src",imgSrc);
+  }
+});
+
+$('#suggestion-img-right').click(function(){
+  if(currentImageIndex < (images.length - 1) ){
+    currentImageIndex++;
+    var imgSrc = images[currentImageIndex];
+    $('#create-suggestion-img').attr("src",images[currentImageIndex]);
+    $('#create-suggestion-img-url').attr("src",imgSrc);
+  }
 });
 
 

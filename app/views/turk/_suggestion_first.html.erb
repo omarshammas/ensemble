@@ -3,7 +3,7 @@
 		<%= image_tag suggestion.image_url,  :class => 'suggestion-img'%>
 	</div>
 	<div class='desc span5'>
-		<a href="<%= suggestion.product_link%>" target="_blank"><b><%=suggestion.product_name%></b></a><br />
+		<a href='<%= suggestion.product_link%>' target='_blank'><b><%=suggestion.product_name%></b></a><br />
 		$<%= suggestion.price %><br />
 		<%= suggestion.retailer %><br />
 		<button class='btn btn-mini upvote'>
