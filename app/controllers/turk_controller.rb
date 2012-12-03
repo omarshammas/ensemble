@@ -11,6 +11,6 @@ class TurkController < ApplicationController
     @suggestions = @task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
     @history = @task.suggestions.where('sent = :sent AND accepted IS NOT NULL',{:sent => true}).order('created_at desc')
     
-    render @task.interface
+    return render @task.interface
   end
 end
