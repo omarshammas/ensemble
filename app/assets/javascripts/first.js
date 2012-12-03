@@ -3,29 +3,44 @@ $(document).ready(function(){
 // Global variable "channel" is set in the view
 var pusher = new Pusher('9ceb5ef670c4262bfbca');
 Pusher.channel_auth_endpoint = '/api/authenticate';
-var ensembleChannel = pusher.subscribe(channel_name);
+var ensembleChannel = pusher.subscribe("presence-"+channel_name);
 var url;
 var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z0-9_.\:\;-]*)*(\?[\&\%\|\+a-z0-9_=,\.\:\;-]*)?([\&\%\|\+&a-z0-9_=,\:\;\.-]*)([\!\#\/\&\%\|\+a-z0-9_=,\:\;\.-]*)}*/i;
 var images;
 var currentImageIndex = -1;
-
+var count=0;
 
 // Logging - Disable in production
 Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
-//When somebody leaves, pop a note to tell the user
-ensembleChannel.bind('pusher_internal:disconnected', function(member) {
-	$.get('http://www.edytan.com/hp/', {}, function(response) {
-		console.log(response);
-	});
-}); 
 
+ensembleChannel.bind('pusher:subscription_succeeded', function(members) {
+  console.log(members);
+  count = members.count;
+  $('#chat-box').find('h4').empty()
+  $('#chat-box').find('h4').append("Chat with "+(count-1)+" Other Turker(s)");
+  // members.each(function(member) {
+    // // for example:
+    // add_member(member.id, member.info);
+  // });
+});
+
+ensembleChannel.bind('pusher:member_added', function(member) {
+  count++;
+  $('#chat-box').find('h4').empty()
+  $('#chat-box').find('h4').append("Chat with "+ (count-1) +" Other Turker(s)");
+});
+
+ensembleChannel.bind('pusher:member_removed', function(member) {
+  count--;
+  $('#chat-box').find('h4').empty()
+  $('#chat-box').find('h4').append("Chat with "+ (count-1) +" Other Turker(s)");
+});
 
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
   var comment_class, display_name, suggestion_button = '';
-
   if(comment.commentable_type == 'User'){
     //User comment
     comment_class = 'alert alert-error';

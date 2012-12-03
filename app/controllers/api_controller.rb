@@ -6,7 +6,7 @@ class ApiController < ApplicationController
 
   UP_THRESHOLD = 2
   MIN_THRESHOLD = -2
-
+  CHANNEL_PREFIX = 'presence-ensemble-'
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
@@ -20,15 +20,15 @@ class ApiController < ApplicationController
       suggestion.reload
       task = suggestion.task
       suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
+      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
       #Send User an SMS with the suggestion
       if suggestion.vote_count >= UP_THRESHOLD and not suggestion.sent 
         user = task.user
         user.send_message "#{request.protocol}#{request.host_with_port}#{user_task_suggestion_path(user, task, suggestion)}"
         suggestion.update_attribute :sent, true
         suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-        Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
-        Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
+        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
+        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
       render json: { status: "succes"}
     else
@@ -48,7 +48,7 @@ class ApiController < ApplicationController
       Suggestion.decrement_counter :vote_count, suggestion.id
       task = suggestion.task
       suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
+      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else
       render json: { status: "failed"}
@@ -70,7 +70,7 @@ class ApiController < ApplicationController
     
     if suggestion.save
       suggestions = task.suggestions.where(sent: false).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
+      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else
       render json: { status: "failed"}
@@ -82,10 +82,11 @@ class ApiController < ApplicationController
     suggestion = Suggestion.find(params[:id])
     if suggestion.update_attributes(params[:suggestion])
       if !suggestion.accepted
-        Pusher["ensemble-" + "#{task.id}"].trigger('suggestion_rejected', suggestion)
+        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('suggestion_rejected', suggestion)
       else
         task.update_attributes(:finished => true)
-        Pusher["ensemble-" + "#{task.id}"].trigger('suggestion_accepted', suggestion)
+        #TODO Close all open hits
+        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('suggestion_accepted', suggestion)
       end
     else
       render :text => "failed"
@@ -97,19 +98,46 @@ class ApiController < ApplicationController
     task = Task.find(params[:task_id])
     comment = Comment.new
     comment.task_id = task.id
-    
     turk = current_turk
     comment.commentable = turk
     comment.body = params[:body]
-    
     payload = comment.attributes
     payload[:turk] = turk.attributes
     payload[:task] = task.attributes
     if comment.save
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
+      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('post_comment', payload)
       render :text => "sent"
     else
       render :text => "failed"
+    end
+  end
+  
+  def authenticate
+    turk = current_turk
+    if !turk.nil?
+      auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
+        :user_id => turk.id
+      )
+      render :json => auth
+    else
+      render :text => "Not authorized", :status => '403'
+    end
+  end
+  
+  def webhook
+    webhook = Pusher::WebHook.new(request)
+    if webhook.valid?
+      webhook.events.each do |event|
+        case event["name"]
+        when 'member_removed'
+          task_id = event["channel"].split('-').last.to_i
+          logger.info "Creating HIT for task with ID #{task_id.to_s}"
+          Task.find(task_id).createHIT(ENV["ENSEMBLE_HOSTNAME"])
+        end
+      end
+      render text: 'ok'
+    else
+      render text: 'invalid', status: 401
     end
   end
 
@@ -128,7 +156,7 @@ class ApiController < ApplicationController
 
     if body == "end;"
       task.close()
-      Pusher["ensemble-" + "#{task.id}"].trigger('task_finished', payload)
+      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('task_finished', payload)
     else
       comment = Comment.new
       comment.task_id = task.id
@@ -139,7 +167,7 @@ class ApiController < ApplicationController
         payload = comment.attributes
         payload[:user] = user.attributes
         payload[:task] = task.attributes
-        Pusher["ensemble-" + "#{task.id}"].trigger('post_comment', payload)
+        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('post_comment', payload)
       end
     end
 

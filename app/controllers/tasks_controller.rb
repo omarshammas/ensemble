@@ -47,9 +47,8 @@ class TasksController < ApplicationController
 
     respond_to do |format|
       if @task.save
-        base_url = "#{request.protocol}#{request.host_with_port}/"
         for i in 1..5
-          @task.createHIT(base_url)
+          @task.createHIT(ENV["ENSEMBLE_HOSTNAME"])
         end
 
         format.html { redirect_to :home, notice: 'Task was successfully created.' }
