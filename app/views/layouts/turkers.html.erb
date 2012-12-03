@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ensemble</title>
-  <%= stylesheet_link_tag 'turkers', :media => 'all' %>
-  <%= yield :stylesheet_links %>
-  <%= javascript_include_tag 'turkers' %>
-  <%= yield :javascript_includes %>
+	<title>Ensemble</title>
+	<%= stylesheet_link_tag 'turkers', :media => 'all' %>
+	<%= javascript_include_tag 'turkers' %>
+	
+	<%= stylesheet_link_tag @task.interface%>
+	<%= javascript_include_tag "#{@task.interface}.js" %>
+	<%= javascript_include_tag "#{@task.interface}.functions.js" %>
+
   <%= csrf_meta_tags %>
   <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
   <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>

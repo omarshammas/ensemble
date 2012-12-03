@@ -1,7 +1,7 @@
 class Task < ActiveRecord::Base
   include Rails.application.routes.url_helpers
 
-  attr_accessible :user_id, :body, :image, :finished
+  attr_accessible :user_id, :body, :image, :finished, :interface
   
   belongs_to :user
   has_many :comments
