@@ -1,0 +1,52 @@
+<% content_for :stylesheet_links do %>
+  <%= stylesheet_link_tag 'second'%>
+<% end %>
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "second.js" %>
+  <%= javascript_include_tag "second.functions.js" %>
+<% end %>
+
+<script type='text/javascript'>
+	channel_name = 'ensemble-<%= @task.id %>';
+	channel = '<%= @task.id %>';
+	turk_id = '<%= current_turk.id%>';
+</script>
+
+<div id='header' class='row-fluid'>
+	<div id='objective' class='span9'>
+		<%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+		<h4><%= @task.body %></h4>
+	</div>
+	<div id='redeem-code' class='span3'>
+		<h4> 3 tasks remaining </h4>
+	</div>
+</div>
+
+<hr />
+
+<div class='row-fluid suggestion-alert'>
+	<% if @task.suggestion_sent? %>
+	<div class="span12 alert-block alert alert-error">
+		<h4>Waiting on response...</h4>
+		Please wait for the requestor to respond before peforming any actions
+	</div>
+	<%end%>
+</div>
+
+<div class='row-fluid'>
+	<div class='span4'>
+		<h4>Requester Feedback</h4>
+		<div id ='history-box-second'>
+			<%= render(partial: 'history_second', collection: @history, as: :history, locals: {row: 1, total: @history.size}) || 'No suggestions have been sent to the user.' %>
+		</div>
+	</div>
+	<div class='span8'>
+		<h4>Suggestions &nbsp; &nbsp;
+			<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal" data-target="#addSuggestion"><i class='icon-plus'></i></a>
+		</h4>
+		<%= render 'suggestion_form' %>
+		<div id='suggestions-box-second'>
+			<%= render(partial: 'suggestion_second', collection: @suggestions, as: :suggestion, locals: {row: 3, total: @suggestions.size}) || 'No suggestions were proposed.' %>
+		</div>
+	</div>
+</div>

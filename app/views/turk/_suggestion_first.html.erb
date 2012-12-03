@@ -1,0 +1,17 @@
+<div class='suggestion-item row-fluid'>
+	<div class = 'span6 thumbnail'>
+		<%= image_tag suggestion.image_url,  :class => 'suggestion-img'%>
+	</div>
+	<div class='desc span5'>
+		<a href='<%= suggestion.product_link%>' target='_blank'><b><%=suggestion.product_name%></b></a><br />
+		$<%= suggestion.price %><br />
+		<%= suggestion.retailer %><br />
+		<button class='btn btn-mini upvote'>
+			<i class='icon-thumbs-up'><input type='hidden' value='<%=suggestion.id%>'/></i>
+		</button>
+		<button class='btn btn-mini downvote'>
+			<i class='icon-thumbs-down'><input type='hidden' value='<%=suggestion.id%>'/></i>
+		</button>
+		<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
+	</div>
+</div>

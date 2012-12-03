@@ -1,10 +1,4 @@
-
-
-$(document).ready(function()
-{
-// Logging - Disable in production
-//Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
-
+$(document).ready(function(){
 
 // Global variable "channel" is set in the view
 var pusher = new Pusher('9ceb5ef670c4262bfbca');
@@ -61,11 +55,9 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
 });
 
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
-  $('.suggestion-alert').empty();
-  var list_item;
-
-  list_item = getHistoryBullet(suggestion);
-  $('#history-box').prepend(list_item);
+	$('.suggestion-alert').empty();
+	var list_item = getHistoryBullet(suggestion);
+	$('#history-box').prepend(list_item);
 });
 
 ensembleChannel.bind('suggestion_accepted', function(suggestion) {
@@ -79,26 +71,13 @@ ensembleChannel.bind('suggestion_accepted', function(suggestion) {
 
 
 ensembleChannel.bind('update_suggestions', function(suggestions) {
-  $('.suggestion-item').remove();
+  $('#suggestions-box').empty();
   var ii;
   var list_item;
   for (ii = 0; ii < suggestions.length; ++ii) {
       suggestion = suggestions[ii];
       list_item = getSuggestionBullet(suggestion);
       $('#suggestions-box').append(list_item);    
-  }
-});
-
-ensembleChannel.bind('update_preferences', function(preferences) {
-  $('.preference').remove();
-  var ii;
-  var list_item;
-  for (ii = 0; ii < preferences.length; ++ii) {
-      pref = preferences[ii];
-      list_item = "<li class='span5 preference'><p>" + pref.body;
-      list_item += "<a  href='#'><i class='icon-remove remove-pref-icon' value='";
-      list_item += pref.id+"'></i></a></p></li>";
-      $('#preference-list').append(list_item);    
   }
 });
 
@@ -141,11 +120,6 @@ $('.downvote').live("click",function(){
     post_down_vote(suggestion_id.val());
 });
 
-$('.remove-pref-icon').live("click",function(){
-    remove_pref($(this).attr("value"));
-});
-
-
 $('#comment-btn').click(function(){
     post_comment();
 });
@@ -153,17 +127,13 @@ $('#comment-btn').click(function(){
 $('#suggest-btn').click(function(){
     post_suggestion();
 });
-$('#create-preference-modal-btn').click(function(){
-	post_preference();
-});
 
 function trim(str) {
 	return str.replace(/^\s+|\s+$/g,"");
 }
 
 
-$('#create-suggestion-product-link').blur(function()
-{
+$('#create-suggestion-product-link').blur(function(){
 	if( trim($(this).val() ) != ""){
 		url = $(this).val();
 		if(urlRegex.test(url)){

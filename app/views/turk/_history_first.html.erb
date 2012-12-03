@@ -1,0 +1,18 @@
+<div class='history-item row-fluid'>
+	<div class = 'span6 thumbnail rating<%= history.rating %>'>
+		<a href="<%= suggestion.product_link%>" target="_blank"><%= image_tag history.image_url,  :class => 'history-img'%></a>
+	</div>
+	<div class='desc span5'>
+		<%= history.body %>
+	</div>
+</div>
+<div class='row-fluid'>
+	<% for ii in 1..5%>
+	<%if ii <= suggestion.rating%>
+	<i class='icon-star'></i>
+	<%else%>
+	<i class='icon-star-empty'></i>
+	<%end%>
+	<%end%>
+</div>
+</hr>

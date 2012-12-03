@@ -1,10 +1,17 @@
+<% content_for :stylesheet_links do %>
+  <%= stylesheet_link_tag 'first'%>
+<% end %>
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "first.js" %>
+  <%= javascript_include_tag "first.functions.js" %>
+<% end %>
+
+
 <script type='text/javascript'>
-channel_name = 'ensemble-<%= @task.id %>';
-channel = '<%= @task.id %>';
-turk_id = '<%= current_turk.id%>';
+	channel_name = 'ensemble-<%= @task.id %>';
+	channel = '<%= @task.id %>';
+	turk_id = '<%= current_turk.id%>';
 </script>
-<%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
-<%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
 
 <div id='header' class='row-fluid'>
 	<div id='objective' class='span9'>
@@ -41,26 +48,7 @@ turk_id = '<%= current_turk.id%>';
 		<div class='span3'>
 		<h4>Requester Feedback</h4>	
 		<div id='history-box'>
-			<%  @processed_suggestions.each do |suggestion| %>
-				<div class='history-item row-fluid'>
-					<div class = 'span6 thumbnail rating<%= suggestion.rating %>'>
-						<a href="<%= suggestion.product_link%>" target="_blank"><%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%></a>
-					</div>
-					<div class='desc span5'>
-						<p><%= suggestion.body %></p>
-					</div>
-				</div>
-				<div class='row-fluid'>
-				<% for ii in 1..5%>
-					<%if ii <= suggestion.rating%>
-					<i class='icon-star'></i>
-					<%else%>
-					<i class='icon-star-empty'></i>
-					<%end%>
-				<%end%>
-				</div>
-				</hr>
-			<% end %>
+			<%= render(partial: 'history_first', collection: @history, as: :history) || 'No suggestions have been sent to the user.' %>
 		</div>
 	</div>
 
@@ -95,33 +83,14 @@ turk_id = '<%= current_turk.id%>';
 		</div>
 	</div>
 
-	<div class='span3'> <!--well well-small memory-->
+	<div class='span3'>
 		<h4>Suggestions &nbsp; &nbsp;
 			<a href="#addSuggestion"  role="button" class="btn btn-mini" data-toggle="modal" data-target="#addSuggestion"><i class='icon-plus'></i></a>
 		</h4>
-		<div id='suggestions-box'>
-			<%  @suggestions.each do |suggestion| %>
-				<div class='suggestion-item row-fluid'>
-					<div class = 'span6 thumbnail'>
-						<%= image_tag suggestion.image_url,  :class => 'prev-suggestion-img'%>
-					</div>
-					<div class='desc span5'>
-						<a href="<%= suggestion.product_link%>" target="_blank"><b><%=suggestion.product_name%></b></a><br />
-						$<%= suggestion.price %><br />
-						<%= suggestion.retailer %><br />
-						<button class='btn btn-mini upvote'>
-							<i class='icon-thumbs-up'><input type='hidden' value='<%=suggestion.id%>'/></i>
-						</button>
-						<button class='btn btn-mini downvote'>
-							<i class='icon-thumbs-down'><input type='hidden' value='<%=suggestion.id%>'/></i>
-						</button>
-						<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
-					</div>
-				</div>
-			<% end %>
-		</div>
-
 		<%= render 'suggestion_form' %>
+		<div id='suggestions-box'>
+			<%= render(partial: 'suggestion_first', collection: @suggestions, as: :suggestion) || 'No suggestions have been proposed.' %>
+		</div>
 	</div>
 	<%end%>
 </div>

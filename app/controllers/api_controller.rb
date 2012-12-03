@@ -68,13 +68,13 @@ class ApiController < ApplicationController
     suggestion.product_link = params[:product_link]
     suggestion.product_name = params[:product_name]
     suggestion.price = params[:price]
+    
     if suggestion.save
-      payload = suggestion.attributes
-      payload[:turk] = turk.attributes
-      Pusher["ensemble-" + "#{task.id}"].trigger('post_suggestion', payload)
-      render :text => "sent"
+      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
+      render json: { status: "success"}
     else
-      render :text => "failed"
+      render json: { status: "failed"}
     end
   end
   
@@ -92,29 +92,6 @@ class ApiController < ApplicationController
       render :text => "failed"
     end
       redirect_to :home
-  end
-  
-  def post_preference
-    task = Task.find(params[:task_id])
-    turk = current_turk;
-    preference_body = params[:preference_body]
-    pref = Preference.new(:turk_id => turk.id, :body => preference_body, :task_id => task.id)
-    if pref.save 
-      prefs = task.preferences.order('created_at desc')
-      Pusher["ensemble-"+"#{task.id}"].trigger('update_preferences', prefs)
-      render :text => 'sent'
-    else
-      render :text => "failed"
-    end
-  end
-  
-  def remove_preference
-    task = Task.find(params[:task_id])
-    pref = Preference.find(params[:preference_id])
-    pref.destroy()
-    prefs = task.preferences.order('created_at desc')
-    Pusher["ensemble-"+"#{task.id}"].trigger('update_preferences', prefs)
-    render :text => 'sent'
   end
   
   def post_comment
@@ -136,18 +113,6 @@ class ApiController < ApplicationController
       render :text => "failed"
     end
   end
-  
-  def authenticate
-    turk = current_turk
-    if !turk.nil?
-      auth = Pusher[params[:channel_name]].authenticate(params[:socket_id],
-        :turk => turk.attributes
-      )
-      render :json => auth
-    else
-      render :text => "Not authorized", :status => '403'
-    end
-  end
 
   def sms
 =begin
@@ -157,14 +122,11 @@ class ApiController < ApplicationController
     body = params[:Body]
 
     user = User.find_by_phone_number(phone_number)
-    p "User #{user}"
     return render text: '<Response>' if user.nil?
   
     task = user.tasks.where(finished: false).first
-    p "Task #{task}"
     return render text: '<Response>' if task.nil?
 
-    p "Body #{body}"
     if body == "end;"
       task.close()
       Pusher["ensemble-" + "#{task.id}"].trigger('task_finished', payload)

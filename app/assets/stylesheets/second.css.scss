@@ -1,0 +1,51 @@
+hr {
+  margin-top:0px;
+}
+
+#header {
+  margin: 0;
+  #task-img { margin-right:15px; }
+  #objective{ padding:5px; }
+}
+
+.message .alert {
+  padding: 4px 4px 4px 4px;
+  margin-bottom: 10px;
+}
+
+#history-box-second{
+  height: 550px;
+  overflow-y: auto;
+  .history-item-second {
+    margin-bottom: 15px;
+    .history-img-second {height:100px;}
+    .rating1{ border: medium solid red; }  
+    .rating2{ border: medium solid pink; }
+    .rating3{ border: medium solid lightGrey; }
+    .rating4{ border: medium solid lightGreen; }
+    .rating5{ border: medium solid green; }  
+    .desc { margin-top: 10px; }
+  }
+}
+
+#suggestions-box-second{
+  height: 550px;
+  overflow-y: auto;
+
+  .suggestion-row {
+    margin-bottom: 15px;
+    .suggestion-item-second {
+      border: 2px solid lightGrey;
+      .suggestion-img-second {height:100px;} 
+      .badge {float:right;}
+    }
+    .suggestion-item-second:hover { border: 2px solid grey; }
+  }
+}
+
+#create-suggestion-img{
+  margin: 10px 0 0 20px;
+  width:100px;
+  max-height:150px;
+}
+

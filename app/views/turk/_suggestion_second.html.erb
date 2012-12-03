@@ -1,0 +1,23 @@
+<% if suggestion_counter%row == 0%>
+	<div class='row-fluid suggestion-row'>
+<% end %>
+
+<div class='suggestion-item-second span4 thumbnail'>
+	<%= image_tag suggestion.image_url,  :class => 'suggestion-img-second'%>
+	<p>
+	<a href='<%= suggestion.product_link%>' target='_blank'><b><%=suggestion.product_name%></b></a><br />
+		$<%= suggestion.price %><br />
+		<%= suggestion.retailer %><br />
+		<button class='btn btn-mini upvote'>
+			<i class='icon-thumbs-up'><input type='hidden' value='<%=suggestion.id%>'/></i>
+		</button>
+		<button class='btn btn-mini downvote'>
+			<i class='icon-thumbs-down'><input type='hidden' value='<%=suggestion.id%>'/></i>
+		</button>
+		<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	
+	</p>
+</div>
+
+<% if suggestion_counter%row == row-1 || suggestion_counter == total %>
+	</div>
+<% end %>

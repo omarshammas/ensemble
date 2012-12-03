@@ -4,8 +4,13 @@ hr {
 
 #header {
   margin: 0;
-  #objective{ padding:5px;}
-  #reedem-code { }
+  #task-img { margin-right:15px; }
+  #objective{ padding:5px; }
+}
+
+.message .alert {
+  padding: 4px 4px 4px 4px;
+  margin-bottom: 10px;
 }
 
 #history-box {
@@ -13,6 +18,7 @@ hr {
   overflow-y: auto;
   .history-item {
     margin-bottom: 15px;
+    .history-img {height:100px;} 
     .rating1{ border: medium solid red; }  
     .rating2{ border: medium solid pink; }
     .rating3{ border: medium solid lightGrey; }
@@ -41,52 +47,19 @@ hr {
   #comment-btn { margin-top: 45px;}
 }
 
-#suggestions-box, #history-box{
+#suggestions-box{
   height: 500px;
   overflow-y: auto;
 
-.suggestion-item { margin-bottom:15px; }
-}
-
-
-.nav li a {
-  display:inline;
-}
-
-.memory{
-  height:115px;
-}
-
-
-
-.prev-suggestion-img{
-  max-height:100px;
-}
-
-.message .alert {
-  padding: 4px 4px 4px 4px;
-  margin-bottom: 10px;
-}
-
-
-.badge{
-  float:right;
-}
-
-#task-img{
-  margin-right:1em;
+  .suggestion-item { 
+    margin-bottom:15px; 
+    .suggestion-img {height:100px;} 
+    .badge{ float:right; }
+  }
 }
 
 #create-suggestion-img{
+  margin: 10px 0 0 20px;
   width:100px;
   max-height:150px;
-}
-#suggestion-img{
-  width:60px;
-  max-height:100px;
-}
-
-#preference-list{
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
