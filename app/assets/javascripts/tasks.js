@@ -15,6 +15,16 @@ var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z
 var images;
 var currentImageIndex = -1;
 
+
+
+
+// When somebody leaves, pop a note to tell the user
+// ensembleChannel.bind('pusher:member_removed', function(member) {
+		// alert('A user has left');
+// }); 
+
+
+
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
   var comment_class, display_name, suggestion_button = '';
