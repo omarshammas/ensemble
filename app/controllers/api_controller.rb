@@ -19,18 +19,17 @@ class ApiController < ApplicationController
       Suggestion.increment_counter :vote_count, suggestion.id
       suggestion.reload
       task = suggestion.task
-      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
-      render json: { status: "success"}
+      
       #Send User an SMS with the suggestion
       if suggestion.vote_count >= UP_THRESHOLD and not suggestion.sent 
         user = task.user
         user.send_message "#{request.protocol}#{request.host_with_port}#{user_task_suggestion_path(user, task, suggestion)}"
         suggestion.update_attribute :sent, true
-        suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-        Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
         Pusher["ensemble-" + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
+      
+      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
+      Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)      
       render json: { status: "succes"}
     else
       render json: { status: "failed"}
@@ -76,6 +75,13 @@ class ApiController < ApplicationController
     else
       render json: { status: "failed"}
     end
+  end
+
+  def get_suggestion
+    suggestion = Suggestion.find(params[:suggestion_id])
+    pros = Point.where(suggestion_id: suggestion.id, isPro:true)
+    cons = Point.where(suggestion_id: suggestion.id, isPro:false)
+    render json: { suggestion: suggestion.to_json, pros: pros.to_json, cons: cons.to_json }
   end
   
   def suggestion_response

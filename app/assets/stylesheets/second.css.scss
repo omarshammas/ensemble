@@ -26,6 +26,7 @@ hr {
     .rating5{ border: medium solid green; }  
     .desc { margin-top: 10px; }
   }
+  .history-item-second:hover { border: 2px solid grey; }
 }
 
 #suggestions-box-second{
@@ -49,3 +50,8 @@ hr {
   max-height:150px;
 }
 
+#procon-modal{
+  #procon-input{
+    #procon-text-input{ width:300px; }
+  }
+}

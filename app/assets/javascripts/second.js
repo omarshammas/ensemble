@@ -53,19 +53,17 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
 });
 
 function getSuggestionBullet(suggestion){
-  var list_item = "<div class='suggestion-item-second span4 thumbnail'>";
+  var list_item = "<div class='suggestion-item-second span4 thumbnail' data-suggestion-id='"+suggestion.id+"'>";
   list_item += "<img class='suggestion-img-second' src='"+ suggestion.image_url +"' />";
   list_item += "<p><a href='" + suggestion.product_link + "' target='blank'><b>"+ suggestion.product_name +"</b></a><br />";
   list_item += suggestion.price + "<br />" + suggestion.retailer + "<br />";
-  list_item += "<button class='btn btn-mini upvote'><i class='icon-thumbs-up'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
-  list_item += "<button class='btn btn-mini downvote'><i class='icon-thumbs-down'><input type='hidden' value='"+ suggestion.id +"'/></i></button>";
   list_item += "<span class='badge badge-success' id='vote_count_" + suggestion.id;
   list_item += "'>" + suggestion.vote_count + "</span></p></div>";
  	return list_item;
 }
 
 function getHistoryBullet(history){
-  var list_item = "<div class='row-fluid history-item-second'>"
+  var list_item = "<div class='row-fluid history-item-second' data-history-id='"+history.id+"'>";
   list_item += "<div class = 'span5 thumbnail rating"+ history.rating + "'>";
   list_item += "<img class='history-img-second' src='"+ history.image_url +"'/>";
   list_item += "<p><a href='" + history.product_link + "' target='_blank'>";
@@ -91,6 +89,16 @@ $('#comment-btn').click(function(){
 
 $('#suggest-btn').click(function(){
     post_suggestion();
+});
+
+$('.suggestion-item-second').live('click', function(){
+  var suggestion_id = $(this).attr('data-suggestion-id');
+  get_suggestion(suggestion_id);
+});
+
+$('.history-item-second').live('click', function(){
+  var history_id = $(this).attr('data-history-id');
+  get_suggestion(history_id);
 });
 
 function trim(str) {
