@@ -21,7 +21,6 @@ class ApiController < ApplicationController
       task = suggestion.task
       suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
-      render json: { status: "success"}
       #Send User an SMS with the suggestion
       if suggestion.vote_count >= UP_THRESHOLD and not suggestion.sent 
         user = task.user

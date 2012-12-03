@@ -15,7 +15,7 @@
 
 <div id='header' class='row-fluid'>
 	<div id='objective' class='span9'>
-		<a href="<%=@task.image.url(:medium)%>"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%></a>
+		<a href="<%=@task.image.url(:medium)%>" target="_blank"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%></a>
 		<h4><%= @task.body %></h4>
 	</div>
 	<div id='redeem-code' class='span3'>
@@ -48,7 +48,7 @@
 		<div class='span3'>
 		<h4>Requester Feedback</h4>	
 		<div id='history-box'>
-			<%= render(partial: 'history_first', collection: @history, as: :history) || 'No suggestions have been sent to the user.' %>
+			<%= render(partial: 'history_first', collection: @history, as: :history) || '<div id="no-history">No suggestions have been sent to the user.</div>'.html_safe %>
 		</div>
 	</div>
 
