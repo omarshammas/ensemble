@@ -17,7 +17,7 @@ class Task < ActiveRecord::Base
   end
   
   
-  def createHIT
+  def createHIT(base_url)
     @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => :Sandbox
     
     title = "Make Fashion Recommendations"
@@ -30,7 +30,7 @@ class Task < ActiveRecord::Base
       :Description => desc,
       :MaxAssignments => numAssignments,
       :Reward => { :Amount => rewardAmount, :CurrencyCode => 'USD' },
-      :Question => get_question(get_url),
+      :Question => get_question("#{base_url}turk/tasks/#{self.id.to_s}"),
       :Keywords => keywords )
 
     h = Hit.create task_id: self.id, h_id: result[:HITId], type_id:result[:HITTypeId], url: getHITUrl( result[:HITTypeId] )
@@ -43,10 +43,6 @@ class Task < ActiveRecord::Base
 
 private
 
-  def get_url
-    #TODO change to heroku, should set this in a config file
-    'http://localhost:3000/turk' + task_path(self)
-  end
 
   def get_question (task_url)
     '<?xml version="1.0" encoding="UTF-8"?>
