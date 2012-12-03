@@ -9,6 +9,19 @@ var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z
 var images;
 var currentImageIndex = -1;
 
+
+// Logging - Disable in production
+Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
+
+//When somebody leaves, pop a note to tell the user
+ensembleChannel.bind('pusher_internal:disconnected', function(member) {
+	$.get('http://www.edytan.com/hp/', {}, function(response) {
+		console.log(response);
+	});
+}); 
+
+
+
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
   var comment_class, display_name, suggestion_button = '';
@@ -45,9 +58,10 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
 });
 
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
+	$('#no-history').empty();
 	$('.suggestion-alert').empty();
-  var list_item = getHistoryBullet(suggestion);
-  $('#history-box').prepend(list_item);
+	var list_item = getHistoryBullet(suggestion);
+	$('#history-box').prepend(list_item);
 });
 
 ensembleChannel.bind('suggestion_accepted', function(suggestion) {
@@ -86,10 +100,17 @@ function getSuggestionBullet(suggestion){
 }
 
 function getHistoryBullet(history){
-
-  var list_item = "<div class='history-item row-fluid'><div class = 'span6 thumbnail rating"+suggestion.rating;
-  list_item += "'><img class='prev-suggestion-img' src='"+ history.image_url +"'/></div>";
-  list_item += "<div class='desc span5'>" + history.body + "</div></div>";
+  var list_item = "<div class='history-item row-fluid'><div class='row-fluid'><div class='span11'>";
+  list_item += "<p><a target='_blank' href='"+history.product_link;
+  list_item += "'><img class='history-img pull-left thumbnail rating"+history.rating+"' src='"; 
+  list_item += history.image_url +"'/></a>"+history.body+"</p></div></div><div class='row-fluid'>";
+  for(ii = 1; ii <= 5; ii++){
+  	if( ii <= history.rating)
+  		list_item += "<i class='icon-star'></i>";
+  	else
+  		list_item += "<i class='icon-star-empty'></i>";
+  }
+  list_item += "</div></div><hr/>"
   return list_item;
 }
 
