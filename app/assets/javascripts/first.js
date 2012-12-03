@@ -1,10 +1,4 @@
-
-
-$(document).ready(function()
-{
-// Logging - Disable in production
-//Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
-
+$(document).ready(function(){
 
 // Global variable "channel" is set in the view
 var pusher = new Pusher('9ceb5ef670c4262bfbca');

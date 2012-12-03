@@ -2,15 +2,17 @@
 <html>
 <head>
   <title>Ensemble</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag 'turkers', :media => 'all' %>
+  <%= yield :stylesheet_links %>
+  <%= javascript_include_tag 'turkers' %>
+  <%= yield :javascript_includes %>
   <%= csrf_meta_tags %>
   <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
   <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
 </head>
 <body>
 
-	<div class="container-fluid" id='turkers'>
+	<div class='container-fluid' id='turkers'>
 	
 		<%= yield %>
 

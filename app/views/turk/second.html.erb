@@ -1,10 +1,16 @@
+<% content_for :stylesheet_links do %>
+  <%= stylesheet_link_tag 'second'%>
+<% end %>
+<% content_for :javascript_includes do %>
+  <%= javascript_include_tag "second.js" %>
+  <%= javascript_include_tag "second.functions.js" %>
+<% end %>
+
 <script type='text/javascript'>
-channel_name = 'ensemble-<%= @task.id %>';
-channel = '<%= @task.id %>';
-turk_id = '<%= current_turk.id%>';
+	channel_name = 'ensemble-<%= @task.id %>';
+	channel = '<%= @task.id %>';
+	turk_id = '<%= current_turk.id%>';
 </script>
-<%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
-<%= javascript_include_tag  'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js'%>
 
 <div id='header' class='row-fluid'>
 	<div id='objective' class='span9'>
@@ -18,7 +24,7 @@ turk_id = '<%= current_turk.id%>';
 
 <hr />
 
-<div class ='row-fluid suggestion-alert'>
+<div class='row-fluid suggestion-alert'>
 	<% if @task.suggestion_sent? %>
 	<div class="span12 alert-block alert alert-error">
 		<h4>Waiting on response...</h4>
@@ -31,7 +37,7 @@ turk_id = '<%= current_turk.id%>';
 	<div class='span4'>
 		<h4>Requester Feedback</h4>
 		<div id ='history-box-second'>
-			<%= render(partial: 'history_second', collection: @processed_suggestions, as: :history, locals: {row: 1, total: @processed_suggestions.size}) || 'No suggestions have been sent to the user.' %>
+			<%= render(partial: 'history_second', collection: @history, as: :history, locals: {row: 1, total: @history.size}) || 'No suggestions have been sent to the user.' %>
 		</div>
 	</div>
 	<div class='span8'>
