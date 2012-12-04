@@ -19,17 +19,15 @@ class ApiController < ApplicationController
       Suggestion.increment_counter :vote_count, suggestion.id
       suggestion.reload
       task = suggestion.task
-      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
       #Send User an SMS with the suggestion
       if suggestion.vote_count >= UP_THRESHOLD and not suggestion.sent 
         user = task.user
         user.send_message "#{request.protocol}#{request.host_with_port}#{user_task_suggestion_path(user, task, suggestion)}"
         suggestion.update_attribute :sent, true
-        suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
-        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
         Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_sent_suggestion', suggestion)
       end
+      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
+      Pusher[CHANNEL_PREFIX  + "#{task.id}"].trigger('update_suggestions', suggestions)      
       render json: { status: "succes"}
     else
       render json: { status: "failed"}
@@ -54,6 +52,20 @@ class ApiController < ApplicationController
       render json: { status: "failed"}
     end
   end
+
+  def post_point
+    suggestion = Suggestion.find params[:suggestion_id]
+    turk = current_turk
+
+    return render json: {status: 'failed'} if suggestion.nil? or turk.nil? or params[:isPro].nil? or params[:body].nil?
+
+    point = Point.new isPro: params[:isPro], body: params[:body], suggestion_id: suggestion.id, turk_id: turk.id
+    if point.save
+      render json: { status: 'success', point:point.to_json }
+    else
+      render json: { status: 'failed'}
+    end
+  end
   
   def post_suggestion
     task = Task.find(params[:task_id])
@@ -75,6 +87,13 @@ class ApiController < ApplicationController
     else
       render json: { status: "failed"}
     end
+  end
+
+  def get_suggestion
+    suggestion = Suggestion.find(params[:suggestion_id])
+    pros = Point.where(suggestion_id: suggestion.id, isPro:true)
+    cons = Point.where(suggestion_id: suggestion.id, isPro:false)
+    render json: { suggestion: suggestion.to_json, pros: pros.to_json, cons: cons.to_json }
   end
   
   def suggestion_response
@@ -130,9 +149,9 @@ class ApiController < ApplicationController
       webhook.events.each do |event|
         case event["name"]
         when 'member_removed'
-          task_id = event["channel"].split('-').last.to_i
-          logger.info "Creating HIT for task with ID #{task_id.to_s}"
-          Task.find(task_id).createHIT(ENV["ENSEMBLE_HOSTNAME"])
+          # task_id = event["channel"].split('-').last.to_i
+          # logger.info "Creating HIT for task with ID #{task_id.to_s}"
+          # Task.find(task_id).createHIT(ENV["ENSEMBLE_HOSTNAME"])
         end
       end
       render text: 'ok'

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ensemble</title>
+	<%= stylesheet_link_tag 'turkers_first', :media => 'all' %>
+	<%= stylesheet_link_tag 'first'%>
+	<%= javascript_include_tag 'turkers_first' %>
+	<%= javascript_include_tag "first.js" %>
+	<%= javascript_include_tag "first.functions.js" %>
+
+  <%= csrf_meta_tags %>
+  <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+  <%= javascript_include_tag  'http://js.pusher.com/1.12/pusher.min.js'%>
+</head>
+<body>
+
+	<div class='container-fluid' id='turkers'>
+	
+		<%= yield %>
+
+		<br />
+		<hr />
+		<div class='row-fluid' id='footer'>
+			Ensemble &copy; 2012
+		</div>
+	
+	</div>
+
+</body>
+</html>
