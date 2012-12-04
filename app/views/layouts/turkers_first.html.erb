@@ -3,11 +3,10 @@
 <head>
 	<title>Ensemble</title>
 	<%= stylesheet_link_tag 'turkers', :media => 'all' %>
+	<%= stylesheet_link_tag 'first'%>
 	<%= javascript_include_tag 'turkers' %>
-	
-	<%= stylesheet_link_tag @task.interface%>
-	<%= javascript_include_tag "#{@task.interface}.js" %>
-	<%= javascript_include_tag "#{@task.interface}.functions.js" %>
+	<%= javascript_include_tag "first.js" %>
+	<%= javascript_include_tag "first.functions.js" %>
 
   <%= csrf_meta_tags %>
   <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
