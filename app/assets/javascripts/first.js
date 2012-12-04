@@ -18,7 +18,7 @@ ensembleChannel.bind('pusher:subscription_succeeded', function(members) {
   console.log(members);
   count = members.count;
   $('#chat-box').find('h4').empty()
-  $('#chat-box').find('h4').append("Chat with "+(count-1)+" Other Turker(s)");
+  $('#chat-box').find('h4').append("Chat with "+(count-1)+" other Fashionista(s)");
   // members.each(function(member) {
     // // for example:
     // add_member(member.id, member.info);
@@ -28,15 +28,18 @@ ensembleChannel.bind('pusher:subscription_succeeded', function(members) {
 ensembleChannel.bind('pusher:member_added', function(member) {
   count++;
   $('#chat-box').find('h4').empty()
-  $('#chat-box').find('h4').append("Chat with "+ (count-1) +" Other Turker(s)");
+  $('#chat-box').find('h4').append("Chat with "+ (count-1) +" other Fashionista(s)");
 });
 
 ensembleChannel.bind('pusher:member_removed', function(member) {
   count--;
   $('#chat-box').find('h4').empty()
-  $('#chat-box').find('h4').append("Chat with "+ (count-1) +" Other Turker(s)");
+  $('#chat-box').find('h4').append("Chat with "+ (count-1) +" other Fashionista(s)");
 });
 
+ensembleChannel.bind('display_redeem_code', function(member){
+	
+});
 
 // Deal with incoming messages!
 ensembleChannel.bind('post_comment', function(comment) {
@@ -155,7 +158,6 @@ function trim(str) {
 $('#create-suggestion-product-link').blur(function(){
 	if( trim($(this).val() ) != ""){
 		url = $(this).val();
-		if(urlRegex.test(url)){
 			$('#create-suggestion-img').attr('src','/loader.gif');	
 			$.get('/preview?url='+url, function(response){
 				images = response.images;
@@ -163,7 +165,6 @@ $('#create-suggestion-product-link').blur(function(){
 				var imgSrc = images[currentImageIndex];
 				$('#create-suggestion-img').attr("src",imgSrc);
 			});	
-		}
 	}
 	return false;
 });

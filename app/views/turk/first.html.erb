@@ -18,8 +18,8 @@
 		<a href="<%=@task.image.url(:medium)%>" target="_blank"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%></a>
 		<h4><%= @task.body %></h4>
 	</div>
-	<div id='redeem-code' class='span3'>
-		<h4> 3 tasks remaining </h4>
+	<div id='redeem-code' class='span3'><p>
+		You must make 4 more suggestions or votes to receive your redeem code</p>
 	</div>
 </div>
 
@@ -53,7 +53,7 @@
 	</div>
 
 	<div id='chat-box' class='span6'>
-		<h4>Chat With Other Turkers</h4>
+		<h4>Chat With Other Fashionistas</h4>
 		<div id='chat-messages'>
 			<ul>
 				<% @comments.each do |comment| %>
