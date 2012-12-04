@@ -18,7 +18,7 @@ class Task < ActiveRecord::Base
   end
 
   def set_interface
-    self.interface = rand(1..2) == 1 ? 'first' : 'second'
+    self.interface = rand(2) == 0 ? 'first' : 'second'
   end
   
   

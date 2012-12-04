@@ -83,7 +83,7 @@ class ApiController < ApplicationController
     suggestion.price = params[:price]
     
     if suggestion.save
-      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
       Pusher["ensemble-" + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else
