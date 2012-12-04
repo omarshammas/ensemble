@@ -47,7 +47,10 @@ Ensemble::Application.configure do
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # config.assets.precompile += %w( search.js )
-  config.assets.precompile += %w( turkers_first.css turkers_second.css first.css second.css )
+  config.assets.precompile += %w( turkers_first.css turkers_second.css )
+  config.assets.precompile += %w( first.css second.css )
+  config.assets.precompile += %w( turkers_first.js first.js first.functions.js )
+  config.assets.precompile += %w( turkers_second.js second.js second.functions.js )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
