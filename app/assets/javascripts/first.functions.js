@@ -54,7 +54,7 @@ function get_redeem_code(task_id){
 		if (response['status'] == 'success'){
 			alert(response['code']);
 		} else {
-			alert('You are required to complete ' + response['min_tasks'] + ' tasks before you can claim your redeem code.')
+			alert('You have completed '+response['count']+' out of the ' + response['min_tasks'] + ' tasks required to claim your redeem code.');
 		}
 	});
 }

@@ -12,10 +12,11 @@ class ApiController < ApplicationController
     task = Task.find params[:task_id]
     turk = current_turk
 
-    if (turk.votes.count + turk.suggestions.count + turk.points.count) >= NUMBER_OF_TASKS
+    count = turk.votes.count + turk.suggestions.count + turk.points.count
+    if (count) >= NUMBER_OF_TASKS
       render json: { status: 'success', code:'just testing' }
     else
-      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS }
+      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:count }
     end
   end
 
