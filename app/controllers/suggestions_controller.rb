@@ -13,6 +13,9 @@ class SuggestionsController < ApplicationController
     @suggestion = Suggestion.find(params[:id])
     return redirect_to :home unless @suggestion.task == @task
 
+    @pros = @suggestion.points.where(isPro:true)
+    @cons = @suggestion.points.where(isPro:false)
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @suggestion }
