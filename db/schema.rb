@@ -83,9 +83,10 @@ ActiveRecord::Schema.define(:version => 20121204063634) do
 
   create_table "turks", :force => true do |t|
     t.string   "code"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "instructed", :default => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "instructed_first",  :default => false
+    t.boolean  "instructed_second", :default => false
   end
 
   create_table "users", :force => true do |t|

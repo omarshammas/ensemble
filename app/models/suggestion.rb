@@ -6,4 +6,5 @@ class Suggestion < ActiveRecord::Base
   belongs_to :suggestable, polymorphic: true
   
   has_many :votes
+  has_many :points
 end

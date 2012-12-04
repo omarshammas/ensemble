@@ -1,7 +1,8 @@
 class Task < ActiveRecord::Base
   include Rails.application.routes.url_helpers
+  before_create :set_interface
 
-  attr_accessible :user_id, :body, :image, :finished, :interface, :instructed
+  attr_accessible :user_id, :body, :image, :finished, :interface
   
   belongs_to :user
   has_many :comments
@@ -14,6 +15,10 @@ class Task < ActiveRecord::Base
 
   def suggestion_sent?
     return !self.suggestions.where('sent = :sent AND accepted IS NULL',{:sent => true}).first.nil?
+  end
+
+  def set_interface
+    self.interface = rand(2) == 0 ? 'first' : 'second'
   end
   
   

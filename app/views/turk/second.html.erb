@@ -10,7 +10,7 @@
 		<h4><%= @task.body %></h4>
 	</div>
 	<div id='redeem-code' class='span3'>
-		<h4> 3 tasks remaining </h4>
+		<button id='redeem-btn' class='btn btn-primary' data-task-id='<%= @task.id %>'>Get Redeem Code</button>
 	</div>
 </div>
 
@@ -27,7 +27,7 @@
 
 <div class='row-fluid'>
 	<div class='span4'>
-		<h4>Requester Feedback</h4>
+		<h4>Requestor Feedback</h4>
 		<div id ='history-box-second'>
 			<%= render(partial: 'history_second', collection: @history, as: :history, locals: {row: 1, total: @history.size}) || 'No suggestions have been sent to the user.' %>
 		</div>

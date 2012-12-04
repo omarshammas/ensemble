@@ -9,8 +9,8 @@
 		<a href="<%=@task.image.url(:medium)%>" target="_blank"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%></a>
 		<h4><%= @task.body %></h4>
 	</div>
-	<div id='redeem-code' class='span3'><p>
-		You must make 4 more suggestions or votes to receive your redeem code</p>
+	<div id='redeem-code' class='span3'>
+		<button id='redeem-btn' class='btn btn-primary' data-task-id='<%= @task.id %>'>Get Redeem Code</button>
 	</div>
 </div>
 
@@ -37,7 +37,7 @@
 <div class='row-fluid task-components'>
 		<% if !@task.finished %>
 		<div class='span3'>
-		<h4>Requester Feedback</h4>	
+		<h4>Requestor Feedback</h4>	
 		<div id='history-box'>
 			<%= render(partial: 'history_first', collection: @history, as: :history) || '<div id="no-history">No suggestions have been sent to the user.</div>'.html_safe %>
 		</div>
@@ -53,7 +53,7 @@
 					<%if comment.commentable == @task.user%>
 					alert alert-error'>
 					<p><a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>
-						<strong>Requester:</strong> 
+						<strong>Requestor:</strong> 
 						<%= comment.body%></p>
 					</div>
 					<%elsif comment.commentable == current_turk%>

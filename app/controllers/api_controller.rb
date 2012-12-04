@@ -7,6 +7,20 @@ class ApiController < ApplicationController
   UP_THRESHOLD = 2
   MIN_THRESHOLD = -2
   CHANNEL_PREFIX = 'presence-ensemble-'
+  NUMBER_OF_TASKS = 4
+
+  def get_redeem_code
+    task = Task.find params[:task_id]
+    turk = current_turk
+
+    count = turk.votes.count + turk.suggestions.count + turk.points.count
+    if (count) >= NUMBER_OF_TASKS
+      render json: { status: 'success', code:'just testing' }
+    else
+      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:count }
+    end
+  end
+
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
     turk = current_turk
@@ -81,7 +95,7 @@ class ApiController < ApplicationController
     suggestion.price = params[:price]
     
     if suggestion.save
-      suggestions = task.suggestions.where(sent: false).order('vote_count desc')
+      suggestions = task.suggestions.where('sent = :sent AND vote_count > :min_count',{:sent => false, :min_count => MIN_THRESHOLD}).order('vote_count desc')
       Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('update_suggestions', suggestions)
       render json: { status: "success"}
     else
@@ -159,6 +173,7 @@ class ApiController < ApplicationController
       render text: 'invalid', status: 401
     end
   end
+
 
   def sms
 =begin

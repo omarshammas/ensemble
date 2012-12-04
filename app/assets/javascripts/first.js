@@ -48,7 +48,7 @@ ensembleChannel.bind('post_comment', function(comment) {
     //User comment
     comment_class = 'alert alert-error';
     suggestion_button = '<a class="btn btn-small pull-right" href="#" data-toggle="modal" data-target="#add-preference-modal"><i class=" icon-plus pull-right"></i></a>';
-    display_name = 'Requester'
+    display_name = 'Requestor'
   } else if(comment.commentable_type == 'Turk' && turk_id == comment.commentable_id) {
     //My Comment
     comment_class = 'alert alert-success'; 
@@ -149,6 +149,12 @@ $('#comment-btn').click(function(){
 $('#suggest-btn').click(function(){
     post_suggestion();
 });
+
+$('#redeem-btn').click(function(){
+  var task_id = $(this).attr('data-task-id');
+  get_redeem_code(task_id);
+});
+
 
 function trim(str) {
 	return str.replace(/^\s+|\s+$/g,"");

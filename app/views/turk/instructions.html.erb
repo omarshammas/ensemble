@@ -1,0 +1,22 @@
+<div class='row-fluid'>
+	<h1>Instructions<h1>
+</div>
+</hr>
+<div class='row-fluid well-small'>
+	<h3><%= @title %></h3>
+	<p>
+		<%= @description %>
+	</p>
+</div>
+<br/>
+<hr/>
+<div id='ui-screenshot'>
+	<%= image_tag @image_url, :width => '1000px'%>
+</div>
+<hr/>
+<br/>
+<div class='row-fluid'>
+	<%= link_to @button_title, @next_step, :class => 'btn btn-large btn-primary pull-right' %>
+</div>
+</br>
+</br>

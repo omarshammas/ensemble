@@ -27,6 +27,26 @@
 		</dl>
 	</div>
 </div>
+<% if @suggestion.task.interface == 'second' %>
+	<div class='row'>
+		<div class='span6'>
+			<h4>Pros</h4>
+			<ul>
+				<% @pros.each do |p| %>
+					<li><%= p.body %></li>
+				<% end %>
+			</ul>
+		</div>
+		<div class='span6'>
+			<h4>Cons</h4>
+			<ul>
+				<% @cons.each do |c| %>
+					<li><%= c.body %></li>
+				<% end %>
+			</ul>
+		</div>
+	</div>
+<% end %>
 <div class="row well">
 	<form class="form-vertical" method="post" action="/api/suggestion_response">
 	<input type="hidden" name="id" value="<%=@suggestion.id%>">

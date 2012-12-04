@@ -49,6 +49,16 @@ function post_down_vote(suggestion_id) {
 	});
 }
 
+function get_redeem_code(task_id){
+	$.post('/api/get_redeem_code', {"task_id": task_id }, function(response) {
+		if (response['status'] == 'success'){
+			alert(response['code']);
+		} else {
+			alert('You have completed '+response['count']+' out of the ' + response['min_tasks'] + ' tasks required to claim your redeem code.');
+		}
+	});
+}
+
 function scrollToTheTop() {
 	$("#chat-messages").scrollTop(20000000);
 }
