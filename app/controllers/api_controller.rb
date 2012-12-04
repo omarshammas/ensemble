@@ -6,6 +6,18 @@ class ApiController < ApplicationController
 
   UP_THRESHOLD = 2
   MIN_THRESHOLD = -2
+  NUMBER_OF_TASKS = 4
+
+  def get_redeem_code
+    task = Task.find params[:task_id]
+    turk = current_turk
+
+    if (turk.votes.count + turk.suggestions.count + turk.points.count) >= NUMBER_OF_TASKS
+      render json: { status: 'success', code:'just testing' }
+    else
+      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS }
+    end
+  end
 
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]

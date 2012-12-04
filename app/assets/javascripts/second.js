@@ -99,6 +99,11 @@ $('#suggest-btn').click(function(){
     post_suggestion();
 });
 
+$('#redeem-btn').click(function(){
+  var task_id = $(this).attr('data-task-id');
+  get_redeem_code(task_id);
+});
+
 $('.suggestion-item-second').live('click', function(){
   var suggestion_id = $(this).attr('data-suggestion-id');
   get_suggestion(suggestion_id);
