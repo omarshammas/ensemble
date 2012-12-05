@@ -97,8 +97,8 @@ class TurkController < ApplicationController
       the correct product preview image"
       elsif step == 4
         @title = "Vote/Comment on Suggestions"
-        @description = "By clicking on an image under 'Suggestions' you can
-      up vote, down vote, view pros/cons and/or add pros/cons to one.
+        @description = "By clicking on one of the boxes under 'Suggestions' you can
+      up vote, down vote, view pros/cons and add pros/cons to a suggestion.
       When a suggestion receives too many down votes it is removed from the
       list. If it receives enough up votes it will be sent to the requestor"
       elsif step == 5

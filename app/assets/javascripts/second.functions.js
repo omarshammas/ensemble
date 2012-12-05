@@ -39,6 +39,8 @@ function post_up_vote(suggestion_id) {
 	$.post('/api/post_up_vote', {"suggestion_id": suggestion_id}, function(response) {
 		if (response['status'] == 'already_voted')
 			vote_already_cast();
+		else if (response['status'] == 'waiting-for-response')
+			waiting_for_response();
 	});
 }
 
@@ -46,6 +48,8 @@ function post_down_vote(suggestion_id) {
 	$.post('/api/post_down_vote', {"suggestion_id": suggestion_id}, function(response) {
 		if (response['status'] == 'already_voted')
 			vote_already_cast();
+		else if (response['status'] == 'waiting-for-response')
+			waiting_for_response();
 	});
 }
 
@@ -115,7 +119,7 @@ function get_suggestion(suggestion_id){
 		$('#suggestion-modal').empty();
 		$('#suggestion-modal').append("<img src='"+suggestion['image_url']+"' />");
 		$('#suggestion-modal').append("<p></p>");
-		$('#suggestion-modal p').append("<a href='"+suggestion['product_link']+"'><b>"+suggestion['product_name']+"</b></a><br />");
+		$('#suggestion-modal p').append("<a href='"+suggestion['product_link']+"' target='_blank'><b>"+suggestion['product_name']+"</b></a><br />");
 		$('#suggestion-modal p').append("$"+suggestion['price']+"<br />"+suggestion['retailer']+"<br />");
 		$('#suggestion-modal p').append("<span class='badge badge-success' id='vote_count_"+suggestion['id']+">"+suggestion['vote_count']+"</span>");
 		
@@ -136,4 +140,8 @@ function replaceURLWithHTMLLinks(text) {
 
 function vote_already_cast(){
 	alert("You have already voted on this suggestion.");
+}
+
+function waiting_for_response(){
+	alert("You can't vote until the requestor responds");
 }

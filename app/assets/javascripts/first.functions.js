@@ -39,6 +39,8 @@ function post_up_vote(suggestion_id) {
 	$.post('/api/post_up_vote', {"suggestion_id": suggestion_id}, function(response) {
 		if (response['status'] == 'already_voted')
 			vote_already_cast();
+		else if (response['status'] == 'waiting-for-response')
+			waiting_for_response();
 	});
 }
 
@@ -46,6 +48,8 @@ function post_down_vote(suggestion_id) {
 	$.post('/api/post_down_vote', {"suggestion_id": suggestion_id}, function(response) {
 		if (response['status'] == 'already_voted')
 			vote_already_cast();
+		else if (response['status'] == 'waiting-for-response')
+			waiting_for_response();
 	});
 }
 
@@ -70,4 +74,8 @@ function replaceURLWithHTMLLinks(text) {
 
 function vote_already_cast(){
 	alert("You have already voted on this suggestion.");
+}
+
+function waiting_for_response(){
+	alert("You can't vote until the requestor responds");
 }

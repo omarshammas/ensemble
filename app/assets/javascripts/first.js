@@ -11,7 +11,7 @@ var currentImageIndex = -1;
 var count=0;
 
 // Logging - Disable in production
-Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
+//Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
 
 ensembleChannel.bind('pusher:subscription_succeeded', function(members) {
@@ -19,10 +19,6 @@ ensembleChannel.bind('pusher:subscription_succeeded', function(members) {
   count = members.count;
   $('#chat-box').find('h4').empty()
   $('#chat-box').find('h4').append("Chat with "+(count-1)+" other Fashionista(s)");
-  // members.each(function(member) {
-    // // for example:
-    // add_member(member.id, member.info);
-  // });
 });
 
 ensembleChannel.bind('pusher:member_added', function(member) {
@@ -105,7 +101,7 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
 
 function getSuggestionBullet(suggestion){
   var list_item = "<div class='suggestion-item row-fluid'><div class = 'span6 thumbnail'>"
-  list_item += "<img alt='' class='prev-suggestion-img' src='"+ suggestion.image_url +"'/></div>";
+  list_item += "<img alt='' class='suggestion-img' src='"+ suggestion.image_url +"'/></div>";
   list_item += "<div class='desc span5'><a href='" + suggestion.product_link + "' target='_blank'>";
   list_item += "<b>" + suggestion.product_name + "</b></a><br />";
   list_item += "$" + suggestion.price + "<br />";

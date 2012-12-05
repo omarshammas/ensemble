@@ -14,7 +14,7 @@ class ApiController < ApplicationController
     turk = current_turk
 
     count = turk.votes.count + turk.suggestions.count + turk.points.count
-    if (count) >= NUMBER_OF_TASKS
+    if (count) >= NUMBER_OF_TASKS || (task.finished && count > 0)
       render json: { status: 'success', code:'just testing' }
     else
       render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:count }
@@ -27,7 +27,9 @@ class ApiController < ApplicationController
 
     #if already voted
     return render json: { status: "already_voted"} if suggestion.votes.where(:turk_id => turk.id).count >= 1
-
+    
+    return render json: { status: "waiting-for-response"} if !suggestion.task.suggestions.where('sent = :sent AND accepted IS NULL',{:sent => true}).first.nil?
+    
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save
       Suggestion.increment_counter :vote_count, suggestion.id
@@ -54,6 +56,8 @@ class ApiController < ApplicationController
 
     #if already voted
     return render json: { status: "already_voted"} if suggestion.votes.where(:turk_id => turk.id).count >= 1
+    #if waiting for a response
+    return render json: { status: "waiting-for-response"} if !suggestion.task.suggestions.where('sent = :sent AND accepted IS NULL',{:sent => true}).first.nil?
 
     vote = Vote.new suggestion_id: suggestion.id, turk_id: turk.id
     if vote.save

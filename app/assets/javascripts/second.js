@@ -9,6 +9,7 @@ var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z
 var images;
 var currentImageIndex = -1;
 
+//Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
 ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
   $('.suggestion-alert').empty();
@@ -39,7 +40,7 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
   for (var ii = 0; ii < suggestions.length; ++ii) {
       suggestion = suggestions[ii];
       list_item = getSuggestionBullet(suggestion);
-
+	  console.log(list_item);
       if (ii%items_per_row == 0){
         $('#suggestions-box-second').append("<div class='row-fluid suggestion-row'>");        
       }
@@ -55,7 +56,7 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
 function getSuggestionBullet(suggestion){
   var list_item = "<div class='suggestion-item-second span4 thumbnail' data-suggestion-id='"+suggestion.id+"'>";
   list_item += "<img class='suggestion-img-second' src='"+ suggestion.image_url +"' />";
-  list_item += "<p><a href='" + suggestion.product_link + "' target='blank'><b>"+ suggestion.product_name +"</b></a><br />";
+  list_item += "<p><a href='" + suggestion.product_link + "' target='_blank'><b>"+ suggestion.product_name +"</b></a><br />";
   list_item += suggestion.price + "<br />" + suggestion.retailer + "<br />";
   list_item += "<span class='badge badge-success' id='vote_count_" + suggestion.id;
   list_item += "'>" + suggestion.vote_count + "</span></p></div>";

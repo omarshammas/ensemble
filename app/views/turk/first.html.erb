@@ -6,7 +6,9 @@
 
 <div id='header' class='row-fluid'>
 	<div id='objective' class='span9'>
-		<a href="<%=@task.image.url(:medium)%>" target="_blank"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%></a>
+		<a href="<%=@task.image.url(:large)%>" target="_blank"><%= image_tag @task.image.url(:thumb),  :class => 'img-polaroid pull-left', :id => 'task-img'%>
+			
+		</a>
 		<h4><%= @task.body %></h4>
 	</div>
 	<div id='redeem-code' class='span3'>

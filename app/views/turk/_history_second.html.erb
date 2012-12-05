@@ -1,13 +1,23 @@
 <div class='row-fluid history-item-second' data-history-id='<%=history.id%>'>
-	<div class='span5 thumbnail rating<%= history.rating %>'>
-		<%= image_tag history.image_url,  :class => 'history-img-second'%>
+	<div class='span6'>
+		<a href='<%= history.product_link%>' target='_blank'>
+			<%= image_tag history.image_url,  :class => "thumbnail history-img-second rating#{history.rating}"%>
+			</a>
 		<p>
 		<a href='<%= history.product_link%>' target='_blank'><b><%=history.product_name%></b></a><br />
 			$<%= history.price %><br />
 			<%= history.retailer %><br />
 		</p>
 	</div>
-	<div class='span7 desc'>
-		<%= history.body %>
+	<div class='span6 desc'>
+		<p><%= history.body %></p>
+		<hr/>
+		<% for ii in 1..5%>
+		<%if ii <=history.rating%>
+		<i class='icon-star'></i>
+		<%else%>
+		<i class='icon-star-empty'></i>
+		<%end%>
+		<%end%>
 	</div>
 </div>
