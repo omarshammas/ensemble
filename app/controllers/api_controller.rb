@@ -79,6 +79,7 @@ class ApiController < ApplicationController
 
     point = Point.new isPro: params[:isPro], body: params[:body], suggestion_id: suggestion.id, turk_id: turk.id
     if point.save
+      Pusher[CHANNEL_PREFIX + "#{suggestion.task_id}"].trigger('point_added', point)
       render json: { status: 'success', point:point.to_json }
     else
       render json: { status: 'failed'}

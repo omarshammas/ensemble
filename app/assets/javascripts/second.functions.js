@@ -67,14 +67,6 @@ function makePoint(isPro){
 
 function post_point(suggestion_id, isPro, point){
 	$.post('/api/post_point', {"suggestion_id": suggestion_id, 'isPro':isPro, 'body':point}, function(response) {
-		if (response['status'] == 'success'){
-			var point = $.parseJSON(response['point']);
-			if (point['isPro']){
-				$('#pros ul').append("<li>"+point['body']+"</li>");
-			} else {
-				$('#cons ul').append("<li>"+point['body']+"</li>");
-			}
-		}
 	});
 }
 
@@ -93,17 +85,18 @@ function get_suggestion(suggestion_id){
 		var suggestion = $.parseJSON(response['suggestion']);
 		var pros = $.parseJSON(response['pros']);
 		var cons = $.parseJSON(response['cons']);
-		
 		//modal header
 		$('#procon-modal-label').empty();
 		$('#procon-modal-label').append("$"+suggestion['price']+" "+suggestion['product_name']);
 		//modal pros
 		$('#pros ul').empty();
+		$('#pros ul').attr('name',suggestion.id);
 		for(var ii=0; ii < pros.length; ++ii){
 			$('#pros ul').append("<li>"+pros[ii]['body']+"</li>");
 		}
 		//modal cons
 		$('#cons ul').empty();
+		$('#cons ul').attr('name',suggestion.id);
 		for(var ii=0; ii < cons.length; ++ii){
 			$('#cons ul').append("<li>"+cons[ii]['body']+"</li>");
 		}

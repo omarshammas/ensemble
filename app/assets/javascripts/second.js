@@ -18,6 +18,15 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
   $('.suggestion-alert').append(alert_div);
 });
 
+ensembleChannel.bind('point_added', function(point) {
+		console.log(point.suggestion_id);
+		if (point['isPro']) {
+			$('#pros').find('ul[name="'+point.suggestion_id+'"]').append("<li>" + point.body + "</li>");
+		} else {
+			$('#cons').find('ul[name="'+point.suggestion_id+'"]').append("<li>" + point.body + "</li>");
+		}
+});
+
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
   $('.suggestion-alert').empty();
   var list_item = getHistoryBullet(suggestion);
