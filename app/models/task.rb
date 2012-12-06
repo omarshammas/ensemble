@@ -23,7 +23,7 @@ class Task < ActiveRecord::Base
   
   
   def createHIT(base_url)
-    @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => :Sandbox
+    @mturk = Amazon::WebServices::MechanicalTurkRequester.new
     
     title = "Make Fashion Recommendations"
     desc = "Help find clothing that matches someone's tastes."
