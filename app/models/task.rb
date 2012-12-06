@@ -23,8 +23,14 @@ class Task < ActiveRecord::Base
   
   
   def createHIT(base_url)
-    @mturk = Amazon::WebServices::MechanicalTurkRequester.new
-    
+    @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => ENV["AWS_ENV"],   
+              :AWSAccessKeyId => ENV["AWS_KEY"],
+              :AWSAccessKey => ENV["AWS_SECRET"]
+              
+    qualReq = { :QualificationTypeId => Amazon::WebServices::MechanicalTurkRequester::LOCALE_QUALIFICATION_TYPE_ID,
+                :Comparator => 'EqualTo',
+                 :LocaleValue => {:Country => 'US'}, }
+    qualReqs = [qualReq]             
     title = "Make Fashion Recommendations"
     desc = "Help find clothing that matches someone's tastes."
     keywords = "fashion, recommendations"
@@ -36,6 +42,7 @@ class Task < ActiveRecord::Base
       :MaxAssignments => numAssignments,
       :Reward => { :Amount => rewardAmount, :CurrencyCode => 'USD' },
       :Question => get_question("#{base_url}turk/tasks/#{self.id.to_s}"),
+      :QualificationRequirement => qualReqs,
       :Keywords => keywords )
 
     h = Hit.create task_id: self.id, h_id: result[:HITId], type_id:result[:HITTypeId], url: getHITUrl( result[:HITTypeId] )
@@ -70,9 +77,9 @@ private
   end
 
   def getHITUrl (hitTypeId)
-    if @mturk.host =~ /sandbox/
+    if ENV["AWS_ENV"] == 'Sandbox'
       "http://workersandbox.mturk.com/mturk/preview?groupId=#{hitTypeId}"   # Sandbox Url
-    else
+    elsif ENV["AWS_ENV"] == 'Production'
       "http://mturk.com/mturk/preview?groupId=#{hitTypeId}"   # Production Url
     end
   end
