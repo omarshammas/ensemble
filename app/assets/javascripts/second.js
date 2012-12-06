@@ -65,7 +65,9 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
         $('#suggestions-box-second').append("<div class='row-fluid suggestion-row'>");        
       }
 
-      $('#suggestions-box-second .suggestion-row').last().append(list_item);    
+      $('#suggestions-box-second .suggestion-row').last().append(list_item);
+      $('#suggestion-modal p #vote_count_'+suggestion.id).empty();
+      $('#suggestion-modal p #vote_count_'+suggestion.id).append(suggestion.vote_count);
 
       if ((ii%items_per_row == items_per_row-1) || (ii >= suggestions.length-1)){
         $('#suggestions-box-second').append("</div>");

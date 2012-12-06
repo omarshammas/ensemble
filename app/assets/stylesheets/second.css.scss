@@ -53,9 +53,10 @@ hr {
 }
 
 #procon-modal{
-  #suggestion-modal img{
-    height:150px;
-  }
+  #suggestion-modal {
+    img{ height:150px; }
+    .badge {float:right;}
+  } 
   #procon-input{
     #procon-text-input{ 
       margin: 10px;

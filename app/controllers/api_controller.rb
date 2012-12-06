@@ -19,9 +19,9 @@ class ApiController < ApplicationController
                  
     if task_count >= NUMBER_OF_TASKS * (hit_count+1) || (task.finished && task_count > 0)
       #TODO NEED TO FIX RACE CONDITION!!!!!
-      task.createHIT(ENV["ENSEMBLE_HOSTNAME"]) unless task.finished
       hit = task.hits.where("turk_id IS NULL").first
       hit.update_attributes(:turk_id => turk.id)
+      task.createHIT(ENV["ENSEMBLE_HOSTNAME"]) unless task.finished
       render json: { status: 'success', code: hit.code }
     else
       render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:task_count - (NUMBER_OF_TASKS * hit_count) }
