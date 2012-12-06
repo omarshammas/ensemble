@@ -79,12 +79,21 @@ ensembleChannel.bind('suggestion_rejected', function(suggestion) {
 });
 
 ensembleChannel.bind('suggestion_accepted', function(suggestion) {
-	$('.suggestion-alert').empty();
-	task_alert = "<div class='span12 alert-block alert alert-success'>";
-	task_alert += "<h4>Task complete</h4>";
-	task_alert += "This task is complete and requires no more work</div>";
-	$('.task-alert').append(task_alert);
-	$('.task-components').empty();
+		$('.suggestion-alert').empty();
+		task_alert = "<div class='span12 alert-block alert alert-success'>";
+		task_alert += "<h4>Task complete</h4>";
+		task_alert += "This task is complete and requires no more work</div>";
+		$('.task-alert').append(task_alert);
+		$('.task-components').empty();
+		//Show redeem code
+		$.post('/api/get_redeem_code', {
+			"task_id" : suggestion.task_id
+		}, function(response) {
+			var code = response['code'];
+			$('#redeem-code').empty();
+			$('#redeem-code').append('<p><b>Redeem Code:</b> ' + code + '<br/><br/>PLEASE WRITE THIS DOWN NOW! IT WILL DISAPPEAR ON A REFRESH!</p>');
+		});
+
 });
 
 

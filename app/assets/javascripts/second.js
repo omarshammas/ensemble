@@ -40,6 +40,12 @@ ensembleChannel.bind('suggestion_accepted', function(suggestion) {
   task_alert += "This task is complete and requires no more work</div>";
   $('.task-alert').append(task_alert);
   $('.task-components').empty();
+  //Show redeem code
+  $.post('/api/get_redeem_code', {"task_id": suggestion.task_id }, function(response) {
+	var code = response['code'];
+	$('#redeem-code').empty();
+	$('#redeem-code').append('<p><b>Redeem Code:</b> ' + code + '<br/><br/>PLEASE WRITE THIS DOWN NOW! IT WILL DISAPPEAR ON A REFRESH!</p>');
+  });
 });
 
 ensembleChannel.bind('update_suggestions', function(suggestions) {
@@ -65,7 +71,7 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
 function getSuggestionBullet(suggestion){
   var list_item = "<div class='suggestion-item-second span4 thumbnail' data-suggestion-id='"+suggestion.id+"'>";
   list_item += "<img class='suggestion-img-second' src='"+ suggestion.image_url +"' />";
-  list_item += "<p><a href='" + suggestion.product_link + "' target='_blank'><b>"+ suggestion.product_name +"</b></a><br />$";
+  list_item += "<p><b>"+ suggestion.product_name +"</b><br />$";
   list_item += suggestion.price + "<br />" + suggestion.retailer + "<br />";
   list_item += "<span class='badge badge-success' id='vote_count_" + suggestion.id;
   list_item += "'>" + suggestion.vote_count + "</span></p></div>";
