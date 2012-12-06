@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121206031244) do
+ActiveRecord::Schema.define(:version => 20121206052121) do
 
   create_table "comments", :force => true do |t|
     t.string   "body"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(:version => 20121206031244) do
     t.integer  "suggestable_id"
     t.string   "suggestable_type"
     t.integer  "task_id"
-    t.integer  "price"
+    t.decimal  "price"
     t.string   "product_name"
     t.string   "product_link"
     t.string   "image_url"
