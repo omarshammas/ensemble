@@ -9,6 +9,8 @@ class Task < ActiveRecord::Base
   has_many :suggestions
   has_many :hits
   has_many :preferences
+  has_many :votes, :through => :suggestions
+  has_many :points, :through => :suggestions
   
   has_attached_file :image, :styles => {:large => "500x500", :medium => "300x300", :small => "200x200>", :thumb => "100x100>" }
 

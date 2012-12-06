@@ -5,7 +5,7 @@
 <div class='suggestion-item-second span4 thumbnail' data-suggestion-id='<%=suggestion.id%>'>
 	<%= image_tag suggestion.image_url,  :class => 'suggestion-img-second'%>
 	<p>
-	<a href='<%= suggestion.product_link%>' target='_blank'><b><%=suggestion.product_name%></b></a><br />
+	<b><%=suggestion.product_name%></b><br />
 		$<%= suggestion.price %><br />
 		<%= suggestion.retailer %><br />
 		<span class='badge badge-success' id='vote_count_<%=suggestion.id%>'><%=suggestion.vote_count%></span>	

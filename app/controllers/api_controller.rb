@@ -12,12 +12,19 @@ class ApiController < ApplicationController
   def get_redeem_code
     task = Task.find params[:task_id]
     turk = current_turk
-
-    count = turk.votes.count + turk.suggestions.count + turk.points.count
-    if (count) >= NUMBER_OF_TASKS || (task.finished && count > 0)
-      render json: { status: 'success', code:'just testing' }
+    hit_count = task.hits.where(:turk_id => turk.id).count
+    task_count = task.votes.where(:turk_id => turk.id).count+
+                 task.suggestions.where(:suggestable_id => turk.id).count+
+                 task.points.where(:turk_id => turk.id).count
+                 
+    if task_count >= NUMBER_OF_TASKS * (hit_count+1) || (task.finished && task_count > 0)
+      #TODO NEED TO FIX RACE CONDITION!!!!!
+      task.createHIT(ENV["ENSEMBLE_HOSTNAME"]) unless task.finished
+      hit = task.hits.where("turk_id IS NULL").first
+      hit.update_attributes(:turk_id => turk.id)
+      render json: { status: 'success', code: hit.code }
     else
-      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:count }
+      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:task_count - (NUMBER_OF_TASKS * hit_count) }
     end
   end
 

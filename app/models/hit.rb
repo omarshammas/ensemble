@@ -1,6 +1,6 @@
 class Hit < ActiveRecord::Base
   before_create :set_code
-  attr_accessible :code, :h_id, :type_id, :url, :task_id
+  attr_accessible :code, :h_id, :type_id, :url, :task_id, :turk_id
 
   belongs_to :task
 

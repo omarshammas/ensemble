@@ -90,8 +90,8 @@ class TurkController < ApplicationController
       a larger image"
       elsif step == 3
         @title = "Make a Suggestion"
-        @description = "Click on the (+) icon next to the 'Suggestions' to make a
-      make one. When making a suggestion, paste the URL of the product into 
+        @description = "Click on the (+) icon next to the 'Suggestions' to make one.
+      When making a suggestion, paste the URL of the product into 
       the product link field. As you fill in the rest of the details, all
       the images on the products website will be loaded. Use the arrows to select
       the correct product preview image"

@@ -73,7 +73,7 @@ function post_point(suggestion_id, isPro, point){
 function get_redeem_code(task_id){
 	$.post('/api/get_redeem_code', {"task_id": task_id }, function(response) {
 		if (response['status'] == 'success'){
-			alert(response['code']);
+			alert(response['code'] + ' - THIS WILL BE SHOW ONCE. PLEASE MAKE SURE YOU WRITE THIS DOWN');
 		} else {
 			alert('You have completed '+response['count']+' out of the ' + response['min_tasks'] + ' tasks required to claim your redeem code.');
 		}
