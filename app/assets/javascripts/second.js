@@ -30,6 +30,11 @@ ensembleChannel.bind('point_added', function(point) {
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
   $('.suggestion-alert').empty();
   var list_item = getHistoryBullet(suggestion);
+
+  var count = $('#history-box-second .history-item-second').length;
+  if (count == 0){
+    $('#history-box-second').empty()
+  }
   $('#history-box-second').prepend(list_item);
 });
 
