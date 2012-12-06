@@ -29,7 +29,7 @@ class Task < ActiveRecord::Base
     desc = "Help find clothing that matches someone's tastes."
     keywords = "fashion, recommendations"
     numAssignments = 1
-    rewardAmount = 0.20 # 20 cents
+    rewardAmount = 0.50
    
     result = @mturk.createHIT( :Title => title,
       :Description => desc,
