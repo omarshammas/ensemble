@@ -1,24 +1,35 @@
-<h1>Tasks</h1>
-
-<table class='table'>
-  <tr>
-    <th>Finished</th>
-    <th>Objective</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @tasks.each do |task| %>
-  <tr>
-    <td><%= task.finished %></td>
-    <td><%= task.body %></td>
-    <td><%= link_to 'Show', user_task_path(current_user, task) %></td>
-    <td><%= link_to 'Destroy', user_task_path(current_user, task), method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
+<p>
+	Take a picture of the article of clothing you want and our fashionistas will take care of the rest!
+</p>
+<br/>
+<%= link_to 'New Request!', new_user_task_path(current_user), :class => 'btn btn-large btn-primary' %>
+<br/>
+<br/>
+<h4>Open requests</h4>
+<p><small>Our fashionistas our currently working on these requests </small></p>
+<ul class="unstyled">
+	<% @tasks.where(:finished => false).order("created_at desc").each do |task| %>
+	<li class="well well-small">
+		<p><a href="<%= user_task_path(current_user, task) %>"> <%= image_tag task.image.url(:thumb),  :class => 'img-polaroid', :id => 'task-img'%> </a>
+		</p>
+		<p><%=task.body%></p>
+	</li>
+	<br>
+	<% end %>
+</ul>
+<hr/>
+<br/>
+<h4>Closed requests</h4>
+<p><small>Our fashionistas have already assisted you on these requests</small></p>
+<ul class="unstyled">
+<% @tasks.where(:finished => true).order("created_at desc").each do |task| %>
+<li class="well well-small">
+	<p><a href="<%= user_task_path(current_user, task) %>"> <%= image_tag task.image.url(:thumb),  :class => 'img-polaroid', :id => 'task-img'%> </a>
+	</p>
+	<p><%=task.body%></p>
+	<br/>
+</li>
 <% end %>
-</table>
+</ul>
+</br>
 
-<br />
-
-<%= link_to 'New Task', new_user_task_path(current_user) %>
