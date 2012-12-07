@@ -9,7 +9,7 @@ class PreviewController < ApplicationController
     response = {}
     response[:images] = []
     doc.xpath("//img").each do |img|
-      response[:images].push(img['src'])
+      response[:images].push(URI.join(url,img['src']).to_s)
     end
     render :json => response
   end

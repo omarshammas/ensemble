@@ -9,6 +9,7 @@ var urlRegex = /(https?\:\/\/|\s)[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})(\/+[a-z
 var images;
 var currentImageIndex = -1;
 
+$("#suggestion-img-nav").hide();
 //Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
 ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
@@ -19,12 +20,11 @@ ensembleChannel.bind('update_sent_suggestion', function(suggestion) {
 });
 
 ensembleChannel.bind('point_added', function(point) {
-		console.log(point.suggestion_id);
-		if (point['isPro']) {
-			$('#pros').find('ul[name="'+point.suggestion_id+'"]').append("<li>" + point.body + "</li>");
-		} else {
-			$('#cons').find('ul[name="'+point.suggestion_id+'"]').append("<li>" + point.body + "</li>");
-		}
+	if (point['isPro']) {
+		$('#pros').find('ul[name="'+point.suggestion_id+'"]').append("<li>" + point.body + "</li>");
+	} else {
+		$('#cons').find('ul[name="'+point.suggestion_id+'"]').append("<li>" + point.body + "</li>");
+	}
 });
 
 ensembleChannel.bind('suggestion_rejected', function(suggestion) {
@@ -60,7 +60,6 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
   for (var ii = 0; ii < suggestions.length; ++ii) {
       suggestion = suggestions[ii];
       list_item = getSuggestionBullet(suggestion);
-	  console.log(list_item);
       if (ii%items_per_row == 0){
         $('#suggestions-box-second').append("<div class='row-fluid suggestion-row'>");        
       }
@@ -139,41 +138,49 @@ function trim(str) {
 	return str.replace(/^\s+|\s+$/g,"");
 }
 
+$('#create-suggestion-product-link').focus(function() {
+	$("#suggestion-img-nav").hide();
+	$("#suggestion-img-count").text("");
+	$("#suggestion-img-desc").text("Paste link to product page and press Tab");
+});
 
 $('#create-suggestion-product-link').blur(function(){
 	if( trim($(this).val() ) != ""){
 		url = $(this).val();
-		if(urlRegex.test(url)){
-			$('#create-suggestion-img').attr('src','/loader.gif');	
+			$('#create-suggestion-img').attr('src','/loader.gif');
 			$.get('/preview?url='+url, function(response){
+				console.log(response);
 				images = response.images;
 				currentImageIndex = 0;
+				console.log(images);
 				var imgSrc = images[currentImageIndex];
 				$('#create-suggestion-img').attr("src",imgSrc);
+				$("#suggestion-img-nav").show();
+				$("#suggestion-img-desc").text("Select product image");
+				$("#suggestion-img-count").text("1 of "+images.length);
 			});	
-		}
 	}
 	return false;
 });
 
-
 $('#suggestion-img-left').click(function(){
-  if(currentImageIndex > 0){
-    currentImageIndex--;
-    var imgSrc = images[currentImageIndex];
-    $('#create-suggestion-img').attr("src",images[currentImageIndex]);
-    $('#create-suggestion-img-url').attr("src",imgSrc);
-  }
+	currentImageIndex = (currentImageIndex - 1) % images.length
+	var imgSrc = images[currentImageIndex];
+	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img-url').attr("src",imgSrc);
+	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
+
 });
 
 $('#suggestion-img-right').click(function(){
-  if(currentImageIndex < (images.length - 1) ){
-    currentImageIndex++;
-    var imgSrc = images[currentImageIndex];
-    $('#create-suggestion-img').attr("src",images[currentImageIndex]);
-    $('#create-suggestion-img-url').attr("src",imgSrc);
-  }
+	currentImageIndex = (currentImageIndex + 1) % images.length
+	var imgSrc = images[currentImageIndex];
+	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img-url').attr("src",imgSrc);
+	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
+
 });
+
 
 
 

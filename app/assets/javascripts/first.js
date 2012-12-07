@@ -10,12 +10,12 @@ var images;
 var currentImageIndex = -1;
 var count=0;
 
+$("#suggestion-img-nav").hide();
 // Logging - Disable in production
 //Pusher.log = function() { if (window.console) window.console.log.apply(window.console, arguments); };
 
 
 ensembleChannel.bind('pusher:subscription_succeeded', function(members) {
-  console.log(members);
   count = members.count;
   $('#chat-box').find('h4').empty()
   $('#chat-box').find('h4').append("Chat with "+(count-1)+" other Fashionista(s)");
@@ -137,6 +137,7 @@ function getHistoryBullet(history){
   return list_item;
 }
 
+
 $('.upvote').live("click",function(){
     var suggestion_id = $(this).children().find('input[type="hidden"]');
     post_up_vote(suggestion_id.val());
@@ -166,15 +167,26 @@ function trim(str) {
 }
 
 
+$('#create-suggestion-product-link').focus(function() {
+	$("#suggestion-img-nav").hide();
+	$("#suggestion-img-count").text("");
+	$("#suggestion-img-desc").text("Paste link to product page");
+}); 
+
 $('#create-suggestion-product-link').blur(function(){
 	if( trim($(this).val() ) != ""){
 		url = $(this).val();
-			$('#create-suggestion-img').attr('src','/loader.gif');	
+			$('#create-suggestion-img').attr('src','/loader.gif');
 			$.get('/preview?url='+url, function(response){
+				console.log(response);
 				images = response.images;
 				currentImageIndex = 0;
+				console.log(images);
 				var imgSrc = images[currentImageIndex];
 				$('#create-suggestion-img').attr("src",imgSrc);
+				$("#suggestion-img-nav").show();
+				$("#suggestion-img-desc").text("Select product image");
+				$("#suggestion-img-count").text("1 of "+images.length);
 			});	
 	}
 	return false;
@@ -183,21 +195,21 @@ $('#create-suggestion-product-link').blur(function(){
 
 
 $('#suggestion-img-left').click(function(){
-	if(currentImageIndex > 0){
-		currentImageIndex--;
-		var imgSrc = images[currentImageIndex];
-		$('#create-suggestion-img').attr("src",images[currentImageIndex]);
-		$('#create-suggestion-img-url').attr("src",imgSrc);
-	}
+	currentImageIndex = (currentImageIndex - 1) % images.length
+	var imgSrc = images[currentImageIndex];
+	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img-url').attr("src",imgSrc);
+	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
+
 });
 
 $('#suggestion-img-right').click(function(){
-	if(currentImageIndex < (images.length - 1) ){
-		currentImageIndex++;
-		var imgSrc = images[currentImageIndex];
-		$('#create-suggestion-img').attr("src",images[currentImageIndex]);
-		$('#create-suggestion-img-url').attr("src",imgSrc);
-	}
+	currentImageIndex = (currentImageIndex + 1) % images.length
+	var imgSrc = images[currentImageIndex];
+	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img-url').attr("src",imgSrc);
+	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
+
 });
 
 
