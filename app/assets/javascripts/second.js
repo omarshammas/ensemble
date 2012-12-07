@@ -64,7 +64,9 @@ ensembleChannel.bind('update_suggestions', function(suggestions) {
         $('#suggestions-box-second').append("<div class='row-fluid suggestion-row'>");        
       }
 
-      $('#suggestions-box-second .suggestion-row').last().append(list_item);    
+      $('#suggestions-box-second .suggestion-row').last().append(list_item);
+      $('#suggestion-modal p #vote_count_'+suggestion.id).empty();
+      $('#suggestion-modal p #vote_count_'+suggestion.id).append(suggestion.vote_count);
 
       if ((ii%items_per_row == items_per_row-1) || (ii >= suggestions.length-1)){
         $('#suggestions-box-second').append("</div>");
@@ -155,6 +157,7 @@ $('#create-suggestion-product-link').blur(function(){
 				console.log(images);
 				var imgSrc = images[currentImageIndex];
 				$('#create-suggestion-img').attr("src",imgSrc);
+				$('#create-suggestion-img-url').attr("src",imgSrc);
 				$("#suggestion-img-nav").show();
 				$("#suggestion-img-desc").text("Select product image");
 				$("#suggestion-img-count").text("1 of "+images.length);
@@ -166,7 +169,7 @@ $('#create-suggestion-product-link').blur(function(){
 $('#suggestion-img-left').click(function(){
 	currentImageIndex = (currentImageIndex - 1) % images.length
 	var imgSrc = images[currentImageIndex];
-	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
 	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
 
@@ -175,7 +178,7 @@ $('#suggestion-img-left').click(function(){
 $('#suggestion-img-right').click(function(){
 	currentImageIndex = (currentImageIndex + 1) % images.length
 	var imgSrc = images[currentImageIndex];
-	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
 	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
 

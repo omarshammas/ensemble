@@ -170,7 +170,7 @@ function trim(str) {
 $('#create-suggestion-product-link').focus(function() {
 	$("#suggestion-img-nav").hide();
 	$("#suggestion-img-count").text("");
-	$("#suggestion-img-desc").text("Paste link to product page");
+	$("#suggestion-img-desc").text("Paste link to product page and press Tab");
 }); 
 
 $('#create-suggestion-product-link').blur(function(){
@@ -184,6 +184,7 @@ $('#create-suggestion-product-link').blur(function(){
 				console.log(images);
 				var imgSrc = images[currentImageIndex];
 				$('#create-suggestion-img').attr("src",imgSrc);
+				$('#create-suggestion-img-url').attr("src",imgSrc);
 				$("#suggestion-img-nav").show();
 				$("#suggestion-img-desc").text("Select product image");
 				$("#suggestion-img-count").text("1 of "+images.length);
@@ -197,7 +198,7 @@ $('#create-suggestion-product-link').blur(function(){
 $('#suggestion-img-left').click(function(){
 	currentImageIndex = (currentImageIndex - 1) % images.length
 	var imgSrc = images[currentImageIndex];
-	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
 	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
 
@@ -206,7 +207,7 @@ $('#suggestion-img-left').click(function(){
 $('#suggestion-img-right').click(function(){
 	currentImageIndex = (currentImageIndex + 1) % images.length
 	var imgSrc = images[currentImageIndex];
-	$('#create-suggestion-img').attr("src",images[currentImageIndex]);
+	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
 	$("#suggestion-img-count").text((currentImageIndex+1)+" of "+images.length);
 

@@ -37,7 +37,7 @@ class Task < ActiveRecord::Base
     desc = "Help find clothing that matches someone's tastes."
     keywords = "fashion, recommendations"
     numAssignments = 1
-    rewardAmount = 0.50
+    rewardAmount = ENV["AWS_REWARD"]
    
     result = @mturk.createHIT( :Title => title,
       :Description => desc,

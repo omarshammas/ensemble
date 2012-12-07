@@ -114,7 +114,7 @@ function get_suggestion(suggestion_id){
 		$('#suggestion-modal').append("<p></p>");
 		$('#suggestion-modal p').append("<a href='"+suggestion['product_link']+"' target='_blank'><b>"+suggestion['product_name']+"</b></a><br />");
 		$('#suggestion-modal p').append("$"+suggestion['price']+"<br />"+suggestion['retailer']+"<br />");
-		$('#suggestion-modal p').append("<span class='badge badge-success' id='vote_count_"+suggestion['id']+">"+suggestion['vote_count']+"</span>");
+		$('#suggestion-modal p').append("<span class='badge badge-success' id='vote_count_"+suggestion['id']+"''>"+suggestion['vote_count']+"</span>");
 		
 		$('#procon-footer').empty();
 		if(!suggestion['sent']){ //modal footer vote buttons
