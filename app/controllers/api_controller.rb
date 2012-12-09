@@ -10,23 +10,28 @@ class ApiController < ApplicationController
   NUMBER_OF_TASKS = 4
 
   def get_redeem_code
+    if session[:hit_id].nil? 
+      render json: { status: 'failed', message: 'You need to use the link from Mechanical Turk'}
+      return
+    end
+    
     task = Task.find params[:task_id]
     turk = current_turk
     hit_count = task.hits.where(:turk_id => turk.id).count
     task_count = task.votes.where(:turk_id => turk.id).count+
                  task.suggestions.where(:suggestable_id => turk.id).count+
                  task.points.where(:turk_id => turk.id).count
-                 
+             
     if task_count >= NUMBER_OF_TASKS * (hit_count+1) || (task.finished && task_count > 0)
-      #TODO NEED TO FIX RACE CONDITION!!!!!
-      hit = task.hits.where("turk_id IS NULL").first
-      hit.update_attributes(:turk_id => turk.id)
+      hit = Hit.find(session[:hit_id])  
+      hit.update_attributes(:turk_id => turk.id) unless !hit.turk_id.nil?
       task.createHIT(ENV["ENSEMBLE_HOSTNAME"]) unless task.finished
       render json: { status: 'success', code: hit.code }
     else
-      render json: { status: 'failed', min_tasks:NUMBER_OF_TASKS, count:task_count - (NUMBER_OF_TASKS * hit_count) }
+      render json: { status: 'failed', message: "You have completed #{task_count - (NUMBER_OF_TASKS * hit_count)} out of the #{NUMBER_OF_TASKS} tasks required to claim your redeem code."}
     end
   end
+
 
   def post_up_vote
     suggestion = Suggestion.find params[:suggestion_id]
@@ -174,10 +179,17 @@ class ApiController < ApplicationController
     if webhook.valid?
       webhook.events.each do |event|
         case event["name"]
-        when 'member_removed'
-          # task_id = event["channel"].split('-').last.to_i
-          # logger.info "Creating HIT for task with ID #{task_id.to_s}"
-          # Task.find(task_id).createHIT(ENV["ENSEMBLE_HOSTNAME"])
+        when 'channel_vacated'
+          task_id = event["channel"].split('-').last.to_i
+          task = Task.find(task_id)
+          if task.finished
+            hit_ids = task.hits.where('turk_id IS NULL').map { |hit| hit.id }
+            @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => ENV["AWS_ENV"],   
+              :AWSAccessKeyId => ENV["AWS_KEY"],
+              :AWSAccessKey => ENV["AWS_SECRET"]
+            logger.info("Deleting the following id #{hit_ids}")
+            @mturk.deleteHITs(hit_ids)
+          end
         end
       end
       render text: 'ok'
@@ -186,38 +198,5 @@ class ApiController < ApplicationController
     end
   end
 
-
-  def sms
-=begin
-  {"AccountSid"=>"ACebf8674db0f1e95deec913097e855dee", "Body"=>"Sent from your Twilio trial account - shoo bro", "ToZip"=>"01801", "FromState"=>"MA", "ToCity"=>"WOBURN", "SmsSid"=>"SM58e0207cc3294ccca7905bc28bb6e5f8", "ToState"=>"MA", "To"=>"+13392984356", "ToCountry"=>"US", "FromCountry"=>"US", "SmsMessageSid"=>"SM58e0207cc3294ccca7905bc28bb6e5f8", "ApiVersion"=>"2010-04-01", "FromCity"=>"BOSTON", "SmsStatus"=>"received", "From"=>"+16177211618", "FromZip"=>"02110", "controller"=>"turk", "action"=>"sms"}
-=end
-    phone_number = params[:From]
-    body = params[:Body]
-
-    user = User.find_by_phone_number(phone_number)
-    return render text: '<Response>' if user.nil?
-  
-    task = user.tasks.where(finished: false).first
-    return render text: '<Response>' if task.nil?
-
-    if body == "end;"
-      task.close()
-      Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('task_finished', payload)
-    else
-      comment = Comment.new
-      comment.task_id = task.id
-      comment.commentable = user
-      comment.body = body
-    
-      if comment.save
-        payload = comment.attributes
-        payload[:user] = user.attributes
-        payload[:task] = task.attributes
-        Pusher[CHANNEL_PREFIX + "#{task.id}"].trigger('post_comment', payload)
-      end
-    end
-
-    return render text: '<Response>'
-  end
 
 end

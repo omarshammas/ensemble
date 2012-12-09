@@ -3,6 +3,7 @@ class TurkController < ApplicationController
 
   MIN_THRESHOLD = -2
   def tasks
+    session[:hit_id] = params[:hitId] unless params[:hitId].nil?
     @task = Task.find(params[:id])
     if (@task.interface == 'first' && !current_turk.instructed_first) || (@task.interface == 'second' && !current_turk.instructed_second)
       return redirect_to "/turk/instructions?task_id=#{@task.id}&interface=#{@task.interface}"

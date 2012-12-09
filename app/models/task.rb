@@ -25,6 +25,9 @@ class Task < ActiveRecord::Base
   
   
   def createHIT(base_url)
+    
+    h = Hit.create task_id: self.id
+    
     @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => ENV["AWS_ENV"],   
               :AWSAccessKeyId => ENV["AWS_KEY"],
               :AWSAccessKey => ENV["AWS_SECRET"]
@@ -43,11 +46,11 @@ class Task < ActiveRecord::Base
       :Description => desc,
       :MaxAssignments => numAssignments,
       :Reward => { :Amount => rewardAmount, :CurrencyCode => 'USD' },
-      :Question => get_question("#{base_url}turk/tasks/#{self.id.to_s}"),
+      :Question => get_question("#{base_url}turk/tasks/#{self.id.to_s}?hitId=#{h.id}"),
       :QualificationRequirement => qualReqs,
       :Keywords => keywords )
 
-    h = Hit.create task_id: self.id, h_id: result[:HITId], type_id:result[:HITTypeId], url: getHITUrl( result[:HITTypeId] )
+     h.update_attributes h_id: result[:HITId], type_id:result[:HITTypeId], url: getHITUrl( result[:HITTypeId] )
     return h
   end
 
