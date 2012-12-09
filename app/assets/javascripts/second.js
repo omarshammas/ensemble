@@ -152,6 +152,10 @@ $('#create-suggestion-product-link').blur(function(){
 			$('#create-suggestion-img').attr('src','/loader.gif');
 			$.get('/preview?url='+url, function(response){
 				console.log(response);
+				if(typeof response.error != 'undefined'){
+					$('#create-suggestion-img').attr('src','/x.gif');
+					alert(response.error);
+				}
 				images = response.images;
 				currentImageIndex = 0;
 				console.log(images);

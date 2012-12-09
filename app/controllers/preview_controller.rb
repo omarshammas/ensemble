@@ -4,7 +4,12 @@ class PreviewController < ApplicationController
   def load
     url = params[:url]
     client = HTTPClient.new
-    url_response = client.get(url,:follow_redirect => true)
+    begin
+      url_response = client.get(url,:follow_redirect => true)
+    rescue Exception
+      render :json => {:error => "Unable to load website. Make sure your url is properly formatted (e.g http://www.nordstrom.com)"}
+      return
+    end
     doc = Nokogiri::HTML(url_response.body)
     response = {}
     response[:images] = []

@@ -176,26 +176,26 @@ class ApiController < ApplicationController
   
   def webhook
     webhook = Pusher::WebHook.new(request)
-    if webhook.valid?
-      webhook.events.each do |event|
-        case event["name"]
-        when 'channel_vacated'
-          task_id = event["channel"].split('-').last.to_i
-          task = Task.find(task_id)
-          if task.finished
-            hit_ids = task.hits.where('turk_id IS NULL').map { |hit| hit.id }
-            @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => ENV["AWS_ENV"],   
-              :AWSAccessKeyId => ENV["AWS_KEY"],
-              :AWSAccessKey => ENV["AWS_SECRET"]
-            logger.info("Deleting the following id #{hit_ids}")
-            @mturk.deleteHITs(hit_ids)
-          end
-        end
-      end
-      render text: 'ok'
-    else
-      render text: 'invalid', status: 401
-    end
+    # if webhook.valid?
+      # webhook.events.each do |event|
+        # case event["name"]
+        # when 'channel_vacated'
+          # task_id = event["channel"].split('-').last.to_i
+          # task = Task.find(task_id)
+          # if task.finished
+            # hit_ids = task.hits.where('turk_id IS NULL').map { |hit| hit.id }
+            # @mturk = Amazon::WebServices::MechanicalTurkRequester.new :Host => ENV["AWS_ENV"],   
+              # :AWSAccessKeyId => ENV["AWS_KEY"],
+              # :AWSAccessKey => ENV["AWS_SECRET"]
+            # logger.info("Deleting the following id #{hit_ids}")
+            # @mturk.deleteHITs(hit_ids)
+          # end
+        # end
+      # end
+      # render text: 'ok'
+    # else
+      # render text: 'invalid', status: 401
+    # end
   end
 
 
