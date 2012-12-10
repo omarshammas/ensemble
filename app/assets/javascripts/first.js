@@ -200,7 +200,7 @@ $('#create-suggestion-product-link').blur(function(){
 
 
 $('#suggestion-img-left').click(function(){
-	currentImageIndex = (currentImageIndex - 1) % images.length
+	currentImageIndex = (((currentImageIndex - 1) % images.length) + images.length) % images.length
 	var imgSrc = images[currentImageIndex];
 	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
@@ -209,7 +209,7 @@ $('#suggestion-img-left').click(function(){
 });
 
 $('#suggestion-img-right').click(function(){
-	currentImageIndex = (currentImageIndex + 1) % images.length
+	currentImageIndex = (((currentImageIndex + 1) % images.length) + images.length) % images.length
 	var imgSrc = images[currentImageIndex];
 	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);

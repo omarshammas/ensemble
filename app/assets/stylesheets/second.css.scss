@@ -20,7 +20,7 @@ hr {
   .history-item-second {
     margin-bottom: 15px;
     width:95%;
-    .history-img-second {height:100px;}
+    .history-img-second {height:100px; max-width:175px; margin-right:5px;}
     .rating1{ border: medium solid red; }  
     .rating2{ border: medium solid pink; }
     .rating3{ border: medium solid lightGrey; }

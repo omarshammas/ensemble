@@ -86,12 +86,21 @@ function getSuggestionBullet(suggestion){
 
 function getHistoryBullet(history){
   var list_item = "<div class='row-fluid history-item-second' data-history-id='"+history.id+"'>";
-  list_item += "<div class = 'span5 thumbnail rating"+ history.rating + "'>";
-  list_item += "<img class='history-img-second' src='"+ history.image_url +"'/>";
-  list_item += "<p><a href='" + history.product_link + "' target='_blank'>";
+  list_item += "<div class='span6'> <a href='"+ history.product_link+"' target='_blank'>"
+  list_item += "<img src='"+ history.image_url +"' class='";
+  list_item += "thumbnail history-img-second rating"+history.rating+"'/></a>";
+  list_item += "<p><a href='" + history.product_link + "' target='_blank'>"
   list_item += "<b>" + history.product_name + "</b></a><br />";
   list_item += history.price + "<br />" + history.retailer + "<br />";
-  list_item += "</p></div><div class='span7 desc'>" + history.body + "</div></div>";
+  list_item += "</p></div><div class='span6 desc'><p>" + history.body + "</p><hr />";
+  for(ii = 1; ii <= 5; ii++){
+  	if( ii <= history.rating)
+  		list_item += "<i class='icon-star'></i>";
+  	else
+  		list_item += "<i class='icon-star-empty'></i>";
+  }
+  list_item += "</div></div>"
+  console.log(list_item);
   return list_item;
 }
 
@@ -171,7 +180,7 @@ $('#create-suggestion-product-link').blur(function(){
 });
 
 $('#suggestion-img-left').click(function(){
-	currentImageIndex = (currentImageIndex - 1) % images.length
+	currentImageIndex = (((currentImageIndex - 1) % images.length) + images.length) % images.length
 	var imgSrc = images[currentImageIndex];
 	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
@@ -180,7 +189,7 @@ $('#suggestion-img-left').click(function(){
 });
 
 $('#suggestion-img-right').click(function(){
-	currentImageIndex = (currentImageIndex + 1) % images.length
+	currentImageIndex = (((currentImageIndex + 1) % images.length) + images.length) % images.length
 	var imgSrc = images[currentImageIndex];
 	$('#create-suggestion-img').attr("src",imgSrc);
 	$('#create-suggestion-img-url').attr("src",imgSrc);
